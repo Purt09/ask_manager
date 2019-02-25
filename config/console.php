@@ -1,10 +1,5 @@
 <?php
-use yii\helpers\ArrayHelper;
 
-$params = ArrayHelper::merge(
-    require(__DIR__ . '/params.php'),
-    require(__DIR__ . '/params-local.php')
-);
 
 $config = [
     'id' => 'app-console',
