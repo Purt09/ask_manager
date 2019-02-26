@@ -7,6 +7,7 @@ $params = ArrayHelper::merge(
 );
 
 return [
+    'name' => 'Task manager',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -14,6 +15,14 @@ return [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'i18n' => [
+            'translations' => [
+                'app' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'forceTranslation' => true,
+                ],
+            ],
+        ],
         'db' => [
             'class' => 'yii\db\Connection',
             'charset' => 'utf8',

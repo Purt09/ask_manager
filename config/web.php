@@ -3,6 +3,7 @@
 
 $config = [
     'id' => 'app',
+    'language'=>'ru-RU',
     'modules' => [
         'main' => [
             'class' => 'app\modules\main\Module',

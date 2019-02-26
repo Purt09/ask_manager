@@ -113,3 +113,14 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+/**
+Hide title
+ */
+h1 {
+    display: none;
+}
+
+.jumbotron h1 {
+    display: block;
+}
