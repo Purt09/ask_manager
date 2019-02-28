@@ -34,6 +34,7 @@ AppAsset::register($this);
         ]);
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav navbar-right'],
+            'activateParents' => true,
             'items' => array_filter([
                 ['label' => Yii::t('app', 'NAV_HOME'), 'url' => ['/main/default/index']],
                 ['label' => Yii::t('app', 'NAW_CONTACT'), 'url' => ['/main/contact/index']],
@@ -44,12 +45,18 @@ AppAsset::register($this);
                     ['label' => Yii::t('app', 'NAV_LOGIN'), 'url' => ['/user/default/login']] :
                     false,
                 !Yii::$app->user->isGuest ?
-                    ['label' => Yii::t('app', 'NAV_PROFILE'), 'url' => ['/user/profile/index']] :
+                    ['label' => Yii::t('app', 'NAV_ADMIN'), 'items' => [
+                        ['label' => Yii::t('app', 'NAV_ADMIN'), 'url' => ['/admin/default/index']],
+                        ['label' => Yii::t('app', 'USERS_ADMIN'), 'url' => ['/admin/users/index']],
+                    ]] :
                     false,
                 !Yii::$app->user->isGuest ?
-                    ['label' => Yii::t('app', 'NAV_LOGOUT'),
-                        'url' => ['/user/default/logout'],
-                        'linkOptions' => ['data-method' => 'post']] :
+                    ['label' => Yii::t('app', 'NAV_PROFILE'), 'items' => [
+                        ['label' => Yii::t('app', 'NAV_PROFILE'), 'url' => ['/user/profile/index']],
+                        ['label' => Yii::t('app', 'NAV_LOGOUT'),
+                            'url' => ['/user/default/logout'],
+                            'linkOptions' => ['data-method' => 'post']]
+                    ]] :
                     false,
             ]),
         ]);

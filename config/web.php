@@ -11,6 +11,9 @@ $config = [
         'user' => [
             'class' => 'app\modules\user\Module',
         ],
+        'admin' => [
+            'class' => 'app\modules\admin\Module',
+        ],
     ],
     'defaultRoute' => 'main/default/index',
     'components' => [
