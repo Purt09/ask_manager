@@ -12,6 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'ADMIN_USERS'), ['users/index'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'USERS_ADMIN'), ['users/index'], ['class' => 'btn btn-primary']) ?>
     </p>
 </div>

@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use app\modules\admin\models\User;
 use app\components\grid\SetColumn;
 use kartik\date\DatePicker;
+use app\components\grid\LinkColumn;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\admin\models\UserSearch */
@@ -40,7 +41,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'created_at',
                 'format' => 'datetime',
             ],
-            'username',
+            [
+                'class' => LinkColumn::className(),
+                'attribute' => 'username',
+            ],
             'email:email',
             [
                 'class' => SetColumn::className(),
