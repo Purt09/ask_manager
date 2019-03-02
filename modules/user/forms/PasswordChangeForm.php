@@ -1,48 +1,45 @@
 <?php
-namespace app\modules\user\models;
-use yii\base\InvalidParamException;
+namespace app\modules\user\forms;
+
 use yii\base\Model;
 use Yii;
+use app\modules\user\models\User;
+
+
 /**
  * Password reset form
  */
-class ChangePasswordForm extends Model
+class PasswordChangeForm extends Model
 {
     public $currentPassword;
     public $newPassword;
     public $newPasswordRepeat;
+
     /**
      * @var User
      */
     private $_user;
+
     /**
      * @param User $user
      * @param array $config
-     * @throws \yii\base\InvalidParamException
      */
     public function __construct(User $user, $config = [])
     {
-        if (empty($user)) {
-            throw new InvalidParamException('User is empty.');
-        }
         $this->_user = $user;
         parent::__construct($config);
     }
-    /**
-     * @inheritdoc
-     */
+
     public function rules()
     {
         return [
             [['currentPassword', 'newPassword', 'newPasswordRepeat'], 'required'],
-            ['currentPassword', 'validatePassword'],
+            ['currentPassword', 'currentPassword'],
             ['newPassword', 'string', 'min' => 6],
             ['newPasswordRepeat', 'compare', 'compareAttribute' => 'newPassword'],
         ];
     }
-    /**
-     * @inheritdoc
-     */
+
     public function attributeLabels()
     {
         return [
@@ -51,11 +48,12 @@ class ChangePasswordForm extends Model
             'currentPassword' => Yii::t('app', 'USER_CURRENT_PASSWORD'),
         ];
     }
+
     /**
      * @param string $attribute
      * @param array $params
      */
-    public function validatePassword($attribute, $params)
+    public function currentPassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
             if (!$this->_user->validatePassword($this->$attribute)) {
@@ -63,6 +61,7 @@ class ChangePasswordForm extends Model
             }
         }
     }
+
     /**
      * @return boolean
      */

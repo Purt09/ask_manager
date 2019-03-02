@@ -1,10 +1,12 @@
 <?php
 
-namespace app\modules\user\models;
+namespace app\modules\user\forms;
 
 use yii\base\Model;
 use yii\db\ActiveQuery;
 use Yii;
+use app\modules\user\models\User;
+
 
 class ProfileUpdateForm extends Model
 {
