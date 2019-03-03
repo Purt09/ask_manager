@@ -6,6 +6,8 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
+use app\modules\user\models\query\UserQuery;
+
 /**
  * This is the model class for table "{{%user}}".
  *
@@ -99,6 +101,15 @@ class User extends ActiveRecord implements IdentityInterface
             self::STATUS_WAIT => Yii::t('app', 'USER_STATUS_WAIT'),
         ];
     }
+    /**
+     * @return UserQuery
+     */
+    public static function find()
+    {
+        return Yii::createObject(UserQuery::className(), [get_called_class()]);
+    }
+
+
     /**
      * @inheritdoc
      */
