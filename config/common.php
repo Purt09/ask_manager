@@ -46,6 +46,11 @@ return [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
         ],
+        'user' => [
+            'class' => 'app\modules\user\Module',
+            'identityClass' => 'app\modules\user\models\User',
+            'loginUrl' => ['models/user/login'],
+        ],
         'cache' => [
             'class' => 'yii\caching\DummyCache',
         ],
