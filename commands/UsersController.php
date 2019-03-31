@@ -12,10 +12,10 @@ class UsersController extends Controller
 {
     public function actionIndex()
     {
-        echo 'yii users/create' . PHP_EOL;
-        echo 'yii users/remove' . PHP_EOL;
-        echo 'yii users/activate' . PHP_EOL;
-        echo 'yii users/change-password' . PHP_EOL;
+        echo 'yii tasks/create' . PHP_EOL;
+        echo 'yii tasks/remove' . PHP_EOL;
+        echo 'yii tasks/activate' . PHP_EOL;
+        echo 'yii tasks/change-password' . PHP_EOL;
     }
 
     public function actionCreate()

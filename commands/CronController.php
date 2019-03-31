@@ -18,7 +18,7 @@ class CronController extends Controller
     public $module;
 
     /**
-     * Removes non-activated expired users
+     * Removes non-activated expired tasks
      */
     public function actionRemoveOverdue()
     {
