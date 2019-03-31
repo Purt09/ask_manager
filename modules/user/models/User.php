@@ -106,7 +106,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function find()
     {
-        return Yii::createObject(UserQuery::className(), [get_called_class()]);
+        return new UserQuery(get_called_class());
     }
 
 
@@ -130,6 +130,13 @@ class User extends ActiveRecord implements IdentityInterface
     public function getId()
     {
         return $this->getPrimaryKey();
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername(){
+        return $this->username;
     }
     /**
      * @inheritdoc

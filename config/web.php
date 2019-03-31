@@ -3,30 +3,34 @@
 
 $config = [
     'id' => 'app',
-    'language'=>'ru-RU',
     'modules' => [
+        'admin' => [
+            'class' => 'app\modules\admin\Module',
+            'modules' => [
+                'user' => [
+                    'class' => 'app\modules\user\Module',
+                    'controllerNamespace' => 'app\modules\user\controllers',
+                    'viewPath' => '@app/modules/user/views',
+                ],
+            ]
+        ],
         'main' => [
             'class' => 'app\modules\main\Module',
         ],
         'user' => [
             'class' => 'app\modules\user\Module',
-        ],
-        'admin' => [
-            'class' => 'app\modules\admin\Module',
+            'controllerNamespace' => 'app\modules\user\controllers',
+            'viewPath' => '@app/modules/user/views',
         ],
     ],
-    'defaultRoute' => 'main/default/index',
     'components' => [
         'user' => [
-            'identityClass' => 'app\modules\user\models\User',
+            'identityClass' => 'app\components\UserIdentity',
             'enableAutoLogin' => true,
             'loginUrl' => ['user/default/login'],
         ],
         'errorHandler' => [
             'errorAction' => 'main/default/error',
-        ],
-        'request' => [
-            'cookieValidationKey' => '',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

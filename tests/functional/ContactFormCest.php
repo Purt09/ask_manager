@@ -4,7 +4,7 @@ class ContactFormCest
 {
     public function _before(\FunctionalTester $I)
     {
-        $I->amOnPage(['site/contact']);
+        $I->amOnPage(['contact']);
     }
 
     public function openContactPage(\FunctionalTester $I)
@@ -20,7 +20,7 @@ class ContactFormCest
         $I->see('Name cannot be blank');
         $I->see('Email cannot be blank');
         $I->see('Subject cannot be blank');
-        $I->see('Body cannot be blank');
+        $I->see('Message cannot be blank');
         $I->see('The verification code is incorrect');
     }
 
