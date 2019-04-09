@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user;
+namespace app\modules\task;
 
 use Yii;
 /**
@@ -11,13 +11,11 @@ class Module extends \yii\base\Module
     /**
      * {@inheritdoc}
      */
-    public $controllerNamespace = 'app\modules\user\controllers';
+    public $controllerNamespace = 'app\modules\task\controllers';
 
-    /**
-     * {@inheritdoc}
-     */
+
     public static function t($category, $message, $params = [], $language = null)
     {
-        return Yii::t('modules/user/' . $category, $message, $params, $language);
+        return Yii::t('modules/task/' . $category, $message, $params, $language);
     }
 }

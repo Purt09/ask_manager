@@ -9,6 +9,6 @@ class HomeCest
     public function checkOpen(FunctionalTester $I)
     {
         $I->amOnPage(\Yii::$app->homeUrl);
-        $I->see('SeoKeys');
+        $I->see('Task manager');
     }
 }

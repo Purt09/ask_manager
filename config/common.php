@@ -5,7 +5,7 @@ $params = ArrayHelper::merge(
     require(__DIR__ . '/params-local.php')
 );
 return [
-    'name' => 'SeoKeys',
+    'name' => 'Task manager',
     'language'=>'ru-RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
@@ -13,6 +13,7 @@ return [
         'app\modules\admin\Bootstrap',
         'app\modules\main\Bootstrap',
         'app\modules\user\Bootstrap',
+        'app\modules\task\Bootstrap',
     ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',

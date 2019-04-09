@@ -47,12 +47,14 @@ AppAsset::register($this);
                 !Yii::$app->user->isGuest ?
                     ['label' => Yii::t('app', 'NAV_ADMIN'), 'items' => [
                         ['label' => Yii::t('app', 'NAV_ADMIN'), 'url' => ['/admin/default/index']],
-                        ['label' => Yii::t('app', 'USERS_ADMIN'), 'url' => ['/admin/tasks/index']],
+                        ['label' => Yii::t('app', 'USERS_ADMIN'), 'url' => ['/admin/users']],
+
                     ]] :
                     false,
                 !Yii::$app->user->isGuest ?
                     ['label' => Yii::t('app', 'NAV_PROFILE'), 'items' => [
                         ['label' => Yii::t('app', 'NAV_PROFILE'), 'url' => ['/user/profile/index']],
+                        ['label' => Yii::t('app', 'USERS_TASK'), 'url' => ['/task/default']],
                         ['label' => Yii::t('app', 'Logout (admin)'),
                             'url' => ['/user/default/logout'],
                             'linkOptions' => ['data-method' => 'post']]

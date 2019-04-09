@@ -22,6 +22,9 @@ $config = [
             'controllerNamespace' => 'app\modules\user\controllers',
             'viewPath' => '@app/modules/user/views',
         ],
+        'task' => [
+            'class' => 'app\modules\task\Module',
+        ],
     ],
     'components' => [
         'user' => [

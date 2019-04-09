@@ -2,11 +2,13 @@
 
 namespace app\modules\task\models;
 
+use app\modules\task\Module;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "{{%task}}".
@@ -25,6 +27,7 @@ class Task extends \yii\db\ActiveRecord
 {
     const STATUS_CAR = 0;
     const STATUS_ACTIVE = 1;
+    const STATUS_TIME_OUT = 2;
 
     /**
      * {@inheritdoc}
@@ -58,11 +61,11 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'created_at' => Yii::t('app', 'TASK_CREATE_AT'),
-            'updated_at' => Yii::t('app', 'TASK_UPDATE_AT'),
-            'title' => Yii::t('app', 'TASK_TITLE'),
-            'description' => Yii::t('app', 'TASK_DESCRIPTION'),
-            'status' => Yii::t('app', 'TASK_STATUS'),
+            'created_at' => Module::t('module', 'TASK_CREATE_AT'),
+            'updated_at' => Module::t('module', 'TASK_UPDATE_AT'),
+            'title' => Module::t('module', 'TASK_TITLE'),
+            'description' => Module::t('module', 'TASK_DESCRIPTION'),
+            'status' => Module::t('module', 'TASK_STATUS'),
         ];
     }
 
@@ -84,8 +87,9 @@ class Task extends \yii\db\ActiveRecord
     public static function getStatusesArray()
     {
         return [
-            self::STATUS_CAR => Yii::t('app', 'TASK_STATUS_CAR'),
-            self::STATUS_ACTIVE => Yii::t('app', 'TASK_STATUS_ACTIVE'),
+            self::STATUS_CAR => Module::t('module', 'TASK_STATUS_CAR'),
+            self::STATUS_ACTIVE => Module::t('module', 'TASK_STATUS_ACTIVE'),
+            self::STATUS_TIME_OUT => Module::t('module', 'TASK_STATUS_TIME_OUT'),
         ];
     }
 
@@ -108,4 +112,5 @@ class Task extends \yii\db\ActiveRecord
     {
         return $this->getPrimaryKey();
     }
+
 }
