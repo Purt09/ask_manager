@@ -11,7 +11,8 @@ use app\modules\task\models\Task;
  */
 class TaskSearch extends Task
 {
-
+    public $id;
+    public $status;
     public $date_from;
     public $date_to;
     /**
@@ -22,6 +23,7 @@ class TaskSearch extends Task
         return [
             [['id', 'created_at', 'updated_at', 'project_id', 'context_id', 'user_id', 'status'], 'integer'],
             [['title', 'description'], 'safe'],
+            [['date_from', 'date_to'], 'date', 'format' => 'php:Y-m-d'],
         ];
     }
 
@@ -62,18 +64,13 @@ class TaskSearch extends Task
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'project_id' => $this->project_id,
-            'context_id' => $this->context_id,
-            'user_id' => $this->user_id,
             'status' => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['>=', 'created_at', $this->date_from ? strtotime($this->date_from . ' 00:00:00') : null])
-            ->andFilterWhere(['<=', 'created_at', $this->date_to ? strtotime($this->date_to . ' 23:59:59') : null]);
+            ->andFilterWhere(['>=', 'updated_at', $this->date_from ? strtotime($this->date_from . ' 00:00:00') : null])
+            ->andFilterWhere(['<=', 'updated_at', $this->date_to ? strtotime($this->date_to . ' 23:59:59') : null]);
 
         return $dataProvider;
     }

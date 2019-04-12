@@ -40,8 +40,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     'pluginOptions' => ['format' => 'yyyy-mm-dd']
                 ]),
                 'attribute' => 'created_at',
-                'format' => 'datetime',
+                'format' => 'date',
             ],
+//            [
+//                'filter' => DatePicker::widget([
+//                    'model' => $searchModel,
+//                    'attribute' => 'date_from',
+//                    'attribute2' => 'date_to',
+//                    'type' => DatePicker::TYPE_RANGE,
+//                    'separator' => '-',
+//                    'pluginOptions' => ['format' => 'yyyy-mm-dd']
+//                ]),
+//                'attribute' => 'updated_at',
+//                'format' => 'datetime',
+//            ],
             'title',
             'description',
             [

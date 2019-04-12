@@ -8,7 +8,6 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
-use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "{{%task}}".
@@ -43,7 +42,7 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'updated_at', 'title'], 'required'],
+            [[ 'title'], 'required'],
             [['created_at', 'updated_at', 'project_id', 'context_id', 'user_id', 'status'], 'integer'],
 
             [['title', 'description'], 'string', 'max' => 255],

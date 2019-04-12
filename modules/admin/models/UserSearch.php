@@ -4,6 +4,7 @@ namespace app\modules\admin\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use app\modules\admin\models\User;
 
 /**
  * UserSearch represents the model behind the search form about `app\modules\admin\models\User`.
@@ -16,7 +17,9 @@ class UserSearch extends Model
     public $status;
     public $date_from;
     public $date_to;
-
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [

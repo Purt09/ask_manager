@@ -13,7 +13,7 @@ use kartik\date\DatePicker;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+<!--    --><?// $form->field($model, 'created_at')->textInput() ?>
 
     <?= $form->field($model, 'updated_at')->widget(DatePicker::className(), [
         'name' => 'anniversary',
@@ -23,9 +23,21 @@ use kartik\date\DatePicker;
         'removeButton' => false,
         'pluginOptions' => [
             'autoclose'=>true,
-            'format' => 'ddmmyyyy'
+            'format' => 'yyyymmdd'
         ]
     ]) ?>
+
+<!--    --><?//= $form->field($model, 'created_at')->widget(DatePicker::className(), [
+//        'name' => 'anniversary',
+//        'value' => '08/10/2004',
+//        'readonly' => true,
+//
+//        'removeButton' => false,
+//        'pluginOptions' => [
+//            'autoclose'=>true,
+//            'format' => 'yyyymmdd'
+//        ]
+//    ]) ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
