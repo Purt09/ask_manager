@@ -2,7 +2,7 @@
 
 return [
     'TASK_CREATE_AT' => 'Создан',
-    'TASK_UPDATE_AT' => 'Выполнить до',
+    'TASK_UPDATE_AT' => 'Срок',
     'TASK_TITLE' => 'Название',
     'TASK_DESCRIPTION' => 'Описание',
     'TASK_STATUS' => 'Статус',
