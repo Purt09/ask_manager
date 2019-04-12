@@ -15,6 +15,8 @@ class TaskSearch extends Task
     public $status;
     public $date_from;
     public $date_to;
+    public $date_from1;
+    public $date_to1;
     /**
      * {@inheritdoc}
      */
@@ -24,6 +26,7 @@ class TaskSearch extends Task
             [['id', 'created_at', 'updated_at', 'project_id', 'context_id', 'user_id', 'status'], 'integer'],
             [['title', 'description'], 'safe'],
             [['date_from', 'date_to'], 'date', 'format' => 'php:Y-m-d'],
+            [['date_from1', 'date_to1'], 'date', 'format' => 'php:Y-m-d'],
         ];
     }
 
@@ -70,7 +73,9 @@ class TaskSearch extends Task
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['>=', 'updated_at', $this->date_from ? strtotime($this->date_from . ' 00:00:00') : null])
-            ->andFilterWhere(['<=', 'updated_at', $this->date_to ? strtotime($this->date_to . ' 23:59:59') : null]);
+            ->andFilterWhere(['<=', 'updated_at', $this->date_to ? strtotime($this->date_to . ' 23:59:59') : null])
+            ->andFilterWhere(['>=', 'created_at', $this->date_from1 ? strtotime($this->date_from1 . ' 00:00:00') : null])
+            ->andFilterWhere(['<=', 'created_at', $this->date_to1 ? strtotime($this->date_to1 . ' 23:59:59') : null]);
 
         return $dataProvider;
     }

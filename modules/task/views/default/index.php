@@ -22,8 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Module::t('module', 'TASK_CREATE'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-    <?= GridView::widget([
+    <?=GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -35,25 +34,29 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'date_from',
                     'attribute2' => 'date_to',
+                    'readonly' => true,
                     'type' => DatePicker::TYPE_RANGE,
                     'separator' => '-',
                     'pluginOptions' => ['format' => 'yyyy-mm-dd']
                 ]),
+                'attribute' => 'updated_at',
+                'format' => 'date',
+            ],
+            [
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'date_from1',
+                    'attribute2' => 'date_to1',
+                    'readonly' => true,
+                    'type' => DatePicker::TYPE_RANGE,
+                    'separator' => '-',
+                    'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => 'yyyy-mm-dd']
+                ]),
                 'attribute' => 'created_at',
                 'format' => 'date',
             ],
-//            [
-//                'filter' => DatePicker::widget([
-//                    'model' => $searchModel,
-//                    'attribute' => 'date_from',
-//                    'attribute2' => 'date_to',
-//                    'type' => DatePicker::TYPE_RANGE,
-//                    'separator' => '-',
-//                    'pluginOptions' => ['format' => 'yyyy-mm-dd']
-//                ]),
-//                'attribute' => 'updated_at',
-//                'format' => 'datetime',
-//            ],
             'title',
             'description',
             [
