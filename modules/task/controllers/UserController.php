@@ -19,4 +19,14 @@ class UserController extends Controller
             'modelspros' => $modelsbad
         ]);
     }
+
+    public function actionOverdue(){
+        $models = Task::find()->where(['status' => 0])->all();
+
+
+        return $this->render('overdue', [
+            'models' => $models,
+        ]);
+    }
+
 }

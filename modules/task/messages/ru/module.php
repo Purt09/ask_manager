@@ -14,5 +14,8 @@ return [
     'DELETE' => 'Удалить',
     'TASK_CREATE' => 'Добавить задачу',
     'TASKS' => 'Ваши задачи',
-    'UPDATE: {name}' => 'Изменить: {name}'
+    'UPDATE: {name}' => 'Изменить: {name}',
+    'TASK_COMPLETE' => 'Выполненные задачи',
+    'TASK_OVERDUE' => 'Просроченные задачи',
+    'TASK_ACTIVE' => 'Активные задачи'
 ];
