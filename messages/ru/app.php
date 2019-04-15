@@ -68,5 +68,6 @@ return [
     'DELETE' => 'Удалить',
     'USERS_CREATE' => 'Добавить пользователя',
     'BUTTON_CREATE' => 'Сохранить изменения',
-    'USERS_TASK' => 'Задачи'
+    'USERS_TASKS' => 'Задачи',
+    'USERS_ALL_TASKS' => 'Все задачи'
 ];

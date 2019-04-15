@@ -124,4 +124,16 @@ class DefaultController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
+    public function actionTasks(){
+
+        $modelsactive = Task::find()->where(['status' => 1])->all();
+        $modelsbad = Task::find()->where(['status' => 2])->all();
+
+
+       return $this->render('tasks', [
+           'modelsactive' => $modelsactive,
+           'modelspros' => $modelsbad
+           ]);
+    }
 }
