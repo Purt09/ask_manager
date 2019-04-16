@@ -1,29 +1,28 @@
 <?php
-
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use app\modules\task\Module;
+use kartik\form\ActiveForm;
 use kartik\date\DatePicker;
-/* @var $this yii\web\View */
-/* @var $model app\modules\task\models\Task */
-/* @var $form yii\widgets\ActiveForm */
+use app\modules\task\Module;
+use yii\helpers\Html;
 ?>
 
 <div class="task-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <? $form->field($model, 'created_at')->textInput() ?>
+<!--    --><?// $form->field($model, 'created_at')->textInput() ?>
 
     <?= $form->field($model, 'updated_at')->widget(DatePicker::className(), [
-        'name' => 'anniversary',
-        'value' => '08/10/2004',
-        'readonly' => true,
-
-        'removeButton' => false,
+        'name' => 'dp_5',
+        'type' => DatePicker::TYPE_INLINE,
+        'value' => '23-Feb-1982',
+        'type' => DatePicker::TYPE_INLINE,
         'pluginOptions' => [
-            'autoclose'=>true,
-            'format' => 'yyyymmdd'
+            'format' => 'yyyymmdd',
+            'multidate' => true
+        ],
+        'options' => [
+            // you can hide the input by setting the following
+            // 'style' => 'display:none'
         ]
     ]) ?>
 
