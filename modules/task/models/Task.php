@@ -8,6 +8,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "{{%task}}".
@@ -42,8 +43,8 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[ 'title'], 'required'],
-            [['created_at', 'updated_at', 'project_id', 'context_id', 'user_id', 'status'], 'integer'],
+            //[[ 'title'], 'required'],
+            [['created_at', 'project_id', 'context_id', 'user_id', 'status', 'updated_at'], 'integer'],
 
             [['title', 'description'], 'string', 'max' => 255],
 
@@ -98,7 +99,12 @@ class Task extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                ],
+            ],
         ];
     }
 

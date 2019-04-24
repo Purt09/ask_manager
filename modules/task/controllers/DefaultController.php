@@ -89,6 +89,7 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
+        $model->touch('created_at');
 
         return $this->render('update', [
             'model' => $model,

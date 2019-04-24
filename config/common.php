@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\ArrayHelper;
+use kartik\datecontrol\Module;
+
 $params = ArrayHelper::merge(
     require(__DIR__ . '/params.php'),
     require(__DIR__ . '/params-local.php')
@@ -59,6 +61,14 @@ return [
         'log' => [
             'class' => 'yii\log\Dispatcher',
         ],
+        'formatter' => [
+            'locale' => 'ru-RU',
+            'defaultTimeZone' => 'Europe/Moscow',
+            'timeZone' => 'Asia/Yekaterinburg',
+            'dateFormat' => 'dd.MM.yyyy',
+            'timeFormat' => 'HH:mm:ss',
+            'datetimeFormat' => 'dd.MM.yyyy hh:mm:ss',
+        ]
     ],
     'params' => $params,
 ];

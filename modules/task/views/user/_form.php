@@ -11,32 +11,10 @@ use yii\helpers\Html;
 
 <!--    --><?// $form->field($model, 'created_at')->textInput() ?>
 
-    <?= $form->field($model, 'updated_at')->widget(DatePicker::className(), [
-        'name' => 'dp_5',
-        'type' => DatePicker::TYPE_INLINE,
-        'value' => '23-Feb-1982',
-        'type' => DatePicker::TYPE_INLINE,
-        'pluginOptions' => [
-            'format' => 'yyyymmdd',
-            'multidate' => true
-        ],
-        'options' => [
-            // you can hide the input by setting the following
-            // 'style' => 'display:none'
-        ]
+    <?= $form->field($model, 'updated_at')->widget(\kartik\datecontrol\DateControl::className(),[
+        'type' => \kartik\datecontrol\DateControl::FORMAT_DATETIME
     ]) ?>
 
-<!--    --><?//= $form->field($model, 'created_at')->widget(DatePicker::className(), [
-//        'name' => 'anniversary',
-//        'value' => '08/10/2004',
-//        'readonly' => true,
-//
-//        'removeButton' => false,
-//        'pluginOptions' => [
-//            'autoclose'=>true,
-//            'format' => 'yyyymmdd'
-//        ]
-//    ]) ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
