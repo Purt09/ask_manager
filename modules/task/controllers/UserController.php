@@ -35,7 +35,7 @@ class UserController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
@@ -68,6 +68,8 @@ class UserController extends Controller
     {
         $model = new Task();
 
+        $model->updated_at=1755016400;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -75,6 +77,27 @@ class UserController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    public function actionDelete($id = false)
+    {
+        if (isset($id)) {
+            if (Task::deleteAll(['in', 'id', $id])) {
+                $this->redirect(['index']);
+            }
+        } else {
+            $this->redirect(['index']);
+        }
+    }
+
+    public function actionComplete($id = false){
+        $model = $this->findModel($id);
+
+        $model->status = Task::STATUS_COMPLETE;
+
+        $model->save();
+
+        $this->redirect(['index']);
     }
 
 

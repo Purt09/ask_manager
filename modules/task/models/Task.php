@@ -25,7 +25,7 @@ use yii\db\Expression;
  */
 class Task extends \yii\db\ActiveRecord
 {
-    const STATUS_CAR = 0;
+    const STATUS_COMPLETE = 0;
     const STATUS_ACTIVE = 1;
     const STATUS_TIME_OUT = 2;
 
@@ -87,7 +87,7 @@ class Task extends \yii\db\ActiveRecord
     public static function getStatusesArray()
     {
         return [
-            self::STATUS_CAR => Module::t('module', 'TASK_STATUS_CAR'),
+            self::STATUS_COMPLETE => Module::t('module', 'TASK_STATUS_CAR'),
             self::STATUS_ACTIVE => Module::t('module', 'TASK_STATUS_ACTIVE'),
             self::STATUS_TIME_OUT => Module::t('module', 'TASK_STATUS_TIME_OUT'),
         ];

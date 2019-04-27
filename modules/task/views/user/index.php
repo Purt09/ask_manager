@@ -27,11 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="p-3 mb-2 bg-info text-white" >
                 <?= Module::t('module', 'TASK_ACTIVE') ?>:
             </div>
+
             <?php foreach ($modelsactive as $model) : ?>
-                <p>
-                    <a href="<?= Url::to(['update', 'id' => $model->id]) ?>">
+            <div class="bg-light">
+                    <? echo Html::a('выполненно', Url::to(['complete', 'id' => $model->id]), ['class'=>'btn btn-success btn-sm']) ?>
+
+                    <a href="<?= Url::to(['update', 'id' => $model->id]) ?>" class="text-body pl-3">
                     <?= $model->title ?> </a>
-                </p>
+            </div>
             <?php endforeach; ?>
         </div>
 
@@ -40,10 +43,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Module::t('module', 'TASK_OVERDUE') ?>:
             </div>
             <?php foreach ($modelspros as $model) : ?>
-                <p>
-                    <a href="<?= Url::to(['update', 'id' => $model->id]) ?>">
+                <div class="bg-light table-striped">
+                    <? echo Html::a('выполненно', Url::to(['complete', 'id' => $model->id]), ['class'=>'btn btn-success btn-sm']) ?>
+
+                    <a href="<?= Url::to(['update', 'id' => $model->id]) ?>" class="text-body pl-3">
                         <?= $model->title ?> </a>
-                </p>
+                </div>
             <?php endforeach; ?>
         </div>
     </div>

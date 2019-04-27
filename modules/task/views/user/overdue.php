@@ -28,8 +28,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Module::t('module', 'TASK_COMPLETE') ?> :
             </div>
             <?php foreach ($models as $model) : ?>
+            <p>
                     <a href="<?= Url::to(['update', 'id' => $model->id]) ?>">
                        <?= $model->title ?> </a>
+            </p>
             <?php endforeach; ?>
         </div>
     </div>

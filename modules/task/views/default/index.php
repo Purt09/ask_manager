@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'name' => 'statusName',
                 'cssCLasses' => [
-                    Task::STATUS_CAR => 'success',
+                    Task::STATUS_COMPLETE => 'success',
                     Task::STATUS_ACTIVE => 'warning',
                     Task::STATUS_TIME_OUT => 'danger',
                 ],
