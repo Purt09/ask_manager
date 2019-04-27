@@ -16,6 +16,7 @@ return [
         'app\modules\main\Bootstrap',
         'app\modules\user\Bootstrap',
         'app\modules\task\Bootstrap',
+        'app\modules\project\Bootstrap',
     ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',

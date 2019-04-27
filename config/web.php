@@ -25,6 +25,9 @@ $config = [
         'task' => [
             'class' => 'app\modules\task\Module',
         ],
+        'project' => [
+            'class' => 'app\modules\project\Module',
+        ],
         'datecontrol' =>  [
             'class' => 'kartik\datecontrol\Module',
 
