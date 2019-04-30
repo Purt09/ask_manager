@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\modules\task\Module;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\task\models\Task */
@@ -35,7 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at:datetime',
             'title',
             'description',
-            'project_id',
+            [
+                'attribute' => 'project_id',
+                'value'=> ArrayHelper::getValue($model, 'project.title'),
+            ],
             'context_id',
             'user_id',
             'status',

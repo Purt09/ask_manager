@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\project\models\Project */
@@ -33,7 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'time_at:datetime',
             'title',
             'description',
-            'parent_id',
+            [
+                'attribute' => 'project_id',
+                'value'=> ArrayHelper::getValue($model, 'parent.title'),
+            ],
         ],
     ]) ?>
 
