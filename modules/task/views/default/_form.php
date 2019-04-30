@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\modules\task\Module;
 use kartik\datetime\DateTimePicker;
+use app\modules\project\models\Project;
 /* @var $this yii\web\View */
 /* @var $model app\modules\task\models\Task */
 /* @var $form yii\widgets\ActiveForm */
@@ -19,7 +20,7 @@ use kartik\datetime\DateTimePicker;
     ]) ?>
 
 
-
+    <?= $form->field($model, 'project_id')->dropDownList(Project::find()->select(['title', 'id'])->indexBy('id')->column(), ['prompt' => ''])?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 

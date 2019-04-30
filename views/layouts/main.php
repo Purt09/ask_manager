@@ -49,6 +49,7 @@ AppAsset::register($this);
                         ['label' => Yii::t('app', 'NAV_ADMIN'), 'url' => ['/admin/default/index']],
                         ['label' => Yii::t('app', 'USERS_ADMIN'), 'url' => ['/admin/users']],
                         ['label' => Yii::t('app', 'USERS_ALL_TASKS'), 'url' => ['/task/default']],
+                        ['label' => Yii::t('app', 'ADMIN_ALL_PROJECTS'), 'url' => ['/project/default']]
 
                     ]] :
                     false,

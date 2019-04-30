@@ -6,6 +6,8 @@ use app\modules\task\models\Task;
 use app\components\grid\SetColumn;
 use kartik\date\DatePicker;
 use app\modules\task\Module;
+use app\modules\project\models\Project;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\task\models\TaskSearch */
@@ -70,7 +72,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     Task::STATUS_TIME_OUT => 'danger',
                 ],
             ],
-            //'project_id',
+            [
+                'attribute' => 'project_id',
+                'filter' => Project::find()->select(['title', 'id'])->indexBy('id')->column(),
+                'value' => 'project.title'
+            ],
+
+
             //'context_id',
             //'user_id',
             //'status',

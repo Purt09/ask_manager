@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\modules\project\models\Project;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\project\models\ProjectSearch */
@@ -29,7 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'time_at:datetime',
             'title',
             'description',
-            'parent_id',
+            [
+                'attribute' => 'parent_id',
+                'filter' => Project::find()->select(['title', 'id'])->indexBy('id')->column(),
+                'value' => 'parent.title'
+
+            ],
+
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

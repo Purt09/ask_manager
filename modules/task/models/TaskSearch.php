@@ -27,6 +27,7 @@ class TaskSearch extends Task
             [['title', 'description'], 'safe'],
             [['date_from', 'date_to'], 'date', 'format' => 'php:Y-m-d'],
             [['date_from1', 'date_to1'], 'date', 'format' => 'php:Y-m-d'],
+            [['project'], 'safe'],
         ];
     }
 
@@ -64,10 +65,12 @@ class TaskSearch extends Task
             return $dataProvider;
         }
 
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
+            'project_id' => $this->project_id,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])

@@ -2,6 +2,7 @@
 
 namespace app\modules\task\models;
 
+use app\modules\project\models\Project;
 use app\modules\task\Module;
 use Yii;
 use yii\base\NotSupportedException;
@@ -116,6 +117,28 @@ class Task extends \yii\db\ActiveRecord
     public function getId()
     {
         return $this->getPrimaryKey();
+    }
+
+//    /**
+//     * @return \yii\db\ActiveQuery
+//     */
+//    public function getTask()
+//    {
+//        return $this->hasMany(Task::className(), ['parent_id' => 'id']);
+//    }
+
+    public function getProject()
+    {
+        return $this->hasOne(Project::className(), ['id' => 'project_id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return TaskQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new TaskQuery(get_called_class());
     }
 
 }
