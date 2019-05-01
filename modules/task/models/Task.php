@@ -67,6 +67,7 @@ class Task extends \yii\db\ActiveRecord
             'title' => Module::t('module', 'TASK_TITLE'),
             'description' => Module::t('module', 'TASK_DESCRIPTION'),
             'status' => Module::t('module', 'TASK_STATUS'),
+            'project_id' => Module::t('module', 'PROJECT'),
         ];
     }
 

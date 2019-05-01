@@ -4,6 +4,7 @@ namespace app\modules\project\models;
 
 use Yii;
 use app\modules\task\models\Task;
+use app\modules\project\Module;
 
 /**
  * This is the model class for table "{{%project}}".
@@ -48,10 +49,10 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'time_at' => 'Time At',
-            'title' => 'Title',
-            'description' => 'Description',
-            'parent_id' => 'Parent ID',
+            'time_at' => Module::t('module', 'TIME_END_AT'),
+            'title' => Module::t('module', 'PROJECT_TITLE'),
+            'description' => Module::t('module', 'PROJECT_DESCRIPTION'),
+            'parent_id' => Module::t('module', 'PROJECT_PARENT'),
         ];
     }
 

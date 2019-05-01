@@ -40,7 +40,7 @@ class ProjectSearch extends Project
      */
     public function search($params)
     {
-        $query = Project::find();
+        $query = Project::find()->with(['parent']);
 
         // add conditions that should always apply here
 

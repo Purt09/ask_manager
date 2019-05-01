@@ -70,6 +70,7 @@ return [
     'BUTTON_CREATE' => 'Сохранить изменения',
     'USERS_TASKS' => 'Задачи',
     'USERS_ALL_TASKS' => 'Все задачи',
-    'ADMIN_ALL_PROJECTS' => 'Все проекты'
+    'ADMIN_ALL_PROJECTS' => 'Все проекты',
+    'PROJECTS' => 'Все проекты'
 
 ];

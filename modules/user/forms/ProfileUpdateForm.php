@@ -33,7 +33,7 @@ class ProfileUpdateForm extends Model
                 'email',
                 'unique',
                 'targetClass' => User::className(),
-                'message' => Yii::t('app', 'ERROR_EMAIL_EXISTS'),
+                'messages' => Yii::t('app', 'ERROR_EMAIL_EXISTS'),
                 'filter' => ['<>', 'id', $this->_user->id],
             ],
             ['email', 'string', 'max' => 255],

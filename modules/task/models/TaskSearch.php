@@ -49,7 +49,7 @@ class TaskSearch extends Task
      */
     public function search($params)
     {
-        $query = Task::find();
+        $query = Task::find()->with(['project']);
 
         // add conditions that should always apply here
 

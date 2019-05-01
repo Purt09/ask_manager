@@ -3,12 +3,13 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\modules\project\models\Project;
+use app\modules\project\Module;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\project\models\ProjectSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Projects');
+$this->title = Yii::t('app', 'PROJECTS');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="project-index">
@@ -17,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Project'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Module::t('module', 'PROJECT_CREATE'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

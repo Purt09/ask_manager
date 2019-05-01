@@ -1,12 +1,13 @@
 <?php
 
 use yii\helpers\Html;
+use app\modules\project\Module;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\project\models\Project */
 
-$this->title = Yii::t('app', 'Create Project');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Projects'), 'url' => ['index']];
+$this->title = Module::t('module', 'CREATE_PROJECT');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'PROJECTS'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="project-create">

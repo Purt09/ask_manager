@@ -2,6 +2,8 @@
 
 namespace app\modules\project;
 
+use Yii;
+
 /**
  * Project module definition class
  */
@@ -12,13 +14,8 @@ class Module extends \yii\base\Module
      */
     public $controllerNamespace = 'app\modules\project\controllers';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function init()
+    public static function t($category, $message, $params = [], $language = null)
     {
-        parent::init();
-
-        // custom initialization code goes here
+        return Yii::t('modules/project/' . $category, $message, $params, $language);
     }
 }

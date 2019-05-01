@@ -4,13 +4,13 @@ namespace app\widgets;
 use Yii;
 
 /**
- * Alert widget renders a message from session flash. All flash messages are displayed
- * in the sequence they were assigned using setFlash. You can set message as following:
+ * Alert widget renders a messages from session flash. All flash messages are displayed
+ * in the sequence they were assigned using setFlash. You can set messages as following:
  *
  * ```php
- * Yii::$app->session->setFlash('error', 'This is the message');
- * Yii::$app->session->setFlash('success', 'This is the message');
- * Yii::$app->session->setFlash('info', 'This is the message');
+ * Yii::$app->session->setFlash('error', 'This is the messages');
+ * Yii::$app->session->setFlash('success', 'This is the messages');
+ * Yii::$app->session->setFlash('info', 'This is the messages');
  * ```
  *
  * Multiple messages could be set as follows:
