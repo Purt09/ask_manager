@@ -142,4 +142,13 @@ class Task extends \yii\db\ActiveRecord
         return new TaskQuery(get_called_class());
     }
 
+    /**
+     * Change status on complete
+     * @param $id
+     */
+    public function setStatusCompete($id){
+        $this->status = self::STATUS_COMPLETE;
+        $this->save();
+    }
+
 }

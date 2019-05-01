@@ -88,4 +88,13 @@ class Project extends \yii\db\ActiveRecord
     {
         return new ProjectQuery(get_called_class());
     }
+
+    /**
+     * @param $id
+     * @return Project|null
+     */
+    public function getTitle($id){
+        $model = Project::findOne($id);
+        return $model->title;
+    }
 }

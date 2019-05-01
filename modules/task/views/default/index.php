@@ -75,7 +75,16 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'project_id',
                 'filter' => Project::find()->select(['title', 'id'])->indexBy('id')->column(),
-                'value' => 'project.title'
+                'value'     => function (Task $model) {
+                    if ($model->project_id != null) {
+
+                        return Project::getTitle($model->project_id);
+                        //or: return Html::encode($model->some_attribute)
+                    } else {
+                        return '-';
+                    }
+                },
+//                'value' => 'project.title'
             ],
 
 

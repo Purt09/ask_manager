@@ -79,6 +79,9 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @param bool $id
+     */
     public function actionDelete($id = false)
     {
         if (isset($id)) {
@@ -90,14 +93,21 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Change status model on complete (Task->complete)
+     *
+     * @param bool $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
     public function actionComplete($id = false){
+
+
         $model = $this->findModel($id);
 
-        $model->status = Task::STATUS_COMPLETE;
+        $model->setStatusCompete($id);
 
-        $model->save();
-
-        $this->redirect(['index']);
+        return $this->redirect(['index']);
     }
 
 
