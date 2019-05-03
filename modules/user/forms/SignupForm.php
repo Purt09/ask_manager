@@ -1,9 +1,8 @@
 <?php
 namespace app\modules\user\forms;
-
-use app\modules\user\models\User;
 use yii\base\Model;
 use Yii;
+use app\modules\user\models\User;
 /**
  * Signup form
  */
@@ -22,12 +21,12 @@ class SignupForm extends Model
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'required'],
             ['username', 'match', 'pattern' => '#^[\w_-]+$#i'],
-            ['username', 'unique', 'targetClass' => User::className(), 'messages' => Yii::t('app', 'ERROR_USERNAME_EXISTS')],
+            ['username', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('app', 'ERROR_USERNAME_EXISTS')],
             ['username', 'string', 'min' => 2, 'max' => 255],
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'required'],
             ['email', 'email'],
-            ['email', 'unique', 'targetClass' => User::className(), 'messages' => Yii::t('app', 'ERROR_EMAIL_EXISTS')],
+            ['email', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('app', 'ERROR_EMAIL_EXISTS')],
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
             ['verifyCode', 'captcha', 'captchaAction' => '/user/default/captcha'],
@@ -61,11 +60,12 @@ class SignupForm extends Model
             $user->generateAuthKey();
             $user->generateEmailConfirmToken();
             if ($user->save()) {
-                Yii::$app->mailer->compose('@app/modules/user/mails/emailConfirm', ['user' => $user])
+                Yii::$app->mailer->compose(['text' => 'confirmEmail'], ['user' => $user])
                     ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
                     ->setTo($this->email)
                     ->setSubject('Email confirmation for ' . Yii::$app->name)
                     ->send();
+
                 return $user;
             }
         }
