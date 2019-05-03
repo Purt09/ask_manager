@@ -27,16 +27,16 @@ class ProfileUpdateForm extends Model
     public function rules()
     {
         return [
-            ['email', 'required'],
-            ['email', 'email'],
-            [
-                'email',
-                'unique',
-                'targetClass' => User::className(),
-                'messages' => Yii::t('app', 'ERROR_EMAIL_EXISTS'),
-                'filter' => ['<>', 'id', $this->_user->id],
-            ],
-            ['email', 'string', 'max' => 255],
+//            ['email', 'required'],
+//            ['email', 'email'],
+//            [
+//                'email',
+//                'unique',
+//                'targetClass' => User::className(),
+//                'messages' => Yii::t('app', 'ERROR_EMAIL_EXISTS'),
+//                'filter' => ['<>', 'id', $this->_user->id],
+//            ],
+//            ['email', 'string', 'max' => 255],
         ];
     }
 

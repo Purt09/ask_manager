@@ -1,13 +1,10 @@
 <?php
 namespace app\modules\user\controllers;
-
-use app\modules\user\models\User;
 use app\modules\user\forms\PasswordChangeForm;
+use app\modules\user\models\User;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use Yii;
-use app\modules\user\forms\ProfileUpdateForm;
-
 class ProfileController extends Controller
 {
     public function behaviors()
@@ -24,28 +21,17 @@ class ProfileController extends Controller
             ],
         ];
     }
-
     public function actionIndex()
     {
         return $this->render('index', [
             'model' => $this->findModel(),
         ]);
     }
-
-    /**
-     * @return User the loaded model
-     */
-    private function findModel()
-    {
-        return User::findOne(Yii::$app->user->identity->getId());
-    }
-
     public function actionUpdate()
     {
-        $user = $this->findModel();
-        $model = new ProfileUpdateForm($user);
-
-        if ($model->load(Yii::$app->request->post()) && $model->update()) {
+        $model = $this->findModel();
+        $model->scenario = User::SCENARIO_PROFILE;
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
@@ -53,18 +39,23 @@ class ProfileController extends Controller
             ]);
         }
     }
-
-    public function actionPasswordChange()
+    public function actionChangePassword()
     {
         $user = $this->findModel();
         $model = new PasswordChangeForm($user);
-
         if ($model->load(Yii::$app->request->post()) && $model->changePassword()) {
             return $this->redirect(['index']);
         } else {
-            return $this->render('passwordChange', [
+            return $this->render('changePassword', [
                 'model' => $model,
             ]);
         }
+    }
+    /**
+     * @return User the loaded model
+     */
+    private function findModel()
+    {
+        return User::findOne(Yii::$app->user->identity->getId());
     }
 }

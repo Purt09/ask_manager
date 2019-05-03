@@ -6,8 +6,6 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
-use app\modules\user\models\query\UserQuery;
-
 /**
  * This is the model class for table "{{%user}}".
  *
@@ -43,27 +41,22 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['username', 'required'],
             ['username', 'match', 'pattern' => '#^[\w_-]+$#i'],
-            ['username', 'unique', 'targetClass' => self::className(), 'messages' => Yii::t('app', 'ERROR_USERNAME_EXISTS')],
+            ['username', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'ERROR_USERNAME_EXISTS')],
             ['username', 'string', 'min' => 2, 'max' => 255],
-
-            ['email', 'required', 'except' => self::SCENARIO_PROFILE],
-            ['email', 'email', 'except' => self::SCENARIO_PROFILE],
-            ['email', 'unique', 'targetClass' => self::className(), 'except' => self::SCENARIO_PROFILE, 'messages' => Yii::t('app', 'ERROR_EMAIL_EXISTS')],
-            ['email', 'string', 'max' => 255, 'except' => self::SCENARIO_PROFILE],
-
-
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'unique', 'targetClass' => self::className(), 'message' => Yii::t('app', 'ERROR_EMAIL_EXISTS')],
+            ['email', 'string', 'max' => 255],
             ['status', 'integer'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => array_keys(self::getStatusesArray())],
         ];
     }
-
     public function scenarios()
     {
-        return [
-            self::SCENARIO_DEFAULT => ['username', 'email', 'status'],
-            self::SCENARIO_PROFILE => ['email'],
-        ];
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_PROFILE] = ['email'];
+        return $scenarios;
     }
     /**
      * @inheritdoc
@@ -102,15 +95,6 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
     /**
-     * @return UserQuery
-     */
-    public static function find()
-    {
-        return new UserQuery(get_called_class());
-    }
-
-
-    /**
      * @inheritdoc
      */
     public static function findIdentity($id)
@@ -130,13 +114,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function getId()
     {
         return $this->getPrimaryKey();
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsername(){
-        return $this->username;
     }
     /**
      * @inheritdoc
@@ -269,6 +246,4 @@ class User extends ActiveRecord implements IdentityInterface
         }
         return false;
     }
-
-
 }

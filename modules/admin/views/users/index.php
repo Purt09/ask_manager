@@ -1,27 +1,25 @@
 <?php
-
+use app\modules\user\Module;
+use app\modules\user\models\User;
 use app\modules\admin\components\ActionColumn;
-use yii\helpers\Html;
-use yii\grid\GridView;
-use app\modules\admin\models\User;
+use app\components\grid\LinkColumn;
 use app\components\grid\SetColumn;
 use kartik\date\DatePicker;
-use app\components\grid\LinkColumn;
-
+use yii\helpers\ArrayHelper;
+use yii\grid\GridView;
+use yii\helpers\Html;
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\admin\models\UserSearch */
+/* @var $searchModel \app\modules\user\forms\backend\search\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = Yii::t('app', 'USERS');
+$this->title = Module::t('module', 'ADMIN_USERS');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
+<div class="users-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'USER_CREATE'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Module::t('module', 'ADMIN_USERS_ADD'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -40,6 +38,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
                 'attribute' => 'created_at',
                 'format' => 'datetime',
+                'filterOptions' => [
+                    'style' => 'max-width: 180px',
+                ],
             ],
             [
                 'class' => LinkColumn::className(),
@@ -57,8 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     User::STATUS_BLOCKED => 'default',
                 ],
             ],
-
             ['class' => ActionColumn::className()],
         ],
     ]); ?>
+
 </div>
