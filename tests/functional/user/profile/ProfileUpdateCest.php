@@ -30,7 +30,7 @@ class ProfileUpdateCest
     public function updateWithEmptyFields(FunctionalTester $I)
     {
         $I->submitForm($this->formId, [
-            'ProfileUpdateForm[email]' => '',
+            'User[email]' => '',
         ]);
 
         $I->see('Email cannot be blank.', '.help-block');
@@ -39,7 +39,7 @@ class ProfileUpdateCest
     public function updateWithWrongFields(FunctionalTester $I)
     {
         $I->submitForm($this->formId, [
-            'ProfileUpdateForm[email]' => 'wrong-email',
+            'User[email]' => 'wrong-email',
         ]);
 
         $I->see('Email is not a valid email address.', '.help-block');
@@ -48,7 +48,7 @@ class ProfileUpdateCest
     public function updateSuccess(FunctionalTester $I)
     {
         $I->submitForm($this->formId, [
-            'ProfileUpdateForm[email]' => 'correct@email.com',
+            'User[email]' => 'correct@email.com',
         ]);
 
         $I->seeInTitle('Profile');

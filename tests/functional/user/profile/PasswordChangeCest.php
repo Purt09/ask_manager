@@ -18,7 +18,7 @@ class PasswordChangeCest
             ]
         ]);
         $I->amLoggedInAsAdmin();
-        $I->amOnRoute('user/profile/password-change');
+        $I->amOnRoute('user/profile/change-password');
     }
 
     public function open(FunctionalTester $I)

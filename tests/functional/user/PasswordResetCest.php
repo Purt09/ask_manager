@@ -56,7 +56,7 @@ class PasswordResetCest
 
     public function resetWithWrongToken(FunctionalTester $I)
     {
-        $I->amOnRoute('user/default/password-reset', ['token' => 'wrong-token']);
+        $I->amOnRoute('user/default/reset-password', ['token' => 'wrong-token']);
 
         $I->see('Wrong password reset token.');
     }
@@ -70,7 +70,7 @@ class PasswordResetCest
         /** @var User $user */
         $user = $I->grabRecord(User::className(), ['email' => 'reset@example.com']);
 
-        $I->amOnRoute('user/default/password-reset', ['token' => $user->password_reset_token]);
+        $I->amOnRoute('user/default/reset-password', ['token' => $user->password_reset_token]);
 
         $I->see('Please choose your new password:');
 

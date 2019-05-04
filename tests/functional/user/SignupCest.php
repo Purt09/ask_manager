@@ -70,7 +70,7 @@ class SignupCest
     {
         $user = $I->grabRecord(User::className(), ['username' => 'email-confirm']);
 
-        $I->amOnRoute('user/default/email-confirm', ['token' => $user->email_confirm_token]);
+        $I->amOnRoute('user/default/confirm-email', ['token' => $user->email_confirm_token]);
         $I->see('Спасибо! Ваш Email успешно подтверждён', '.alert-success');
 
         $I->seeRecord(User::className(), [
@@ -83,15 +83,15 @@ class SignupCest
     {
         $user = $I->grabRecord(User::className(), ['username' => 'email-confirm']);
 
-        $I->amOnRoute('user/default/email-confirm', ['token' => $user->email_confirm_token]);
+        $I->amOnRoute('user/default/confirm-email', ['token' => $user->email_confirm_token]);
         $I->see('Спасибо! Ваш Email успешно подтверждён.', '.alert-success');
-        $I->amOnRoute('user/default/email-confirm', ['token' => $user->email_confirm_token]);
+        $I->amOnRoute('user/default/confirm-email', ['token' => $user->email_confirm_token]);
         $I->see('Неверный токен');
     }
 
     public function confirmEmailWithWrongToken(FunctionalTester $I)
     {
-        $I->amOnRoute('user/default/email-confirm', ['token' => 'wrong-token']);
+        $I->amOnRoute('user/default/confirm-email', ['token' => 'wrong-token']);
         $I->see('Неверный токен');
     }
 }
