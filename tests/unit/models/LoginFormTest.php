@@ -1,8 +1,11 @@
 <?php
 
-namespace tests\unit\models;
+namespace tests\models;
 
+use Yii;
+use yii\codeception\TestCase;
 use app\modules\user\forms\LoginForm;
+use Codeception\Specify;
 
 class LoginFormTest extends \Codeception\Test\Unit
 {

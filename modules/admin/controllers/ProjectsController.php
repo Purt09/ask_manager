@@ -1,18 +1,18 @@
 <?php
 
-namespace app\modules\task\controllers;
+namespace app\modules\admin\controllers;
 
 use Yii;
-use app\modules\task\models\Task;
-use app\modules\task\models\TaskSearch;
+use app\modules\project\models\Project;
+use app\modules\project\models\ProjectSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * DefaultController implements the CRUD actions for Task model.
+ * TasksController implements the CRUD actions for Project model.
  */
-class DefaultController extends Controller
+class ProjectsController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class DefaultController extends Controller
     }
 
     /**
-     * Lists all Task models.
+     * Lists all Project models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new TaskSearch();
+        $searchModel = new ProjectSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Displays a single Task model.
+     * Displays a single Project model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,13 +58,13 @@ class DefaultController extends Controller
     }
 
     /**
-     * Creates a new Task model.
+     * Creates a new Project model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Task();
+        $model = new Project();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,7 +76,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Updates an existing Task model.
+     * Updates an existing Project model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -89,7 +89,6 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-        $model->touch('created_at');
 
         return $this->render('update', [
             'model' => $model,
@@ -97,7 +96,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Deletes an existing Task model.
+     * Deletes an existing Project model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -111,20 +110,18 @@ class DefaultController extends Controller
     }
 
     /**
-     * Finds the Task model based on its primary key value.
+     * Finds the Project model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Task the loaded model
+     * @return Project the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Task::findOne($id)) !== null) {
+        if (($model = Project::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
-
-
 }

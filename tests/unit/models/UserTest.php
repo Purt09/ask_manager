@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\unit\models;
+namespace tests\models;
 
 use app\modules\user\models\User;
 
