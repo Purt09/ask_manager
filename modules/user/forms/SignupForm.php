@@ -60,7 +60,7 @@ class SignupForm extends Model
             $user->generateAuthKey();
             $user->generateEmailConfirmToken();
             if ($user->save()) {
-                Yii::$app->mailer->compose(['text' => 'confirmEmail'], ['user' => $user])
+                Yii::$app->mailer->compose(['text' => '@app/modules/user/mails/emailConfirm'], ['user' => $user])
                     ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
                     ->setTo($this->email)
                     ->setSubject('Email confirmation for ' . Yii::$app->name)
