@@ -43,7 +43,7 @@ class LoginCest
     {
         $I->submitForm($this->formId, $this->formParams('admin', 'admins'));
         $I->dontSeeLink('Login');
-        $I->seeLink('Logout');
+        $I->seeLink('Logout (admin)');
     }
 
     private function formParams($login, $password)

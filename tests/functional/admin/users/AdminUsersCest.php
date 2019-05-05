@@ -1,13 +1,13 @@
 <?php
 
-namespace tests\functional\admin;
+namespace tests\functional\admin\users;
 
 use FunctionalTester;
 use app\modules\user\models\User;
 use tests\_fixtures\UserFixture;
 use yii\helpers\Url;
 
-class UsersCest
+class AdminUsersCest
 {
     private $formId = '#user-form';
     

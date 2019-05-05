@@ -7,6 +7,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\modules\user\models\User;
+
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -58,7 +60,7 @@ AppAsset::register($this);
                         ['label' => Yii::t('app', 'NAV_PROFILE'), 'url' => ['/user/profile/index']],
                         ['label' => Yii::t('app', 'USERS_TASKS'), 'url' => ['/task/user']],
                         ['label' => Yii::t('app', 'USERS_PROJECTS'), 'url' => ['/project/default']],
-                        ['label' => Yii::t('app', 'Logout (admin)'),
+                        ['label' => Yii::t('app', 'LOGOUT ({username})', ['username' => Yii::$app->user->identity->username]),
                             'url' => ['/user/default/logout'],
                             'linkOptions' => ['data-method' => 'post']]
                     ]] :

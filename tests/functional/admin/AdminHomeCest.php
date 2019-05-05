@@ -5,7 +5,7 @@ namespace tests\functional\admin;
 use app\modules\user\models\User;
 use FunctionalTester;
 
-class HomeCest
+class AdminHomeCest
 {
     public function testAccess(FunctionalTester $I)
     {

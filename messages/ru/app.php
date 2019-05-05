@@ -72,6 +72,7 @@ return [
     'USERS_ALL_TASKS' => 'Все задачи',
     'ADMIN_ALL_PROJECTS' => 'Все проекты',
     'PROJECTS' => 'Все проекты',
-    'USERS_PROJECTS' => 'Проекты'
+    'USERS_PROJECTS' => 'Проекты',
+    'LOGOUT ({username})' => 'Выход ({username})'
 
 ];

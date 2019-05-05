@@ -35,7 +35,7 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['time_at', 'title'], 'required'],
+            [ 'title', 'required'],
             [['time_at', 'parent_id'], 'integer'],
             [['title', 'description'], 'string', 'max' => 255],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['parent_id' => 'id']],

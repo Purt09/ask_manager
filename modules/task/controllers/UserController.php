@@ -21,11 +21,11 @@ class UserController extends Controller
         ]);
     }
 
-    public function actionOverdue(){
+    public function actionDone(){
         $models = Task::find()->where(['status' => 0])->all();
 
 
-        return $this->render('overdue', [
+        return $this->render('done', [
             'models' => $models,
         ]);
     }

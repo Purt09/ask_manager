@@ -11,7 +11,7 @@ use app\modules\project\models\Project;
 
 <div class="project-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'project-form']); ?>
 
 
     <?= $form->field($model, 'time_at')->widget(\kartik\datecontrol\DateControl::className(),[

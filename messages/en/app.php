@@ -40,7 +40,7 @@ return [
     'USER_STATUS_WAIT' => 'Waits of verify',
     'USER_VERIFY_CODE' => 'Verify code',
     'USER_BUTTON_SIGNUP' => 'Signup',
-    'USER_BUTTON_LOGIN' => 'Login',
+    'USER_BUTTON_LOGIN' => 'Enter',
     'PLEASE_FILL_FOR_LOGIN' => 'Please fill out the following fields to login:',
     'PLEASE_FILL_FOR_SIGNUP' => 'Please fill out the following fields to signup:',
     'PLEASE_FILL_FOR_RESET_REQUEST' => 'Please fill out your email. A link to reset password will be sent there.',
@@ -61,5 +61,6 @@ return [
     'USER_CREATE' => 'Add user',
     'UPDATE' => 'Update',
     'ADMIN' => 'Admin',
-    'USERS' => 'Users'
+    'USERS' => 'Users',
+    'LOGOUT ({username})' => 'Logout ({username})'
 ];

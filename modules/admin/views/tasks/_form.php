@@ -12,7 +12,7 @@ use app\modules\project\models\Project;
 
 <div class="task-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'task-form']); ?>
 
 
     <?= $form->field($model, 'updated_at')->widget(\kartik\datecontrol\DateControl::className(),[

@@ -12,7 +12,6 @@ class m190426_234726_add_project_id_column_to_task_table extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('{{%task}}', 'project_id', $this->integer());
 
         $this->alterColumn('{{%task}}', 'status', $this->smallInteger()->notNull()->defaultValue(1));
 

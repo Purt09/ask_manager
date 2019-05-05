@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-sm-6">
             <div class="row">
-                <?= Html::a(Module::t('module', 'TASK_COMPLETE'), ['user/overdue'], ['class' => 'btn btn-info']) ?>
+                <?= Html::a(Module::t('module', 'TASK_COMPLETE'), ['user/done'], ['class' => 'btn btn-info']) ?>
             </div>
         </div>
     </div>
