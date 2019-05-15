@@ -44,7 +44,7 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[ 'title'], 'required'],
+            ['title', 'required'],
             [['created_at', 'project_id', 'context_id', 'user_id', 'status', 'updated_at'], 'integer'],
 
             [['title', 'description'], 'string', 'max' => 255],
@@ -149,6 +149,10 @@ class Task extends \yii\db\ActiveRecord
     public function setStatusCompete($id){
         $this->status = self::STATUS_COMPLETE;
         $this->save();
+    }
+
+    public function getTitleProjects($id){
+
     }
 
 }

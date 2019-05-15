@@ -5,6 +5,7 @@ namespace app\modules\project\models;
 use Yii;
 use app\modules\task\models\Task;
 use app\modules\project\Module;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "{{%project}}".
@@ -96,5 +97,28 @@ class Project extends \yii\db\ActiveRecord
     public function getTitle($id){
         $model = Project::findOne($id);
         return $model->title;
+    }
+
+    /**
+     * @param $projects
+     * @return mixed
+     */
+    public function getTaskByProjects($projects){
+
+        $id =[];
+        foreach ($projects as $project) array_push($id, $project->id);
+        foreach ($id as $i) {
+            $test = Task::find()->where(['project_id' => $i])->select(['title', 'id'])->all();
+            $task[$i] = $test;
+        }
+        return $task;
+    }
+
+    /**
+     * @param null $parent_id
+     * @return Project[]|array
+     */
+    public function getProjectByParent_id($parent_id = NULL) {
+        return $projects = Project::find()->where(['parent_id' => $parent_id])->all();
     }
 }
