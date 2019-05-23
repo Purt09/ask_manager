@@ -105,7 +105,17 @@ class UserController extends Controller
 
         $model = $this->findModel($id);
 
-        $model->setStatusCompete($id);
+        $model->setStatusComplete($id);
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionUncomplete($id = false){
+
+
+        $model = $this->findModel($id);
+
+        $model->setStatusActive($id);
 
         return $this->redirect(['index']);
     }

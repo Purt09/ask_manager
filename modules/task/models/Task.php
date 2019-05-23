@@ -146,13 +146,18 @@ class Task extends \yii\db\ActiveRecord
      * Change status on complete
      * @param $id
      */
-    public function setStatusCompete($id){
+    public function setStatusComplete($id){
         $this->status = self::STATUS_COMPLETE;
         $this->save();
     }
 
-    public function getTitleProjects($id){
-
+    /**
+     * Change status on active
+     * @param $id
+     */
+    public function setStatusActive($id){
+        $this->status = self::STATUS_ACTIVE;
+        $this->save();
     }
 
 }

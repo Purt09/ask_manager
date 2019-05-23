@@ -100,25 +100,39 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
+     * Возращает задачи определенных проектов еще не выполненные
      * @param $projects
      * @return mixed
      */
-    public function getTaskByProjects($projects){
+    public function getTasksByProjects($projects){
 
         $id =[];
         foreach ($projects as $project) array_push($id, $project->id);
         foreach ($id as $i) {
-            $test = Task::find()->where(['project_id' => $i])->select(['title', 'id'])->all();
-            $task[$i] = $test;
+            $t = Task::find()->where(['project_id' => $i, 'status' => 1])->select(['title', 'id'])->all();
+            $task[$i] = $t;
         }
         return $task;
     }
 
     /**
+     * Возращает проеты по определенному parent_id
      * @param null $parent_id
      * @return Project[]|array
      */
     public function getProjectByParent_id($parent_id = NULL) {
         return $projects = Project::find()->where(['parent_id' => $parent_id])->all();
+    }
+
+    /**
+     * @param $project_id
+     * @param $status
+     * @return Task[]|array
+     */
+    public function getTasksByProject($project_id, $status){
+
+            return $task = Task::find()->where(['project_id' => $project_id, 'status' => $status])->select(['title', 'id'])->all();
+
+
     }
 }
