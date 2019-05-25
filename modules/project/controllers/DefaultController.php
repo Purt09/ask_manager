@@ -53,7 +53,7 @@ class DefaultController extends \yii\web\Controller
     {
         $model = $this->findModel($id);
         $taskscomplete = $model->getTasksByProject($model, 0);
-        $tasksactive = $model->getTasksByProject($model, 1);
+        $tasksactive = $model->getTasksByProject($model);
         $tasksoverdue = $model->getTasksByProject($model, 2);
 
 

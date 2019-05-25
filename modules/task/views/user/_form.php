@@ -3,6 +3,7 @@ use kartik\form\ActiveForm;
 use kartik\date\DatePicker;
 use app\modules\task\Module;
 use yii\helpers\Html;
+use app\modules\project\models\Project;
 ?>
 
 <div class="task-form">
@@ -15,6 +16,8 @@ use yii\helpers\Html;
         'type' => \kartik\datecontrol\DateControl::FORMAT_DATETIME
     ]) ?>
 
+
+    <?= $form->field($model, 'project_id')->dropDownList(Project::find()->select(['title', 'id'])->indexBy('id')->column(), ['prompt' => ''])?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 

@@ -25,13 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         Задачи:
                     </div>
                     <div class="p-3 bg-light rounded-bottom" >
-                        <?php for($i=0; $i<count($tasksactive);$i++):  ?>
+                        <?php foreach ($tasksactive as $task): ?>
 
-                            <a href="<?= Url::to(['/task/user/update', 'id' => $tasksactive[$i]->id]) ?>" class="text-body pl-3"> <?= $tasksactive[$i]->title ?> </a>
-                            <? echo Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $tasksactive[$i]->id]), ['class'=>' text-secondary']) ?>
+                            <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>" class="text-body pl-3"> <?= $task['title'] ?> </a>
+                            <?= Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id']]), ['class'=>' text-secondary']) ?>
                         <br>
 
-                        <?php endfor; ?>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
@@ -42,13 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         Просроченные:
                     </div>
                     <div class="p-3 mb-2 bg-light" >
-                        <?php for($i=0; $i<count($tasksoverdue);$i++):  ?>
+                        <?php foreach ($tasksoverdue as $task): ?>
 
-                            <a href="<?= Url::to(['/task/user/update', 'id' => $tasksoverdue[$i]->id]) ?>" class="text-body pl-3"> <?= $tasksoverdue[$i]->title ?> </a>
-                            <? echo Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $tasksoverdue[$i]->id]), ['class'=>' text-secondary']) ?>
+                            <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>" class="text-body pl-3"> <?= $task['title'] ?> </a>
+                            <? echo Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id']]), ['class'=>' text-secondary']) ?>
                             <br>
 
-                        <?php endfor; ?>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
@@ -59,13 +59,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div class="p-3 mb-2 bg-light" >
 
-                        <?php for($i=0; $i<count($taskscomplete);$i++):  ?>
+                        <?php foreach ($taskscomplete as $task): ?>
 
-                            <a href="<?= Url::to(['/task/user/update', 'id' => $taskscomplete[$i]->id]) ?>" class="text-body pl-3"> <?= $taskscomplete[$i]->title ?> </a>
-                            <? echo Html::a('(невыполнено)', Url::to(['/task/user/uncomplete', 'id' => $taskscomplete[$i]->id]), ['class'=>' text-secondary']) ?>
+                            <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>" class="text-body pl-3"> <?= $task['title'] ?> </a>
+                            <? echo Html::a('(невыполнено)', Url::to(['/task/user/uncomplete', 'id' => $task['id']]), ['class'=>' text-secondary']) ?>
                             <br>
 
-                        <?php endfor; ?>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>

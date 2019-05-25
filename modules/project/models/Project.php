@@ -100,16 +100,16 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * Возращает задачи определенных проектов еще не выполненные
+     * Возращает задачи определенных проектов по умолчанию еще не выполненные
      * @param $projects
      * @return mixed
      */
-    public function getTasksByProjects($projects){
+    public function getTasksByProjects($projects, $status = 1){
 
         $id =[];
         foreach ($projects as $project) array_push($id, $project->id);
         foreach ($id as $i) {
-            $t = Task::find()->where(['project_id' => $i, 'status' => 1])->select(['title', 'id'])->all();
+            $t = Task::find()->where(['project_id' => $i, 'status' => $status])->select(['title', 'id'])->all();
             $task[$i] = $t;
         }
         return $task;
@@ -129,9 +129,9 @@ class Project extends \yii\db\ActiveRecord
      * @param $status
      * @return Task[]|array
      */
-    public function getTasksByProject($project_id, $status){
+    public function getTasksByProject($project_id, $status = 1){
 
-            return $task = Task::find()->where(['project_id' => $project_id, 'status' => $status])->select(['title', 'id'])->all();
+            return $task = Task::find()->where(['project_id' => $project_id, 'status' => $status])->asArray()->indexBy('id')->all();
 
 
     }
