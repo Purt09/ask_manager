@@ -64,11 +64,12 @@ class UserController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($project_id = null)
     {
         $model = new Task();
 
-        $model->updated_at=1755016400;
+        $model->project_id = $project_id;
+        $model->updated_at = 1755016400;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);

@@ -53,6 +53,9 @@ class ProjectWidget extends Widget
         $this->tpl = 'task.php';
         $str .= $this->catToTemplate($this->tasks);
 
+        $this->tpl = 'bottom.php';
+        $str .= $this->catToTemplate($project);
+
         return $str;
     }
 

@@ -12,11 +12,3 @@ use yii\helpers\Html;
 
         <br>
     <?php endforeach; ?>
-    <hr/>
-    <p>
-        <? echo Html::a('Добавить задачу', Url::to(['/task/user/complete', 'id' => $task[$project->id][$i]->id]), ['class'=>'btn btn-success']) ?>
-    </p>
-</div>
-
-</div>
-</div>

@@ -20,17 +20,18 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-sm-6">
             <div class="row">
-                456
+
+                <? echo Html::a('Завершенные проекты', Url::to('default/create'), ['class'=>'btn btn-warning']) ?>
             </div>
         </div>
     </div>
-    <br>
+    <br><br>
     <hr/>
     <div class="row">
         <?php foreach ($projects as $project) : ?>
-
+        <div class="col-sm-4 ">
             <?= \app\modules\project\components\ProjectWidget::widget(['tpl' => 'project', 'id' => $project->id]) ?>
-
+        </div>
             <?php endforeach; ?>
         </div>
     </div>
