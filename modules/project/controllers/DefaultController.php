@@ -55,13 +55,15 @@ class DefaultController extends \yii\web\Controller
         $taskscomplete = $model->getTasksByProject($model, 0);
         $tasksactive = $model->getTasksByProject($model);
         $tasksoverdue = $model->getTasksByProject($model, 2);
+        $subprojects = $model->getProjectByParent_id($id);
 
 
         return $this->render('view', [
             'model' => $model,
             'tasksactive' => $tasksactive,
             'tasksoverdue' => $tasksoverdue,
-            'taskscomplete' => $taskscomplete
+            'taskscomplete' => $taskscomplete,
+            'subprojects' => $subprojects
 
         ]);
     }

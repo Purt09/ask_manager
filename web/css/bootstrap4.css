@@ -2139,3 +2139,7 @@ a.text-dark:hover, a.text-dark:focus {
 .shadow-none {
     box-shadow: none !important;
 }
+.mod-row{
+    display: flex;
+    flex-wrap: wrap;
+}

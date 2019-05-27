@@ -7,11 +7,29 @@ use app\modules\task\models\Task;
 
 class ProjectWidget extends Widget
 {
+    /**
+     * @var string шаблон проекта, его вид или часть такого
+     */
     public $tpl;
+    /**
+     * @var array Все данные из бд, с проекта
+     */
     public $data;
+    /**
+     * @var array Данные с массива но в виде дерева
+     */
     public $tree;
+    /**
+     * @var string
+     */
     public $projectHtml;
+    /**
+     * @var integer id проекта для которого строим виджет
+     */
     public $id;
+    /**
+     * @var array Задачи проекта
+     */
     public $tasks;
 
     public function init()
@@ -29,6 +47,12 @@ class ProjectWidget extends Widget
         $this->data = Project::find()->where(['id' => $this->id])->orWhere(['parent_id' => $this->id])->indexBy('id')->asArray()->all();
         $this->tasks = $model->getTasksByProject($this->id);
         $this->tree = $this->getTree();
+
+        // Меняет структура дерева для вывода подкатегорий
+        if (!isset($this->tree[$this->id])) {
+            $this->tree = array_shift(array_pop($this->tree));
+        }
+
         $this->projectHtml = $this->getProjectHtml($this->tree);
         return $this->projectHtml;
     }
