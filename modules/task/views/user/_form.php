@@ -10,8 +10,6 @@ use app\modules\project\models\Project;
 
     <?php $form = ActiveForm::begin(); ?>
 
-<!--    --><?// $form->field($model, 'created_at')->textInput() ?>
-
     <?= $form->field($model, 'updated_at')->widget(\kartik\datecontrol\DateControl::className(),[
         'type' => \kartik\datecontrol\DateControl::FORMAT_DATETIME
     ]) ?>

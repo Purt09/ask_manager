@@ -22,27 +22,28 @@ use app\modules\task\Module;
             </div>
             <div class="modal-body">
 
-            <!--    --><?// $form->field($model, 'created_at')->textInput() ?>
+                <!--    --><?// $form->field($model, 'created_at')->textInput() ?>
 
-            <?= $form->field($model, 'updated_at')->widget(\kartik\datecontrol\DateControl::className(),[
-                'type' => \kartik\datecontrol\DateControl::FORMAT_DATETIME
-            ]) ?>
-
-
-            <?= $form->field($model, 'project_id')->dropDownList(Project::find()->select(['title', 'id'])->indexBy('id')->column(), ['prompt' => ''])?>
-
-            <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
-
-            <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'updated_at')->widget(\kartik\datecontrol\DateControl::className(),[
+                    'type' => \kartik\datecontrol\DateControl::FORMAT_DATETIME
+                ]) ?>
 
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal"><?= Module::t('module', 'CLOSE') ?></button>
-                <?= Html::submitButton(Module::t('module', 'SAVE'), ['class' => 'btn btn-success', 'name' => 'contact-button']) ?>
+                <?= $form->field($model, 'project_id')->dropDownList(Project::find()->select(['title', 'id'])->indexBy('id')->column(), ['prompt' => ''])?>
+
+                <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
+                <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?= Module::t('module', 'CLOSE') ?></button>
+                    <?= Html::submitButton(Module::t('module', 'SAVE'), ['class' => 'btn btn-success', 'name' => 'contact-button']) ?>
+                </div>
+
+                <?php ActiveForm::end(); ?>
+
             </div>
-
-            <?php ActiveForm::end(); ?>
-
         </div>
     </div>
 </div>
