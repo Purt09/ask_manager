@@ -18,5 +18,8 @@ return [
     'TASK_COMPLETE' => 'Выполненные задачи',
     'TASK_OVERDUE' => 'Просроченные задачи',
     'TASK_ACTIVE' => 'Активные задачи',
-    'PROJECT' => 'Проект'
+    'PROJECT' => 'Проект',
+    'MODAL_TITLE_SUCCESS' => 'Задача добавлена',
+    'MODAL_TEXT_SUCCESS' => 'Задача успешно добавлена, спасибо',
+    'CLOSE' => 'Закрыть'
 ];

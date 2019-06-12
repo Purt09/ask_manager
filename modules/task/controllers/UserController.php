@@ -3,6 +3,7 @@
 namespace app\modules\task\controllers;
 
 use app\modules\task\models\Task;
+use app\modules\task\Module;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -10,10 +11,10 @@ use yii\web\NotFoundHttpException;
 class UserController extends Controller
 {
     public function actionIndex(){
+        $model = new Task();
 
-        $modelsactive = Task::find()->where(['status' => 1])->all();
-        $modelsbad = Task::find()->where(['status' => 2])->all();
-
+        $modelsactive = $model->getTasks(1);
+        $modelsbad = $model->getTasks(2);
 
         return $this->render('index', [
             'modelsactive' => $modelsactive,
@@ -22,7 +23,9 @@ class UserController extends Controller
     }
 
     public function actionDone(){
-        $models = Task::find()->where(['status' => 0])->all();
+        $model = new Task();
+
+        $models = $model->getTasks(0);
 
 
         return $this->render('done', [
@@ -30,6 +33,13 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Страница для редактирования задачи с опред id
+     *
+     * @param $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -111,6 +121,13 @@ class UserController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Change status model on uncomplete (Task->complete)
+     *
+     * @param bool $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
     public function actionUncomplete($id = false){
 
 

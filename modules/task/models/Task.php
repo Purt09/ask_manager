@@ -160,4 +160,16 @@ class Task extends \yii\db\ActiveRecord
         $this->save();
     }
 
+    /**
+     * Возвращает задачи по статусу
+     *  1 - активные
+     *  2 - просроченные
+     *  3 - выполенные
+     * @param int $status
+     * @return Task[]|array
+     */
+    public function getTasks($status = 0){
+        return Task::find()->where(['status' => $status])->all();
+    }
+
 }

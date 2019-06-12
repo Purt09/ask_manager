@@ -10,8 +10,7 @@ $this->title = Module::t('module', 'UPDATE: {name}', [
     'name' => $model->title,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Module::t('module', 'TASKS'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Module::t('module', 'UPDATE');
+$this->params['breadcrumbs'][] = ['label' => $model->title];
 ?>
 <div class="task-update">
 

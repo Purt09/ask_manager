@@ -125,6 +125,8 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
+     * Возращает массив хадач определенного проекта с определенным статусом
+     *
      * @param $project_id
      * @param $status
      * @return Task[]|array

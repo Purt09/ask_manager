@@ -68,7 +68,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <?php foreach ($subprojects as $subproject): ?>
                         <?= \app\modules\project\components\ProjectWidget::widget(['tpl' => 'project', 'id' => $subproject->id]) ?>
-                        <?= $subproject->id ?>
                     <?php endforeach; ?>
                 </div>
             </div>

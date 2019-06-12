@@ -4,6 +4,7 @@ use app\modules\project\Module;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use app\components\Vardump;
+use app\modules\project\components\CreateProjectWidget;
 
 $this->title = Yii::t('app', 'PROJECTS');
 $this->params['breadcrumbs'][] = $this->title;
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-6">
             <div class="row">
                 <? echo Html::a('Создать проект', Url::to('default/create'), ['class'=>'btn btn-success']) ?>
+                <?= CreateProjectWidget::widget([]) ?>
             </div>
         </div>
         <div class="col-sm-6">

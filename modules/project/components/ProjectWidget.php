@@ -48,7 +48,7 @@ class ProjectWidget extends Widget
         $this->tasks = $model->getTasksByProject($this->id);
         $this->tree = $this->getTree();
 
-        // Меняет структура дерева для вывода подкатегорий
+        /* Меняет структура дерева для вывода подкатегорий */
         if (!isset($this->tree[$this->id])) {
             $this->tree = array_shift(array_pop($this->tree));
         }
@@ -57,6 +57,11 @@ class ProjectWidget extends Widget
         return $this->projectHtml;
     }
 
+    /**
+     * Строит дерево из данных
+     *
+     * @return array
+     */
     protected  function getTree(){
         $tree = [];
         foreach ($this->data as $id => &$node){
