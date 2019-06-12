@@ -3,8 +3,7 @@
 use app\modules\project\Module;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\components\Vardump;
-use app\modules\project\components\CreateProjectWidget;
+use app\modules\project\components\CreateProjectWidjet;
 
 $this->title = Yii::t('app', 'PROJECTS');
 $this->params['breadcrumbs'][] = $this->title;
@@ -16,8 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="text-center" >
         <div class="col-sm-6">
             <div class="row">
-                <? echo Html::a('Создать проект', Url::to('default/create'), ['class'=>'btn btn-success']) ?>
-                <?= CreateProjectWidget::widget([]) ?>
+                <?= Html::button(Module::t('module', 'PROJECT_CREATE'), ['data-toggle' => 'modal', 'data-target' => '#CreateProject', 'class' => 'btn-success btn']) ?>
             </div>
         </div>
         <div class="col-sm-6">
@@ -39,3 +37,4 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
+<?= CreateProjectWidjet::widget([]) ?>

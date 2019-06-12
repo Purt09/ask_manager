@@ -61,12 +61,3 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <?= CreateTaskWidjet::widget([]) ?>
-
-<?php
-$this->registerJS("
-$('.test').on('click', function(){
-    var data = $(this).data();
-    console.log(data);
-    });
-");
-?>

@@ -45,11 +45,14 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             ['title', 'required'],
+            ['title', 'string', 'min' => 5, 'max' => 60, 'message' => 'Слишком короткое'],
+            ['title', 'match', 'pattern' => '/^([а-яё]+|[a-z]+|[0-9]+)$/i', 'message' => 'Данные не корректны, запрещено использовать символы'],
+
             [['created_at', 'project_id', 'context_id', 'user_id', 'status', 'updated_at'], 'integer'],
 
-            [['title', 'description'], 'string', 'max' => 255],
 
-            ['status', 'integer'],
+            ['description', 'string', 'max' => 255],
+
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => array_keys(self::getStatusesArray())],
         ];
