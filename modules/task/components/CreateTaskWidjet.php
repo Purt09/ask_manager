@@ -25,7 +25,7 @@ class CreateTaskWidjet extends Widget
         }
         return $this->render('createTaskWidjet',            [
             'model' => $model,
-            'parent_id' => $this->project_id,
+            'project_id' => $this->project_id,
              ]);
     }
 

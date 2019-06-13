@@ -1,10 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
-use yii\helpers\ArrayHelper;
-use app\components\Vardump;
+use app\modules\task\components\CreateTaskWidjet;
 use yii\helpers\Url;
+use app\modules\task\Module;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\project\models\Project */
@@ -16,11 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="project-view">
 
-    <h1><?= $this->title ?></h1>
     <br>
-
     <div class="container">
         <div class="col-sm-8">
+            <h2><?php echo $model->title ?> </h2>
             <div class="mod-row">
                 <div class="col-sm-6 mr-3 border rounded-bottom shadow-sm rounded-lg">
                     <div class="row">
@@ -35,6 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <br>
 
                             <?php endforeach; ?>
+                            <?php $datatarget = '#CreateTask' . $model->id; ?>
+                            <?= Html::button(Module::t('module', 'TASK_CREATE'), ['data-toggle' => 'modal', 'data-target' => $datatarget, 'class' => 'btn-success btn']) ?>
                         </div>
                     </div>
                 </div>
@@ -77,5 +77,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
 </div>
-
-
+<?= CreateTaskWidjet::widget([
+        'project_id' => $model->id,
+]) ?>

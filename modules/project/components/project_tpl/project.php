@@ -7,9 +7,6 @@ use yii\helpers\Url;
         <div class="bg-light pb-2 border rounded-bottom shadow-sm rounded-lg">
             <div class="p-3 mb-2 bg-info text-white text-center" >
                 <a href="<?= Url::to(['view', 'id' => $project['id']]) ?>" class="text-body pl-3"> <?=   $project['title'] ?></a>
-                <?php if(isset($project['childs'])): ?>
-                    +
-                <?php endif;?>
             </div>
     </a>
     <hr>

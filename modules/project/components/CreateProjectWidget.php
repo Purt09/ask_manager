@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Widget;
 use app\modules\project\models\Project;
 
-class CreateProjectWidjet extends Widget
+class CreateProjectWidget extends Widget
 {
 
     public function run()
@@ -16,7 +16,7 @@ class CreateProjectWidjet extends Widget
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->response->refresh();
         }
-        return $this->render('createProjectWidjet', [
+        return $this->render('createProjectWidget', [
             'model' => $model,
         ]);
     }

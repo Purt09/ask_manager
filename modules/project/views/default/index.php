@@ -3,7 +3,7 @@
 use app\modules\project\Module;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\modules\project\components\CreateProjectWidjet;
+use app\modules\project\components\CreateProjectWidget;
 
 $this->title = Yii::t('app', 'PROJECTS');
 $this->params['breadcrumbs'][] = $this->title;
@@ -37,4 +37,4 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<?= CreateProjectWidjet::widget([]) ?>
+<?= CreateProjectWidget::widget([]) ?>
