@@ -111,14 +111,17 @@ class UserController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionComplete($id = false){
+    public function actionComplete($id = false, $redirect = 'index'){
 
+        if(\Yii::$app->request->isAjax){
+            return 'Запрос принят!';
+        }
 
         $model = $this->findModel($id);
 
         $model->setStatusComplete($id);
 
-        return $this->redirect(['index']);
+        return $this->redirect([$redirect]);
     }
 
     /**

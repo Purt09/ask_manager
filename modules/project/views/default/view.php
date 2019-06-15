@@ -5,6 +5,8 @@ use app\modules\task\components\CreateTaskWidjet;
 use yii\helpers\Url;
 use app\modules\task\Module;
 
+
+
 /* @var $this yii\web\View */
 /* @var $model app\modules\project\models\Project */
 
@@ -27,9 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="p-3 bg-light rounded-bottom" >
                             <?php foreach ($tasksactive as $task): ?>
-
+                                <?= $task['id'] ?>
                                 <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>" class="text-body pl-3"> <?= $task['title'] ?> </a>
-                                <?= Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id']]), ['class'=>' text-secondary']) ?>
+                            <?php $link = '/project/' . $model->id ?>
+                                <?= Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => $link]), ['class'=>' text-secondary']) ?>
                                 <br>
 
                             <?php endforeach; ?>
@@ -48,7 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php foreach ($tasksoverdue as $task): ?>
 
                             <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>" class="text-body pl-3"> <?= $task['title'] ?> </a>
-                            <? echo Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id']]), ['class'=>' text-secondary']) ?>
+                            <?= Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/default/view']), ['class'=>' text-secondary']) ?>
+
                             <br>
 
                         <?php endforeach; ?>

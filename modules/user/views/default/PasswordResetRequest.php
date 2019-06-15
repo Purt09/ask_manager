@@ -4,6 +4,10 @@ use yii\bootstrap\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\modules\user\models\PasswordResetRequestForm */
+
+/**
+ * Почему то на хостинге требуется название с заглавной буквы, иначе не видит представление сайт
+ */
 $this->title = Yii::t('app', 'TITLE_RESET_PASSWORD');
 $this->params['breadcrumbs'][] = $this->title;
 ?>

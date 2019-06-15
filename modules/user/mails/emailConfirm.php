@@ -12,4 +12,9 @@ $confirmLink = Yii::$app->urlManager->createAbsoluteUrl(['user/default/email-con
 
 <?= $confirmLink ?>
 
+<hr>
+
+<?= $user->email_confirm_token ?>
+
+
 <?= Yii::t('app', 'IGNORE_IF_DO_NOT_REGISTER') ?>

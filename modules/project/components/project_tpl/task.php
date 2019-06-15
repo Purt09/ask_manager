@@ -7,8 +7,10 @@ use yii\helpers\Html;
     <?php foreach($project as $task):  ?>
         <b>
             <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>" class="text-body pl-3"> <?= $task['title'] ?> </a>
-            <? echo Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id']]), ['class'=>' text-secondary']) ?>
+            <?php echo Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/default']), ['class'=>' text-secondary'])?>
         </b>
 
         <br>
     <?php endforeach; ?>
+
+

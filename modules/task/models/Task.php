@@ -45,8 +45,7 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             ['title', 'required'],
-            ['title', 'string', 'min' => 5, 'max' => 60, 'message' => 'Слишком короткое'],
-            ['title', 'match', 'pattern' => '/^([а-яё]+|[a-z]+|[0-9]+)$/i', 'message' => 'Данные не корректны, запрещено использовать символы'],
+            ['title', 'string', 'min' => 3, 'max' => 60, 'message' => 'Слишком короткое'],
 
             [['created_at', 'project_id', 'context_id', 'user_id', 'status', 'updated_at'], 'integer'],
 
