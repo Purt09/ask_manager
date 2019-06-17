@@ -50,6 +50,7 @@ class Task extends \yii\db\ActiveRecord
             [['created_at', 'project_id', 'context_id', 'user_id', 'status', 'updated_at'], 'integer'],
 
 
+
             ['description', 'string', 'max' => 255],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -122,14 +123,9 @@ class Task extends \yii\db\ActiveRecord
         return $this->getPrimaryKey();
     }
 
-//    /**
-//     * @return \yii\db\ActiveQuery
-//     */
-//    public function getTask()
-//    {
-//        return $this->hasMany(Task::className(), ['parent_id' => 'id']);
-//    }
-
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'project_id']);
@@ -145,20 +141,11 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * Change status on complete
+     * Change status task
      * @param $id
      */
-    public function setStatusComplete($id){
-        $this->status = self::STATUS_COMPLETE;
-        $this->save();
-    }
-
-    /**
-     * Change status on active
-     * @param $id
-     */
-    public function setStatusActive($id){
-        $this->status = self::STATUS_ACTIVE;
+    public function setStatus($status = self::STATUS_COMPLETE){
+        $this->status = $status;
         $this->save();
     }
 
@@ -166,12 +153,12 @@ class Task extends \yii\db\ActiveRecord
      * Возвращает задачи по статусу
      *  1 - активные
      *  2 - просроченные
-     *  3 - выполенные
+     *  0 - выполенные
      * @param int $status
      * @return Task[]|array
      */
     public function getTasks($status = 0){
-        return Task::find()->where(['status' => $status])->all();
+        return $task =Task::find()->where(['status' => $status])->all();
     }
 
 }

@@ -2,7 +2,7 @@
 
 return [
     'TASK_CREATE_AT' => 'Создан',
-    'TASK_UPDATE_AT' => 'Срок',
+    'TASK_UPDATE_AT' => 'Срок выполнения',
     'TASK_TITLE' => 'Название',
     'TASK_DESCRIPTION' => 'Описание',
     'TASK_STATUS' => 'Статус',
@@ -21,5 +21,6 @@ return [
     'PROJECT' => 'Проект',
     'MODAL_TITLE_SUCCESS' => 'Задача добавлена',
     'MODAL_TEXT_SUCCESS' => 'Задача успешно добавлена, спасибо',
-    'CLOSE' => 'Закрыть'
+    'CLOSE' => 'Закрыть',
+    'TASK_VALID_TIME_SMALL' => 'Срок выполнения не может иметь значение прошедшего времени'
 ];

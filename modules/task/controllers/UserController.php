@@ -7,6 +7,7 @@ use app\modules\task\Module;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
+use app\modules\task\forms\CreateForm;
 
 class UserController extends Controller
 {
@@ -18,7 +19,7 @@ class UserController extends Controller
 
         return $this->render('index', [
             'modelsactive' => $modelsactive,
-            'modelspros' => $modelsbad
+            'modelspros' => $modelsbad,
         ]);
     }
 
@@ -63,6 +64,7 @@ class UserController extends Controller
     protected function findModel($id)
     {
         if (($model = Task::findOne($id)) !== null) {
+            if(($model->updated_at < time()) && ($model->status != 0)) $model->setStatus(Task::STATUS_TIME_OUT); // Проверка на просрочеенность задачи
             return $model;
         }
 
@@ -76,10 +78,9 @@ class UserController extends Controller
      */
     public function actionCreate($project_id = null)
     {
-        $model = new Task();
+        $model = new CreateForm();
 
         $model->project_id = $project_id;
-        $model->updated_at = 1755016400;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
@@ -113,13 +114,9 @@ class UserController extends Controller
      */
     public function actionComplete($id = false, $redirect = 'index'){
 
-        if(\Yii::$app->request->isAjax){
-            return 'Запрос принят!';
-        }
-
         $model = $this->findModel($id);
 
-        $model->setStatusComplete($id);
+        $model->setStatus();
 
         return $this->redirect([$redirect]);
     }
@@ -136,7 +133,7 @@ class UserController extends Controller
 
         $model = $this->findModel($id);
 
-        $model->setStatusActive($id);
+        $model->setStatus(Task::STATUS_ACTIVE);
 
         return $this->redirect(['index']);
     }

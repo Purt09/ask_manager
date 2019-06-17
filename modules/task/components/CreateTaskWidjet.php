@@ -5,6 +5,7 @@ namespace app\modules\task\components;
 use Yii;
 use yii\base\Widget;
 use app\modules\task\models\Task;
+use app\modules\task\forms\CreateForm;
 
 class CreateTaskWidjet extends Widget
 {
@@ -17,7 +18,7 @@ class CreateTaskWidjet extends Widget
 
     public function run()
     {
-        $model = new Task();
+        $model = new CreateForm();
         //$model = new ContactForm();
         $model->project_id = $this->project_id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

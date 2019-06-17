@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <a href="<?= Url::to(['update', 'id' => $model->id]) ?>" class="text-body pl-3">
                     <?= $model->title ?> </a>
+                    <div class="pull-right"> Осталось: <?=  time() - $model->updated_at ?> </div>
             </div>
             <?php endforeach; ?>
         </div>
@@ -61,3 +62,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <?= CreateTaskWidjet::widget([]) ?>
+<?= time() ?>
+<?php vardump($modelsactive) ?>
