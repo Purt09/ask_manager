@@ -176,4 +176,8 @@ class Task extends \yii\db\ActiveRecord
         return $tasks;
     }
 
+    public function checkStatus($task){
+
+    }
+
 }

@@ -1,0 +1,1 @@
+<span class="glyphicon glyphicon-time text-<?= $class?>"></span>
