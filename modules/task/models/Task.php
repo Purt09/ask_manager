@@ -158,7 +158,22 @@ class Task extends \yii\db\ActiveRecord
      * @return Task[]|array
      */
     public function getTasks($status = 0){
-        return $task =Task::find()->where(['status' => $status])->all();
+        $time = time();
+        $tasks = Task::find()->where(['status' => $status])->asArray()->all();
+        for($t = 0; $t <= count($tasks); $t++) {
+            if ($tasks[$t]['updated_at'] != null && $tasks[$t]['status'] != 0) {
+
+                $tasks[$t]['time'] = $tasks[$t]['updated_at'] - $time;
+                if ($tasks[$t]['time'] < 0) {
+                    $model = Task::find()->where(['id' => $tasks[$t]['id']])->one();
+                    $model->setStatus(2);
+                } else {
+                    $model = Task::find()->where(['id' => $tasks[$t]['id']])->one();
+                    $model->setStatus(1);
+                }
+            }
+        }
+        return $tasks;
     }
 
 }

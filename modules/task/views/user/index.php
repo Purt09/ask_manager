@@ -35,11 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?php foreach ($modelsactive as $model) : ?>
             <div class="bg-light test">
-                    <? echo Html::a('выполненно', Url::to(['complete', 'id' => $model->id]), ['class'=>'btn btn-success btn-sm']) ?>
+                    <? echo Html::a('выполненно', Url::to(['complete', 'id' => $model['id']]), ['class'=>'btn btn-success btn-sm']) ?>
 
-                    <a href="<?= Url::to(['update', 'id' => $model->id]) ?>" class="text-body pl-3">
-                    <?= $model->title ?> </a>
-                    <div class="pull-right"> Осталось: <?=  time() - $model->updated_at ?> </div>
+                    <a href="<?= Url::to(['update', 'id' => $model['id']]) ?>" class="text-body pl-3">
+                    <?= $model['title'] ?> </a>
+                    <div class="pull-right">  <?php  if(!empty($model['time'])) echo createtime($model['time']) ?> </div>
             </div>
             <?php endforeach; ?>
         </div>
@@ -50,10 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <?php foreach ($modelspros as $model) : ?>
                 <div class="bg-light table-striped">
-                    <? echo Html::a('выполненно', Url::to(['complete', 'id' => $model->id]), ['class'=>'btn btn-success btn-sm']) ?>
+                    <? echo Html::a('выполненно', Url::to(['complete', 'id' => $model['id']]), ['class'=>'btn btn-success btn-sm']) ?>
 
-                    <a href="<?= Url::to(['update', 'id' => $model->id]) ?>" class="text-body pl-3">
-                        <?= $model->title ?> </a>
+                    <a href="<?= Url::to(['update', 'id' => $model['id']]) ?>" class="text-body pl-3">
+                        <?= $model['title'] ?> </a>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -62,5 +62,3 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <?= CreateTaskWidjet::widget([]) ?>
-<?= time() ?>
-<?php vardump($modelsactive) ?>

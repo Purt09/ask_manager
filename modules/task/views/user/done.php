@@ -29,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <?php foreach ($models as $model) : ?>
             <p>
-                    <a href="<?= Url::to(['update', 'id' => $model->id]) ?>">
-                       <?= $model->title ?> </a>
+                    <a href="<?= Url::to(['update', 'id' => $model['id']]) ?>">
+                       <?= $model['title'] ?> </a>
             </p>
             <?php endforeach; ?>
         </div>

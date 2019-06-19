@@ -49,4 +49,15 @@ class CreateForm extends \yii\base\Model
         ];
     }
 
+    public function save(){
+        $task = new Task();
+
+        $task->title = $this->title;
+        $task->description = $this->description;
+        $task->updated_at = $this->updated_at;
+        $task->project_id = $this->project_id;
+
+        return $task->save();
+    }
+
 }
