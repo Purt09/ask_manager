@@ -8,6 +8,8 @@ use app\modules\project\components\CreateProjectWidget;
 $this->title = Yii::t('app', 'PROJECTS');
 $this->params['breadcrumbs'][] = $this->title;
 
+
+
 ?>
 
 
@@ -21,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-6">
             <div class="row">
 
-                <? echo Html::a('Завершенные проекты', Url::to('default/create'), ['class'=>'btn btn-warning']) ?>
+                <? echo Html::a(Module::t('module', 'PROJECT_COMPLETE'), Url::to('default/create'), ['class'=>'btn btn-warning']) ?>
             </div>
         </div>
     </div>
@@ -37,3 +39,4 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
+<?= CreateProjectWidget::widget([]) ?>

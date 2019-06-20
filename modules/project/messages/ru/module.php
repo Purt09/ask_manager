@@ -7,5 +7,7 @@ return [
     'PROJECT_PARENT' => 'Проект',
     'PROJECT_CREATE' => 'Создать проект',
     'UPDATE_PROJECT: {name}' => 'Изменить проект: {name}',
-    'CREATE_PROJECT' => 'Создать проект'
+    'CREATE_PROJECT' => 'Создать проект',
+    'SUBPROJECT_ADD' => 'Добавить подпроект',
+    'PROJECT_COMPLETE' => 'Завершенные проекты'
 ];

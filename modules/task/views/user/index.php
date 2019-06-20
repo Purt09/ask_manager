@@ -10,7 +10,10 @@ use app\modules\task\components\CreateTaskWidjet;
 
 $this->title = Module::t('module', 'TASKS');
 $this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
+
 
 
 <div class="container">
@@ -59,6 +62,5 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-
 
 <?= CreateTaskWidjet::widget([]) ?>

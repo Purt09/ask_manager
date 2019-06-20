@@ -124,17 +124,5 @@ class Project extends \yii\db\ActiveRecord
         return $projects = Project::find()->where(['parent_id' => $parent_id])->all();
     }
 
-    /**
-     * Возращает массив хадач определенного проекта с определенным статусом
-     *
-     * @param $project_id
-     * @param $status
-     * @return Task[]|array
-     */
-    public function getTasksByProject($project_id, $status = 1){
 
-            return $task = Task::find()->where(['project_id' => $project_id, 'status' => $status])->asArray()->indexBy('id')->all();
-
-
-    }
 }

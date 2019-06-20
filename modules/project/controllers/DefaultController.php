@@ -52,9 +52,11 @@ class DefaultController extends \yii\web\Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $taskscomplete = $model->getTasksByProject($model, 0);
-        $tasksactive = $model->getTasksByProject($model);
-        $tasksoverdue = $model->getTasksByProject($model, 2);
+        $time = time();
+        $tasks = new Task();
+        $tasksactive = $tasks->getTasksByProject($model);
+
+        $tasksoverdue = $tasks->getTasksByProject($model, 2);
         $subprojects = $model->getProjectByParent_id($id);
 
 

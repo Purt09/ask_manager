@@ -47,14 +47,23 @@ class ProjectWidget extends Widget
 
     public function run()
     {
-        $model = new Project();
+        $model = new Task();
         $this->data = Project::find()->where(['id' => $this->id])->orWhere(['parent_id' => $this->id])->indexBy('id')->asArray()->all();
-        $this->tasks = $model->getTasksByProject($this->id);
+        $this->tasks = array_merge($model->getTasksByProject($this->id), $model->getTasksByProject($this->id,2));
         $this->tree = $this->getTree();
+
+
 
         /* Меняет структура дерева для вывода подкатегорий */
         if (!isset($this->tree[$this->id])) {
             $this->tree = array_shift(array_pop($this->tree));
+        }
+
+        /* Добаавляет в виджет также заддачи подкатегорий */
+        foreach ($this->tree as  $s){
+            if(isset( $s['childs']) && is_array( $s['childs'])) foreach ( $s['childs'] as $child) {
+                $this->tasks = array_merge($this->tasks, $model->getTasksByProject($child['id'],1));
+            }
         }
 
         $this->projectHtml = $this->getProjectHtml($this->tree);

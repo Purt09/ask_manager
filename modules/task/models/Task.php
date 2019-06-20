@@ -176,8 +176,33 @@ class Task extends \yii\db\ActiveRecord
         return $tasks;
     }
 
-    public function checkStatus($task){
+    /**
+     * Возращает массив хадач определенного проекта с определенным статусом
+     *
+     * @param $project_id
+     * @param $status
+     * @return Task[]|array
+     */
+    public function getTasksByProject($project_id, $status = 1, $count = false){
+        $time = time();
+        if (!$count){
+            $tasks = Task::find()->where(['project_id' => $project_id, 'status' => $status])->asArray()->all();
+            for($t = 0; $t <= count($tasks); $t++) {
+                if ($tasks[$t]['updated_at'] != null && $tasks[$t]['status'] != 0) {
 
+                    $tasks[$t]['time'] = $tasks[$t]['updated_at'] - $time;
+                    if ($tasks[$t]['time'] < 0) {
+                        $model = Task::find()->where(['id' => $tasks[$t]['id']])->one();
+                        $model->setStatus(2);
+                    } else {
+                        $model = Task::find()->where(['id' => $tasks[$t]['id']])->one();
+                        $model->setStatus(1);
+                    }
+                }
+            }
+            return $tasks;
+        }
+            else    return $tasks = Task::find()->where(['project_id' => $project_id, 'status' => $status])->count();
     }
 
 }

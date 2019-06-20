@@ -11,6 +11,8 @@ class TimeColorSignWidget extends Widget
 
     public $seconds;
 
+    public $id;
+
 
     public function run(){
         if ($this->seconds === null) {
@@ -18,8 +20,9 @@ class TimeColorSignWidget extends Widget
         }
 
         $seconds = $this->seconds - time();
+        $id = $this->id;
 
-
+        $time = createtime($seconds);
 
         if($seconds < 86400){
             $class = 'warning';
@@ -28,6 +31,8 @@ class TimeColorSignWidget extends Widget
 
         return $this->render('timeColorSignWidget',            [
             'class' => $class,
+            'id' => $id,
+            'time' => $time,
         ]);
     }
 }
