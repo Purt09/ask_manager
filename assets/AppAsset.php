@@ -13,8 +13,6 @@ class AppAsset extends AssetBundle
         'css/bootstrap4.css'
     ];
     public $js = [
-        'js/site.js',
-        'js/conformity.js'
     ];
     public $depends = [
         'app\assets\IESupportAsset',
