@@ -3,7 +3,7 @@
 
 namespace app\modules\task\components;
 
-
+use app\components\TimeSupport;
 use yii\base\Widget;
 
 class TimeColorSignWidget extends Widget
@@ -11,18 +11,12 @@ class TimeColorSignWidget extends Widget
 
     public $seconds;
 
-    public $id;
-
-
     public function run(){
         if ($this->seconds === null) {
             return false;
         }
 
         $seconds = $this->seconds - time();
-        $id = $this->id;
-
-        $time = createtime($seconds);
 
         if($seconds < 86400){
             $class = 'warning';
@@ -31,8 +25,6 @@ class TimeColorSignWidget extends Widget
 
         return $this->render('timeColorSignWidget',            [
             'class' => $class,
-            'id' => $id,
-            'time' => $time,
         ]);
     }
 }

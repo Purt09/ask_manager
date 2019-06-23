@@ -6,8 +6,7 @@ use app\modules\project\models\Project;
 use app\modules\task\Module;
 use app\modules\user\models\User;
 use Yii;
-use yii\base\NotSupportedException;
-use yii\behaviors\TimestampBehavior;
+use app\components\TimeSupport;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\db\Expression;
@@ -161,19 +160,7 @@ class Task extends \yii\db\ActiveRecord
     public function getTasks($status = self::STATUS_COMPLETE){
         $time = time();
         $tasks = User::find()->one()->getTasks()->where(['status' => $status])->with('users')->asArray()->all(); // Сложный запрос, связь многие ко многим
-        for($t = 0; $t <= count($tasks); $t++) {
-            if ($tasks[$t]['updated_at'] != null && $tasks[$t]['status'] != 0) {
-
-                $tasks[$t]['time'] = $tasks[$t]['updated_at'] - $time;
-                if ($tasks[$t]['time'] < 0) {
-                    $model = Task::find()->where(['id' => $tasks[$t]['id']])->one();
-                    $model->setStatus(2);
-                } else {
-                    $model = Task::find()->where(['id' => $tasks[$t]['id']])->one();
-                    $model->setStatus(1);
-                }
-            }
-        }
+        TimeSupport::changeStatus($tasks);
         return $tasks;
     }
 
@@ -188,19 +175,7 @@ class Task extends \yii\db\ActiveRecord
         $time = time();
         if (!$count){
             $tasks = User::find()->one()->getTasks()->where(['project_id' => $project_id, 'status' => $status])->asArray()->all();  // Сложный запрос, связь многие ко многим
-            for($t = 0; $t <= count($tasks); $t++) {
-                if ($tasks[$t]['updated_at'] != null && $tasks[$t]['status'] != 0) {
-
-                    $tasks[$t]['time'] = $tasks[$t]['updated_at'] - $time;
-                    if ($tasks[$t]['time'] < 0) {
-                        $model = Task::find()->where(['id' => $tasks[$t]['id']])->one();
-                        $model->setStatus(2);
-                    } else {
-                        $model = Task::find()->where(['id' => $tasks[$t]['id']])->one();
-                        $model->setStatus(1);
-                    }
-                }
-            }
+            TimeSupport::changeStatus($tasks);
             return $tasks;
         }
             else

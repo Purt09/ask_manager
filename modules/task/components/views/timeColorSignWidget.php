@@ -1,1 +1,1 @@
-<span id="btn-tooltip-<?= $id ?>" class="glyphicon glyphicon-time text-<?= $class?>" data-toggle="tooltip" data-placement="top" title="Some tooltip text!"></span>
+<span class="glyphicon glyphicon-time text-<?= $class?>" ></span>
