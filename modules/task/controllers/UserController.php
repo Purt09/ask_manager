@@ -2,6 +2,7 @@
 
 namespace app\modules\task\controllers;
 
+use app\modules\user\models\User;
 use app\modules\task\models\Task;
 use app\modules\task\Module;
 use yii\web\Controller;
@@ -13,6 +14,9 @@ class UserController extends Controller
 {
     public function actionIndex(){
         $model = new Task();
+
+
+
 
         $modelsactive = $model->getTasks(1);
         $modelsbad = $model->getTasks(2);

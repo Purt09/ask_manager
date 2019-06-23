@@ -1,5 +1,6 @@
 <?php
 namespace app\modules\user\models;
+use app\modules\task\models\Task;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -245,5 +246,11 @@ class User extends ActiveRecord implements IdentityInterface
             return true;
         }
         return false;
+    }
+
+    public function getTasks()
+    {
+        return $this->hasMany(Task::className(), ['id' => 'task_id'])
+            ->viaTable('{{%user_task}}', ['user_id' => 'id']);
     }
 }
