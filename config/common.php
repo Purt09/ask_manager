@@ -23,6 +23,9 @@ return [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'authManager' => [
+            'class' => 'yii\rbac\PhpManager',
+        ],
         'db' => [
             'class' => 'yii\db\Connection',
             'charset' => 'utf8',
