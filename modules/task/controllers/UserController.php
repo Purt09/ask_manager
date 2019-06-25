@@ -65,7 +65,7 @@ class UserController extends Controller
     protected function findModel($id)
     {
         if (($model = Task::findOne($id)) !== null) {
-            if(($model->updated_at < time()) && ($model->status != 0) && ($model->updated_at != null)) $model->setStatus(Task::STATUS_TIME_OUT); // Проверка на просрочеенность задачи
+            if(($model->updated_at < time()) && ($model->status != 0) && ($model->updated_at != null)) $model->setStatus(Task::STATUS_TIME_OUT); // Проверка на просрочеенность задачи sad sdsaddsds
             return $model;
         }
 
