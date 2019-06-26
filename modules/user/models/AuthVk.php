@@ -58,6 +58,7 @@ class AuthVk
         curl_close($ku);
 
         $ob = json_decode($result);
+        var_dump($ob);
         if($ob->access_token) {
             $this->setToken($ob->access_token);
             $this->setUid($ob->user_id);
