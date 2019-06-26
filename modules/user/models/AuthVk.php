@@ -104,20 +104,20 @@ class AuthVk
 
         $user = User::findByEmail($result->email);
 
-//        if($user) {
-//            $user = new User();
-//            $user->email = $result->email;
-//            $user->username = $result->uid;
-//            $user->photo = $result->photo;
-//            $user->photo_big = $result->photo_big;
-//            $user->photo_medium = $result->photo_medium;
-//            $user->first_name = $result->first_name;
-//            $user->last_name = $result->last_name;
-//            $user->save();
-//        } else {
-//            $user = User::findByEmail($result->email);
-//            $user->login();
-//        }
+        if($user) {
+            $user = new User();
+            $user->email = $result->email;
+            $user->username = $result->uid;
+            $user->photo = $result->photo;
+            $user->photo_big = $result->photo_big;
+            $user->photo_medium = $result->photo_medium;
+            $user->first_name = $result->first_name;
+            $user->last_name = $result->last_name;
+            $user->save();
+        } else {
+            $user = User::findByEmail($result->email);
+            $user->login();
+        }
 
         $this->redirect("http://task.md-help.ru");
         //TODO: Сделать нормальные пути
