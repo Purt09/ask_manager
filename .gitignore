@@ -36,3 +36,4 @@ tests/_support/_generated
 
 # Доступ к бд с прод, не должен быть виден на гитхаб и т.д.
 /environments/prod/config/common-local.php
+/.environments
