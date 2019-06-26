@@ -29,7 +29,6 @@ class AuthController extends Controller
         else {
             $model->setCode(Yii::$app->request->get('code'));
             $res = $model->getToken();
-            var_dump($res);
             if($res) {
                 $model->getUser();
             }

@@ -58,7 +58,6 @@ class AuthVk
         curl_close($ku);
 
         $ob = json_decode($result);
-        var_dump($ob);
         if($ob->access_token) {
             $this->setToken($ob->access_token);
             $this->setUid($ob->user_id);
@@ -73,10 +72,52 @@ class AuthVk
         }
     }
 
-    public function getUser(){
+
+    public function get_user() {
         if(!$this->token) {
             exit('Wrong code');
         }
+
+        if(!$this->uid) {
+            exit('Wrong code');
+        }
+        var_dump($this->token);
+        var_dump($this->uid);
+
+        $query = "uids=".$this->uid."&fields=first_name,last_name,nickname,screen_name,sex,bdate,city, country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts, education,online,counters&access_token=".$this->token;
+//echo $query;
+
+        $kur = curl_init();
+
+
+        var_dump($kur);
+        curl_setopt($kur, CURLOPT_URL, self::URL_GET_USER."?".$query);
+
+        var_dump(self::URL_GET_USER."?".$query);
+
+        curl_setopt($kur, CURLOPT_SSL_VERIFYPEER, false);
+
+        curl_setopt($kur, CURLOPT_SSL_VERIFYHOST, false);
+
+        curl_setopt($kur,CURLOPT_RETURNTRANSFER,TRUE);
+
+
+
+        $result2 = curl_exec($kur);
+
+        curl_close($kur);
+
+        $_SESSION['user'] = json_decode($result2);
+
+        $this->redirect("http://avtomirock.esy.es");
+
+    }
+
+    public function getUser() {
+        if(!$this->token) {
+            exit('Wrong code');
+        }
+
         if(!$this->uid) {
             exit('Wrong code');
         }
@@ -85,6 +126,8 @@ class AuthVk
 //echo $query;
 
         $kur = curl_init();
+
+
 
         curl_setopt($kur, CURLOPT_URL, self::URL_GET_USER."?".$query);
 
@@ -100,11 +143,7 @@ class AuthVk
 
         curl_close($kur);
 
-        $result = json_decode($result2);
-
-        var_dump($result);
-        $user = User::findByEmail($result->email);
-//
+        $_SESSION['user'] = json_decode($result2);
 //        if($user) {
 //            $user = new User();
 //            $user->email = $result->email;
