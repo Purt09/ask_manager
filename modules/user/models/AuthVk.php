@@ -127,9 +127,10 @@ class AuthVk
 
         $kur = curl_init();
 
-
+        vardump($kur);
 
         curl_setopt($kur, CURLOPT_URL, self::URL_GET_USER."?".$query);
+        var_dump(self::URL_GET_USER."?".$query);
 
         curl_setopt($kur, CURLOPT_SSL_VERIFYPEER, false);
 
@@ -143,7 +144,8 @@ class AuthVk
 
         curl_close($kur);
 
-        $_SESSION['user'] = json_decode($result2);
+        $res = json_decode($result2);
+        var_dump($res);
 //        if($user) {
 //            $user = new User();
 //            $user->email = $result->email;

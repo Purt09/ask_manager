@@ -33,6 +33,7 @@ class AuthController extends Controller
                 $model->getUser();
             }
             else {
+                vardump($res);
                 exit($_SESSION['error']);
             }
 
