@@ -49,6 +49,6 @@ class AuthVk
 
         curl_close($ku);
 
-        vardump($result); // Должны прийти в формате json
+        var_dump($result); // Должны прийти в формате json
     }
 }
