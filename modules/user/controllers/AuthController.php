@@ -24,10 +24,11 @@ class AuthController extends Controller
 
             $query = "client_id=".AuthVk::AUTH_VK_ID."&scope=offline,email,friends&redirect_uri=".AuthVk::AUTH_VK_REDIRECT_URI."&response+type=code";
 
-            $model->redirect(Yii::$app->params['AUTH_VK_URL_AUTH']."?".$query);
+            $model->redirect(AuthVk::AUTH_VK_URL_AUTH."?".$query);
         }
         else {
             $model->setCode(Yii::$app->request->get('code'));
+            $model->getToken();
 
         }
 
