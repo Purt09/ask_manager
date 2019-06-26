@@ -99,10 +99,11 @@ class AuthVk
 
         curl_close($kur);
 
-        $_SESSION['user'] = json_decode($result2);
-//        $result = $result->response[0];
-//
-//        $user = User::findByEmail($result->email);
+        $result = json_decode($result2);
+        $result = $result->response[0];
+
+        var_dump($result);
+        $user = User::findByEmail($result->email);
 //
 //        if($user) {
 //            $user = new User();
