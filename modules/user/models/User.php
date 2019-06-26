@@ -140,6 +140,17 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['username' => $username]);
     }
+
+    /**
+     * Finds user by email
+     *
+     * @param string $email
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
     /**
      * Validates password
      *
@@ -246,6 +257,28 @@ class User extends ActiveRecord implements IdentityInterface
             return true;
         }
         return false;
+    }
+
+    //todo: жопа
+    public function login()
+    {
+        if ($this->validate()) {
+            return Yii::$app->user->login($this->getUserEmail(), $this->rememberMe ? 3600*24*30 : 0);
+        }
+        return false;
+    }
+
+    /**
+     * Finds user by [[username]]
+     *
+     * @return User|null
+     */
+    public function getUserEmail()
+    {
+        if ($this->_user === false) {
+            $this->_user = User::findByEmail($this->email);
+        }
+        return $this->_user;
     }
 
     public function getTasks()

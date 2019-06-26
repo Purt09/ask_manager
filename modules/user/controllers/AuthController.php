@@ -28,7 +28,14 @@ class AuthController extends Controller
         }
         else {
             $model->setCode(Yii::$app->request->get('code'));
-            $model->getToken();
+            $res = $model->getToken();
+
+            if($res) {
+                $model->getUser();
+            }
+            else {
+                exit($_SESSION['error']);
+            }
 
         }
 
