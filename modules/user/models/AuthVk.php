@@ -104,7 +104,7 @@ class AuthVk
         curl_close($kur);
 
         $result = json_decode($result2);
-        vardump($result);
+        vardump(User::findByEmail($this->email));
 
 //        if($result) {
 //            $user = new User();
