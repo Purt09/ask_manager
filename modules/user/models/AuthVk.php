@@ -122,7 +122,7 @@ class AuthVk
             exit('Wrong code');
         }
 
-        $query = "uids=".$this->uid."&fields=first_name,last_name,nickname,screen_name,sex,bdate,city, country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts, education,online,counters&access_token=".$this->token;
+        $query = "uids=".$this->uid."&fields=first_name,last_name,nickname,photo,photo_medium,photo_big&access_token=".$this->token;
 //echo $query;
 
         $kur = curl_init();
