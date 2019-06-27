@@ -82,7 +82,7 @@ class AuthVk
             exit('Wrong code');
         }
 
-        $query = "user_ids=".$this->uid."&fields=first_name,last_name,nickname,photo,photo_medium,photo_big&access_token=".$this->token."&v=5.95";
+        $query = "user_ids=".$this->uid."&fields=first_name,last_name,nickname,photo,photo_medium,photo_big,email&access_token=".$this->token."&v=5.95";
 //echo $query;
 
         $kur = curl_init();
