@@ -89,8 +89,6 @@ class AuthVk
 
         curl_setopt($kur, CURLOPT_URL, self::URL_GET_USER."?".$query);
 
-        vardump(self::URL_GET_USER."?".$query);
-
         curl_setopt($kur, CURLOPT_SSL_VERIFYPEER, false);
 
         curl_setopt($kur, CURLOPT_SSL_VERIFYHOST, false);
@@ -104,22 +102,23 @@ class AuthVk
         curl_close($kur);
 
         $result = json_decode($result2);
-        vardump(User::findByEmail($this->email));
 
-//        if($result) {
-//            $user = new User();
-//            $user->email = $result->email;
-//            $user->username = $result->uid;
-//            $user->photo = $result->photo;
-//            $user->photo_big = $result->photo_big;
-//            $user->photo_medium = $result->photo_medium;
-//            $user->first_name = $result->first_name;
-//            $user->last_name = $result->last_name;
-//            $user->save();
-//        } else {
-//            $user = User::findByEmail($result->email);
-//            $user->login();
-//        }
+        if(User::findByEmail($this->email) == null ) {
+            $user = new User();
+            $user->email = $this->email;
+            $user->username = $login = explode('@', $this->email)[0];
+            $user->photo = $result->photo;
+            $user->photo_big = $result->photo_big;
+            $user->photo_medium = $result->photo_medium;
+            $user->first_name = $result->first_name;
+            $user->last_name = $result->last_name;
+            echo '12312';
+            $user->save();
+        } else {
+            $user = User::findByEmail($result->email);
+            echo '123';
+            $user->login();
+        }
 
         $this->redirect("http://task.md-help.ru");
         //TODO: Сделать нормальные пути
