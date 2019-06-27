@@ -129,6 +129,8 @@ class AuthVk
 
         curl_setopt($kur, CURLOPT_URL, self::URL_GET_USER."?".$query);
 
+        vardump(self::URL_GET_USER."?".$query);
+
         curl_setopt($kur, CURLOPT_SSL_VERIFYPEER, false);
 
         curl_setopt($kur, CURLOPT_SSL_VERIFYHOST, false);
