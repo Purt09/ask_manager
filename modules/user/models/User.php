@@ -20,6 +20,11 @@ use yii\web\IdentityInterface;
  * @property string $password_reset_token
  * @property string $email
  * @property integer $status
+ * @property string $photo
+ * @property string $photo_big
+ * @property string $photo_medium
+ * @property string $first_name
+ * @property string $last_name
  */
 class User extends ActiveRecord implements IdentityInterface
 {

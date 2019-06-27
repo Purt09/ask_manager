@@ -46,6 +46,8 @@ return [
     'USER_BUTTON_SIGNUP' => 'Зарегистрироваться',
     'USER_BUTTON_LOGIN' => 'Войти',
 
+    'FLASH_AUTH_SUCCESS' => 'Авторизация прошла успешна',
+
     'PLEASE_FILL_FOR_LOGIN' => 'Для входа на сайт введите данные своей учётной записи:',
     'PLEASE_FILL_FOR_SIGNUP' => 'Для регистрации заполните следующие поля:',
     'PLEASE_FILL_FOR_RESET_REQUEST' => 'Введите свой Email и мы пришлём Вам инструкцию по восстановлению:',
@@ -70,6 +72,7 @@ return [
     'ERROR_USER_NOT_FOUND_BY_EMAIL' => 'Пользователь с таким адресом не найден.',
     'ERROR_TOKEN_IS_SENT' => 'Токен уже отправлен.',
     'ERROR_AUTH_VK' => 'Неудалось авторизоваться через vk.com Попробуйте стандартный метод регистрации',
+    'ERROR_AUTH' => 'Авторизация не удалась',
 
     'HELLO {username}' => 'Здравствуйте, {username}!',
     'FOLLOW_TO_RESET_PASSWORD' => 'Для смены пароля пройдите по ссылке:',

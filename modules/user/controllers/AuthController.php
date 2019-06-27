@@ -16,6 +16,11 @@ use app\modules\user\Module;
 
 class AuthController extends Controller
 {
+
+    /**
+     * Страница через которую происходит перенаправление и авторизация
+     * @return string
+     */
     public function actionAuthvk(){
         $model = new AuthVk();
 
@@ -33,7 +38,6 @@ class AuthController extends Controller
                 $model->getUser();
             }
             else {
-                vardump($res);
                 exit($_SESSION['error']);
             }
 
@@ -42,7 +46,6 @@ class AuthController extends Controller
         if(Yii::$app->request->get('error')){
             Yii::$app->user->setFlash('error', Module::t('module', 'ERROR_AUTH_VK'));
             // TODO: Добавить в лог ошибку
-            // ошибка в error_description ($_GET)
         }
 
         return $this->render('authvk', [

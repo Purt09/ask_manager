@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p><?= Yii::t('app', 'PLEASE_FILL_FOR_LOGIN') ?></p>
-
+    <b><?= Html::a('Войти через VK',['/user/auth/authvk'], ['class' => 'btn btn-info']) ?> </b>
     <div class="row">
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
@@ -29,4 +29,3 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-<?= Html::a('VK', Url::to('user/auth/authvk')) ?>
