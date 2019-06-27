@@ -84,7 +84,7 @@ class AuthVk
         var_dump($this->token);
         var_dump($this->uid);
 
-        $query = "uids=".$this->uid."&fields=first_name,last_name,nickname,screen_name,sex,bdate,city, country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts, education,online,counters&access_token=".$this->token;
+        $query = "user_ids=".$this->uid."&fields=first_name,last_name,nickname,screen_name,sex,bdate,city, country,timezone,photo,photo_medium,photo_big,has_mobile,rate,contacts, education,online,counters&access_token=".$this->token."&v=5.95";
 //echo $query;
 
         $kur = curl_init();
@@ -127,10 +127,7 @@ class AuthVk
 
         $kur = curl_init();
 
-        vardump($kur);
-
         curl_setopt($kur, CURLOPT_URL, self::URL_GET_USER."?".$query);
-        var_dump(self::URL_GET_USER."?".$query);
 
         curl_setopt($kur, CURLOPT_SSL_VERIFYPEER, false);
 
@@ -144,9 +141,10 @@ class AuthVk
 
         curl_close($kur);
 
-        $res = json_decode($result2);
-        var_dump($res);
-//        if($user) {
+        $result = json_decode($result2);
+        vardump($result);
+
+//        if($result) {
 //            $user = new User();
 //            $user->email = $result->email;
 //            $user->username = $result->uid;
