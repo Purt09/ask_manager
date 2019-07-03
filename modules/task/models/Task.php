@@ -158,8 +158,7 @@ class Task extends \yii\db\ActiveRecord
      * @return Task[]|array
      */
     public function getTasks($status = self::STATUS_COMPLETE){
-        $time = time();
-        $tasks = User::find()->one()->getTasks()->where(['status' => $status])->with('users')->asArray()->all(); // Сложный запрос, связь многие ко многим
+        $tasks = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getTasks()->where(['status' => $status])->with('users')->asArray()->all(); // Сложный запрос, связь многие ко многим
         TimeSupport::changeStatus($tasks);
         return $tasks;
     }
@@ -172,9 +171,8 @@ class Task extends \yii\db\ActiveRecord
      * @return Task[]|array
      */
     public function getTasksByProject($project_id, $status = 1, $count = false){
-        $time = time();
         if (!$count){
-            $tasks = User::find()->one()->getTasks()->where(['project_id' => $project_id, 'status' => $status])->asArray()->all();  // Сложный запрос, связь многие ко многим
+            $tasks = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getTasks()->where(['project_id' => $project_id, 'status' => $status])->asArray()->all();  // Сложный запрос, связь многие ко многим
             TimeSupport::changeStatus($tasks);
             return $tasks;
         }

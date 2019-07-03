@@ -21,7 +21,7 @@ class m190426_234200_create_project_table extends Migration
 
         $this->createTable('{{%project}}', [
             'id' => $this->primaryKey(),
-            'time_at' => $this->integer()->notNull(),
+            'time_at' => $this->integer(),
             'title' => $this->string()->notNull(),
             'description' => $this->string(),
             'parent_id' => $this->integer()->notNull(),

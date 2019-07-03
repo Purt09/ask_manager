@@ -274,7 +274,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by [[username]]
+     * Finds user by [[email]]
      *
      * @return User|null
      */
@@ -291,4 +291,5 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Task::className(), ['id' => 'task_id'])
             ->viaTable('{{%user_task}}', ['user_id' => 'id']);
     }
+
 }
