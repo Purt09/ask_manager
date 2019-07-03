@@ -2,9 +2,7 @@
 
 namespace app\modules\task\controllers;
 
-use app\modules\admin\models\User;
 use app\modules\task\models\Task;
-use app\modules\task\Module;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -15,19 +13,17 @@ class UserController extends Controller
     public function actionIndex(){
         $model = new Task();
 
-        $modelsactive = $model->getTasks(1);
-        $modelsbad = $model->getTasks(2);
+        $models = $model->getTasks();
 
         return $this->render('index', [
-            'modelsactive' => $modelsactive,
-            'modelspros' => $modelsbad,
+            'models' => $models,
         ]);
     }
 
     public function actionDone(){
         $model = new Task();
 
-        $models = $model->getTasks(0);
+        $models = $model->getTasks();
 
 
         return $this->render('done', [

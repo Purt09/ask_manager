@@ -23,6 +23,12 @@ use yii\db\Expression;
  * @property int $context_id
  * @property int $user_id
  * @property int $status
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $photo
+ * @property string $photo_medium
+ * @property string $photo_big
+ * @property int phone
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -150,7 +156,7 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * Возвращает задачи по статусу
+     * Возвращает задачи по статусу пользователя который сейчас авторизирован
      *  1 - активные
      *  2 - просроченные
      *  0 - выполенные
@@ -158,26 +164,26 @@ class Task extends \yii\db\ActiveRecord
      * @return Task[]|array
      */
     public function getTasks($status = self::STATUS_COMPLETE){
-        $tasks = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getTasks()->where(['status' => $status])->with('users')->asArray()->all(); // Сложный запрос, связь многие ко многим
-        TimeSupport::changeStatus($tasks);
+        $tasks = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getTasks()->with('users')->all(); // Сложный запрос, связь многие ко многим
+        //TimeSupport::changeStatus($tasks);
         return $tasks;
     }
 
-    /**
-     * Возращает массив хадач определенного проекта с определенным статусом
+    /**Возращает массив задач определенного проекта
      *
-     * @param $project_id
-     * @param $status
-     * @return Task[]|array
+     * если count - true, то выдает количесвто задач в проекте
+     *
+     * @param null $project_id
+     * @param int $status
+     * @param bool $count
+     * @return mixed
      */
-    public function getTasksByProject($project_id, $status = 1, $count = false){
+    public function getTasksByProject($project_id = NULL, $status = 1, $count = false){
         if (!$count){
             $tasks = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getTasks()->where(['project_id' => $project_id, 'status' => $status])->asArray()->all();  // Сложный запрос, связь многие ко многим
             TimeSupport::changeStatus($tasks);
             return $tasks;
-        }
-            else
-                return $tasks = User::find()->one()->getTasks()->where(['project_id' => $project_id, 'status' => $status])->count();
+        } else  return $tasks = User::find()->one()->getTasks()->where(['project_id' => $project_id, 'status' => $status])->count();
     }
 
     public function getUsers()
