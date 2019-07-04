@@ -110,7 +110,9 @@ class UserController extends Controller
      * @throws NotFoundHttpException
      */
     public function actionComplete($id = false, $redirect = 'index'){
-
+        if(\Yii::$app->request->isAjax){
+            vardump(Yii::$app->request->post());
+        }
         $model = $this->findModel($id);
 
         $model->setStatus();

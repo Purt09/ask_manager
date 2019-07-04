@@ -156,16 +156,12 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * Возвращает задачи по статусу пользователя который сейчас авторизирован
-     *  1 - активные
-     *  2 - просроченные
-     *  0 - выполенные
-     * @param int $status
+     * Возвращает задачи определленного пользователя
      * @return Task[]|array
      */
-    public function getTasks($status = self::STATUS_COMPLETE){
+    public function getTasks(){
         $tasks = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getTasks()->with('users')->all(); // Сложный запрос, связь многие ко многим
-        //TimeSupport::changeStatus($tasks);
+        TimeSupport::changeStatus($tasks); // Проверка статуса задачи
         return $tasks;
     }
 

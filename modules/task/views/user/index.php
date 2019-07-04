@@ -40,16 +40,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <?php foreach ($models as $model) : ?>
                     <?php if ($model['status'] == 1): ?>
-                        <div class="bg-light  p-1 shadow-sm row mr-1">
+                        <div class="bg-light  p-1 shadow-sm row mr-1 del<?= $model['id'] ?>">
                             <?php
-                            $id = 'toggle-event-' . $model['id'];
+                            $id = $model['id'];
+                            $idtoggle = 'toggle-event-' . $model['id'];
+                            $id_del_class = 'div.del' . $model['id'];
                             $tool_id = 'tooltip-' . $model['id'];
                             $url = Url::to(['complete', 'id' => $model['id']]);
                             $url = '"http://' . $_SERVER['SERVER_NAME'] . $url . '"';
 
                             $script = <<< JS
 $(function() {
-        $('#$id').change(function() {
+        $('#$idtoggle').change(function() {
+            $('$id_del_class').remove();
             document.location.href = $url;
         })
     })
@@ -59,7 +62,7 @@ JS;
                             $this->registerJs($script, yii\web\View::POS_READY);
                             ?>
                             <div class="col-xs-1">
-                                <?= '<input id="' . $id . '" type="checkbox" checked data-toggle="toggle" data-on="<i class=\'glyphicon glyphicon-remove\'> </i>" data-off="<i class=\'glyphicon glyphicon-ok\'> </i>" data-size="sm" data-onstyle="success">';
+                                <?= '<input id="' . $idtoggle . '" type="checkbox" checked data-toggle="toggle" data-on="<i class=\'glyphicon glyphicon-remove\'> </i>" data-off="<i class=\'glyphicon glyphicon-ok\'> </i>" data-size="sm" data-onstyle="success">';
                                 ?>
                             </div>
                             <div class="col-xs-7 ml-3">

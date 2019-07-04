@@ -11,12 +11,19 @@ use yii\helpers\Html;
 class TimeSupport
 {
 
+    /**
+     * Принимает количесвто секунд
+     * Возращает html code вывода времени в читаемом виде
+     * @param $seconds
+     * @return string
+     */
     public static function createtime($seconds)
     {
-        if($seconds < 86400){
-            $class = 'warning';
-            if ($seconds < 3600) $class = 'danger';
-        } else $class = 'success';
+            if ($seconds < 86400) {
+                $class = 'warning';
+                if ($seconds < 3600) $class = 'danger';
+            } else $class = 'success';
+
 
         $times = array();
 
@@ -44,10 +51,11 @@ class TimeSupport
 
 
         // значения времени константы
-        $times_values = array('сек.','мин.','час.','д.','г.');
+        $times_values = array('сек.', 'мин.','час.','дней','год');
 
         $time = ($times);
-        for ($i = count($time)-1; $i >= 0; $i--)
+        // Выводит только 2 значения (мин и сек или часы и мин или дни и часы)
+        for ($i = count($time) - 1; $i >= count($time) - 2; $i--)
         {
             $result .= $time[$i] . ' ' . $times_values[$i] . ' ';
         };
@@ -57,18 +65,18 @@ class TimeSupport
         return $html;
     }
 
-    public static function changeStatus($tasks = []){
 
-        for($t = 0; $t <= count($tasks); $t++) {
-            if ($tasks[$t]['updated_at'] != null && $tasks[$t]['status'] != 0) {
-
-                $tasks[$t]['time'] = $tasks[$t]['updated_at'] - time();
-                if ($tasks[$t]['time'] < 0) {
-                    $model = Task::find()->where(['id' => $tasks[$t]['id']])->one();
-                    $model->setStatus(2);
+    /**Присвает статус задаче исходя из ее времени
+     * @param $tasks
+     */
+    public static function changeStatus($tasks){
+        foreach ($tasks as $t) {
+            if ($t['updated_at'] != null && $t['status'] != 0) {
+                // Проверка закончилось ли время
+                if ($t['updated_at'] - time() < 0) {
+                    $t->setStatus(2);
                 } else {
-                    $model = Task::find()->where(['id' => $tasks[$t]['id']])->one();
-                    $model->setStatus(1);
+                    $t->setStatus(1);
                 }
             }
         }
