@@ -5,7 +5,7 @@ namespace app\modules\project\models;
 use Yii;
 use app\modules\task\models\Task;
 use app\modules\project\Module;
-use yii\data\ActiveDataProvider;
+use app\modules\user\models\User;
 
 /**
  * This is the model class for table "{{%project}}".
@@ -116,13 +116,33 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * Возращает проеты по определенному parent_id
      * @param null $parent_id
-     * @return Project[]|array
+     * @return mixed
      */
     public function getProjectByParent_id($parent_id = NULL) {
-        return $projects = Project::find()->where(['parent_id' => $parent_id])->all();
+        return $projects = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getProjects()->with('projects')->where(['parent_id' => $parent_id])->all(); // Сложный запрос, связь многие ко многим
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        if (Yii::$app->request->post()) {
+            $user = User::findOne(\Yii::$app->user->identity->id);
+            $project = Project::find()->where(['id' => $this->id])->one();
+
+            $project->link('projects', $user);
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**
+     * connects many to many with users
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getUsers()
+    {
+        return $this->hasMany(User::className(), ['id' => 'user_id'])
+            ->viaTable('{{%user_project}}', ['project_id' => 'id']);
+    }
 
 }

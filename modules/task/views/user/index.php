@@ -65,12 +65,12 @@ JS;
                                 <?= '<input id="' . $idtoggle . '" type="checkbox" checked data-toggle="toggle" data-on="<i class=\'glyphicon glyphicon-remove\'> </i>" data-off="<i class=\'glyphicon glyphicon-ok\'> </i>" data-size="sm" data-onstyle="success">';
                                 ?>
                             </div>
-                            <div class="col-xs-7 ml-3">
+                            <div class="col-xs-8 ml-3">
                                 <a href="<?= Url::to(['update', 'id' => $model['id']]) ?>"
                                    title="<?= $model['description'] ?>" id="<?= $tool_id ?>" class="text-body pl-3">
                                     <?= $model['title'] ?> </a>
                             </div>
-                            <div class="pull-right col-4">
+                            <div class="pull-right col-3">
                                 <?php if ($model['updated_at'] != null): ?>
                                     <?= TimeSupport::createtime($model['updated_at'] - $time) ?>
                                 <? endif; ?>

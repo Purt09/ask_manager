@@ -182,6 +182,11 @@ class Task extends \yii\db\ActiveRecord
         } else  return $tasks = User::find()->one()->getTasks()->where(['project_id' => $project_id, 'status' => $status])->count();
     }
 
+    /**
+     * connects many to many with users
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getUsers()
     {
         return $this->hasMany(User::className(), ['id' => 'user_id'])

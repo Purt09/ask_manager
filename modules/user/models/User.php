@@ -1,5 +1,6 @@
 <?php
 namespace app\modules\user\models;
+use app\modules\project\models\Project;
 use app\modules\task\models\Task;
 use Yii;
 use yii\base\NotSupportedException;
@@ -286,10 +287,24 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->_user;
     }
 
+    /** Connect many to many with task
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getTasks()
     {
         return $this->hasMany(Task::className(), ['id' => 'task_id'])
             ->viaTable('{{%user_task}}', ['user_id' => 'id']);
+    }
+
+    /** Connect many to many with project
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getProjects()
+    {
+        return $this->hasMany(Project::className(), ['id' => 'project_id'])
+            ->viaTable('{{%user_project}}', ['user_id' => 'id']);
     }
 
 }
