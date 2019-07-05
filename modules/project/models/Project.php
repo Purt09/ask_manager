@@ -129,7 +129,7 @@ class Project extends \yii\db\ActiveRecord
             $user = User::findOne(\Yii::$app->user->identity->id);
             $project = Project::find()->where(['id' => $this->id])->one();
 
-            $project->link('projects', $user);
+            $project->link('users', $user);
         }
         parent::afterSave($insert, $changedAttributes);
     }
