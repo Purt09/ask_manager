@@ -56,10 +56,9 @@ class ProjectWidget extends Widget
 
     public function run()
     {
+        $model = new Task();
         foreach ($this->projects as $project) {
-
             static $i = 0;
-            $model = new Task();
             $this->ids += array($i => $project['id']);
             $i++;
 
@@ -71,6 +70,7 @@ class ProjectWidget extends Widget
             }
             $i++;
         }
+
         $tasks = $model->getTasks();
         foreach ($tasks as $t) {
             foreach ($this->ids as $i)
