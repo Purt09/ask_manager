@@ -120,7 +120,7 @@ class Project extends \yii\db\ActiveRecord
      * @param null $parent_id
      * @return mixed
      */
-    public function getProjectByParent_id($parent_id = NULL) {
+    public function getProjectByParent_id($parent_id) {
         return $projects = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getProjects()->with('projects')->where(['parent_id' => $parent_id])->indexBy('id')->asArray()->all(); // Сложный запрос, связь многие ко многим
     }
 

@@ -165,23 +165,6 @@ class Task extends \yii\db\ActiveRecord
         return $tasks;
     }
 
-    /**Возращает массив задач определенного проекта
-     *
-     * если count - true, то выдает количесвто задач в проекте
-     *
-     * @param null $project_id
-     * @param int $status
-     * @param bool $count
-     * @return mixed
-     */
-    public function getTasksByProject($project_id = NULL, $count = false){
-        if (!$count){
-            $tasks = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getTasks()->where(['project_id' => $project_id])->asArray()->all();  // Сложный запрос, связь многие ко многим
-            TimeSupport::changeStatus($tasks);
-            return $tasks;
-        } else  return $tasks = User::find()->one()->getTasks()->where(['project_id' => $project_id])->count();
-    }
-
     /**
      * connects many to many with users
      * @return \yii\db\ActiveQuery

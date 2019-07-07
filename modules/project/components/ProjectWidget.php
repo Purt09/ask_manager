@@ -1,4 +1,5 @@
 <?php
+
 namespace app\modules\project\components;
 
 use yii\base\Widget;
@@ -24,16 +25,21 @@ class ProjectWidget extends Widget
      * @var string
      */
     public $projectHtml;
+
+    public $id;
+
     /**
      * @var integer id проекта для которого строим виджет
      */
-    public $id;
+    public $ids = [];
 
-    public $project;
+    public $projects = [];
     /**
      * @var array Задачи проекта
      */
     public $tasks = [];
+
+    public $csscol = 4;
 
     /**
      *
@@ -50,81 +56,67 @@ class ProjectWidget extends Widget
 
     public function run()
     {
+        foreach ($this->projects as $project) {
 
-        $model = new Task();
-        $this->id = $this->project['id'];
+            static $i = 0;
+            $model = new Task();
+            $this->ids += array($i => $project['id']);
+            $i++;
 
-        // формируем массив проектов, для их дальнейшего преобразования в дерево
-        $this->data += [$this->project['id'] => $this->project];
-        foreach ($this->project['projects'] as $child){
-            $this->data += array($child['id'] => $child);
-        }
-
-        $tasks = $model->getTasks();
-        foreach ($tasks as $t){
-            if(($t['project_id'] == $this->id) && ($t['status'] == 1)){
-                $t = ArrayHelper::toArray($t);
-                $t = array(
-                    $t['id'] => $t,
-                );
-                $this->tasks = ArrayHelper::merge($this->tasks, $t);
+            // формируем массив проектов, для их дальнейшего преобразования в дерево
+            $this->data += [$project['id'] => $project];
+            foreach ($project['projects'] as $child) {
+                $this->data += array($child['id'] => $child);
+                $this->ids += array($i => $child['id']);
             }
+            $i++;
         }
-        $this->tree = $this->getTree();
-
-
-
-        /* Меняет структура дерева для вывода подкатегорий */
-        if (!isset($this->tree[$this->id])) {
-            $this->tree = array_shift(array_pop($this->tree));
-        }
-
-        /* Добаавляет в виджет также заддачи подкатегорий */
-        foreach ($this->tree as  $s){
-            if(isset( $s['childs']) && is_array( $s['childs']))
-                foreach ( $s['childs'] as $child) {
-                    foreach ($tasks as $t)
-                        if ($child['id'] == $t['project_id']) {
-                            $t = ArrayHelper::toArray($t);
-                            $t = array(
-                                $t['id'] => $t,
-                            );
-                            $this->tasks = ArrayHelper::merge($this->tasks, $t);
-                        }
+        $tasks = $model->getTasks();
+        foreach ($tasks as $t) {
+            foreach ($this->ids as $i)
+                if (($t['project_id'] == $i) && ($t['status'] != 0)) {
+                    $t = ArrayHelper::toArray($t);
+                    $t = array(
+                        $t['id'] => $t,
+                    );
+                    $this->tasks = ArrayHelper::merge($this->tasks, $t);
                 }
         }
+        $this->tree = $this->getTree();
 
 
         $this->projectHtml = $this->getProjectHtml($this->tree);
         return $this->projectHtml;
     }
 
+
     /**
      * Строит дерево из данных
      *
      * @return array
      */
-    protected  function getTree(){
+    protected function getTree()
+    {
         $tree = [];
-        foreach ($this->data as $id => &$node){
-            if(!$node['parent_id'])
+        foreach ($this->data as $id => &$node) {
+            if ((!$node['parent_id']) || ($node['parent_id'] == $this->id))
                 $tree[$id] = &$node;
-            else
-                $this->data[$node['parent_id']]['childs'][$node['id']] = &$node;
         }
         return $tree;
     }
 
-    protected function getProjectHtml($tree){
+    protected function getProjectHtml($tree)
+    {
         $str = '';
         foreach ($tree as $project) {
-            $str .= $this->catToTemplate($project, $this->tasks);
+            $str .= $this->catToTemplate($project, $this->tasks, $this->csscol);
         }
 
         return $str;
     }
 
-    protected function catToTemplate($project,$tasks){
+    protected function catToTemplate($project, $tasks, $csscol)
+    {
         ob_start();
         include __DIR__ . '/project_tpl/' . $this->tpl;
         return ob_get_clean();

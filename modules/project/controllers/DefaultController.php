@@ -50,14 +50,14 @@ class DefaultController extends \yii\web\Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $tasks = new Task();
-        $models = $tasks->getTasksByProject($model);
+        $task = new Task();
+        $tasks = $task->getTasks();
         $subprojects = $model->getProjectByParent_id($id);
 
 
         return $this->render('view', [
             'model' => $model,
-            'models' => $models,
+            'tasks' => $tasks,
             'subprojects' => $subprojects
 
         ]);
