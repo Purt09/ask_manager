@@ -26,6 +26,12 @@ $this->title = Yii::$app->name;
                 <p><b>v0.1.2</b>!</p>
                 <br> - Добавлена авторизация и регистрация через вк
                 <p><a class="btn btn-default" href="https://github.com/Purt09/task_manager">Исходный код проекта:</a></p>
+
+                <p><b>v0.1.3</b>!</p>
+                <br> - Теперь у каждого пользователя выводятся только свои материаллы
+                <br> - Улучшен интерфейс
+                <br> - Исправлены ошибки
+                <p><a class="btn btn-default" href="https://github.com/Purt09/task_manager">Исходный код проекта:</a></p>
             </div>
 
         </div>
