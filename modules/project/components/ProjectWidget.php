@@ -4,6 +4,7 @@ namespace app\modules\project\components;
 use yii\base\Widget;
 use app\modules\project\models\Project;
 use app\modules\task\models\Task;
+use yii\helpers\ArrayHelper;
 
 class ProjectWidget extends Widget
 {
@@ -14,7 +15,7 @@ class ProjectWidget extends Widget
     /**
      * @var array Все данные из бд, с проекта
      */
-    public $data;
+    public $data = [];
     /**
      * @var array Данные с массива но в виде дерева
      */
@@ -28,10 +29,11 @@ class ProjectWidget extends Widget
      */
     public $id;
 
+    public $project;
     /**
      * @var array Задачи проекта
      */
-    public $tasks;
+    public $tasks = [];
 
     /**
      *
@@ -42,14 +44,32 @@ class ProjectWidget extends Widget
         if ($this->tpl === null) {
             $this->tpl = 'project';
         }
+
         $this->tpl .= '.php';
     }
 
     public function run()
     {
+
         $model = new Task();
-        $this->data = Project::find()->where(['id' => $this->id])->orWhere(['parent_id' => $this->id])->indexBy('id')->asArray()->all();
-        $this->tasks = array_merge($model->getTasksByProject($this->id), $model->getTasksByProject($this->id,2));
+        $this->id = $this->project['id'];
+
+        // формируем массив проектов, для их дальнейшего преобразования в дерево
+        $this->data += [$this->project['id'] => $this->project];
+        foreach ($this->project['projects'] as $child){
+            $this->data += array($child['id'] => $child);
+        }
+
+        $tasks = $model->getTasks();
+        foreach ($tasks as $t){
+            if(($t['project_id'] == $this->id) && ($t['status'] == 1)){
+                $t = ArrayHelper::toArray($t);
+                $t = array(
+                    $t['id'] => $t,
+                );
+                $this->tasks = ArrayHelper::merge($this->tasks, $t);
+            }
+        }
         $this->tree = $this->getTree();
 
 
@@ -61,10 +81,19 @@ class ProjectWidget extends Widget
 
         /* Добаавляет в виджет также заддачи подкатегорий */
         foreach ($this->tree as  $s){
-            if(isset( $s['childs']) && is_array( $s['childs'])) foreach ( $s['childs'] as $child) {
-                $this->tasks = array_merge($this->tasks, $model->getTasksByProject($child['id'],1));
-            }
+            if(isset( $s['childs']) && is_array( $s['childs']))
+                foreach ( $s['childs'] as $child) {
+                    foreach ($tasks as $t)
+                        if ($child['id'] == $t['project_id']) {
+                            $t = ArrayHelper::toArray($t);
+                            $t = array(
+                                $t['id'] => $t,
+                            );
+                            $this->tasks = ArrayHelper::merge($this->tasks, $t);
+                        }
+                }
         }
+
 
         $this->projectHtml = $this->getProjectHtml($this->tree);
         return $this->projectHtml;
@@ -89,19 +118,13 @@ class ProjectWidget extends Widget
     protected function getProjectHtml($tree){
         $str = '';
         foreach ($tree as $project) {
-            $str .= $this->catToTemplate($project);
+            $str .= $this->catToTemplate($project, $this->tasks);
         }
-
-        $this->tpl = 'task.php';
-        $str .= $this->catToTemplate($this->tasks);
-
-        $this->tpl = 'bottom.php';
-        $str .= $this->catToTemplate($project);
 
         return $str;
     }
 
-    protected function catToTemplate($project){
+    protected function catToTemplate($project,$tasks){
         ob_start();
         include __DIR__ . '/project_tpl/' . $this->tpl;
         return ob_get_clean();

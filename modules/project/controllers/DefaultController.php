@@ -33,13 +33,11 @@ class DefaultController extends \yii\web\Controller
     public function actionIndex()
     {
         $model = new Project();
-        $projects = $model->getProjectByParent_id();
-        $tasks = $model->getTasksByProjects($projects);
+        $projects = $model->getProjectByParent_id(null);
 
 
         return $this->render('index', [
-            'projects' => $projects,
-            'tasks' => $tasks
+            'projects' => $projects
 
         ]);
     }
@@ -52,22 +50,31 @@ class DefaultController extends \yii\web\Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $time = time();
         $tasks = new Task();
-        $tasksactive = $tasks->getTasksByProject($model);
-
-        $tasksoverdue = $tasks->getTasksByProject($model, 2);
+        $models = $tasks->getTasksByProject($model);
         $subprojects = $model->getProjectByParent_id($id);
 
 
         return $this->render('view', [
             'model' => $model,
-            'tasksactive' => $tasksactive,
-            'tasksoverdue' => $tasksoverdue,
-            'taskscomplete' => $taskscomplete,
+            'models' => $models,
             'subprojects' => $subprojects
 
         ]);
+    }
+
+    /**
+     * @param bool $id
+     */
+    public function actionDelete($id)
+    {
+        if (isset($id)) {
+            if (Project::deleteAll(['in', 'id', $id])) {
+                $this->redirect(['index']);
+            }
+        } else {
+            $this->redirect(['index']);
+        }
     }
     /**
      * Finds the Project model based on its primary key value.

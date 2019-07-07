@@ -8,6 +8,7 @@ use app\modules\task\Module;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\project\models\Project */
+/* @var $models app\modules\task\models\Task */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'PROJECTS'), 'url' => ['index']];
@@ -27,17 +28,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= Module::t('module', 'TASKS') ?>
                         </div>
                         <div class="p-3 bg-light rounded-bottom">
-                            <?php foreach ($tasksactive as $task): ?>
-                                <div class="bg-light test">
-                                    <div class="pull-right">  <?php if (!empty($task['time'])) echo createtime($task['time']) ?> </div>
-                                    <? echo Html::a('выполненно', Url::to(['/task/user/complete', 'id' => $task['id']]), ['class' => 'btn btn-success btn-sm']) ?>
+                            <?php foreach ($models as $task): ?>
+                                <?php if ($task['status'] == 1): ?>
+                                    <div class="bg-light test">
+                                        <? echo Html::a('выполненно', Url::to(['/task/user/complete', 'id' => $task['id']]), ['class' => 'btn btn-success btn-sm']) ?>
 
-                                    <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
-                                       class="text-body pl-3">
-                                        <?= $task['title'] ?> </a>
+                                        <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
+                                           class="text-body pl-3">
+                                            <?= $task['title'] ?> </a>
 
-                                </div>
-                                <hr>
+                                    </div>
+                                    <hr>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                             <?php $datatarget = '#CreateTask' . $model->id; ?>
                             <div class="text-center">
@@ -53,16 +55,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= Module::t('module', 'TASKS_TIMEOUT') ?>
                         </div>
                         <div class="p-3 bg-light mod-row">
-                            <?php foreach ($tasksoverdue as $task): ?>
-                                <div class="bg-light test">
+                            <?php foreach ($models as $task): ?>
+                                <?php if ($task['status'] == 2): ?>
+                                    <div class="bg-light test">
 
-                                    <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
-                                       class="text-body pl-3">
-                                        <?= $task['title'] ?> </a>
+                                        <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
+                                           class="text-body pl-3">
+                                            <?= $task['title'] ?> </a>
 
 
-                                    <?= Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/default/view']), ['class' => ' text-secondary']) ?>
-                                </div>
+                                        <?= Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/default/view']), ['class' => ' text-secondary']) ?>
+                                    </div>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </div>
                     </div>
@@ -85,9 +89,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= Html::button(\app\modules\project\Module::t('module', 'SUBPROJECT_ADD'), ['data-toggle' => 'modal', 'data-target' => '#CreateProject', 'class' => 'btn-success btn']) ?>
                     <? else: ?>
                         <?php foreach ($subprojects as $subproject): ?>
-                            <?= \app\modules\project\components\ProjectWidget::widget(['tpl' => 'project', 'id' => $subproject->id]) ?>
+                            <?= \app\modules\project\components\ProjectWidget::widget(['project' => $subproject]) ?>
 
-                        <br>
+                            <br>
                         <?php endforeach; ?>
                     <? endif; ?>
                 </div>

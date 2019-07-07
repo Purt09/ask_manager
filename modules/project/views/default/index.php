@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-6">
             <div class="row">
 
-                <? echo Html::a(Module::t('module', 'PROJECT_COMPLETE'), Url::to('default/create'), ['class'=>'btn btn-warning']) ?>
+                <?= Html::a(Module::t('module', 'PROJECT_COMPLETE'), Url::to('default/create'), ['class'=>'btn btn-warning']) ?>
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <?php foreach ($projects as $project) : ?>
         <div class="col-sm-4 ">
-            <?= \app\modules\project\components\ProjectWidget::widget(['tpl' => 'project', 'id' => $project->id]) ?>
+            <?= \app\modules\project\components\ProjectWidget::widget(['project' => $project]) ?>
         </div>
             <?php endforeach; ?>
         </div>

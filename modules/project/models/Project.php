@@ -115,14 +115,22 @@ class Project extends \yii\db\ActiveRecord
         return $task;
     }
 
-    /**
+    /**Возращает проекты опрделённого родителя
+     * asArray надо для виджета вывода проекта с подпроектами
      * @param null $parent_id
      * @return mixed
      */
     public function getProjectByParent_id($parent_id = NULL) {
-        return $projects = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getProjects()->with('projects')->where(['parent_id' => $parent_id])->all(); // Сложный запрос, связь многие ко многим
+        return $projects = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getProjects()->with('projects')->where(['parent_id' => $parent_id])->indexBy('id')->asArray()->all(); // Сложный запрос, связь многие ко многим
     }
 
+
+
+    /**
+     * Сохраняет данные, со связью многие ко многим
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
     public function afterSave($insert, $changedAttributes)
     {
         if (Yii::$app->request->post()) {

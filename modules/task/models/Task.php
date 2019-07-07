@@ -174,12 +174,12 @@ class Task extends \yii\db\ActiveRecord
      * @param bool $count
      * @return mixed
      */
-    public function getTasksByProject($project_id = NULL, $status = 1, $count = false){
+    public function getTasksByProject($project_id = NULL, $count = false){
         if (!$count){
-            $tasks = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getTasks()->where(['project_id' => $project_id, 'status' => $status])->asArray()->all();  // Сложный запрос, связь многие ко многим
+            $tasks = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getTasks()->where(['project_id' => $project_id])->asArray()->all();  // Сложный запрос, связь многие ко многим
             TimeSupport::changeStatus($tasks);
             return $tasks;
-        } else  return $tasks = User::find()->one()->getTasks()->where(['project_id' => $project_id, 'status' => $status])->count();
+        } else  return $tasks = User::find()->one()->getTasks()->where(['project_id' => $project_id])->count();
     }
 
     /**

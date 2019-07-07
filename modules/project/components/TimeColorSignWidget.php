@@ -1,9 +1,8 @@
 <?php
 
 
-namespace app\modules\task\components;
+namespace app\modules\project\components;
 
-use app\components\TimeSupport;
 use yii\base\Widget;
 
 class TimeColorSignWidget extends Widget
