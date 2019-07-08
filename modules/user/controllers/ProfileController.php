@@ -2,6 +2,7 @@
 namespace app\modules\user\controllers;
 use app\modules\user\forms\PasswordChangeForm;
 use app\modules\user\models\User;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use Yii;
@@ -31,7 +32,7 @@ class ProfileController extends Controller
 
     public function actionUpdate()
     {
-        $model = $this->findModel();
+        $model = $this->findModel(Yii::$app->user->identity->id);
         $model->scenario = User::SCENARIO_PROFILE;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
@@ -43,7 +44,7 @@ class ProfileController extends Controller
     }
     public function actionChangePassword()
     {
-        $user = $this->findModel();
+        $user = $this->findModel(Yii::$app->user->identity->id);
         $model = new PasswordChangeForm($user);
         if ($model->load(Yii::$app->request->post()) && $model->changePassword()) {
             return $this->redirect(['index']);
@@ -52,6 +53,20 @@ class ProfileController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionSearch(){
+       $search = Yii::$app->request->get('search');
+
+       $search1 = str_replace(' ', '', $search);
+
+       $users = User::find()->where(['like', 'username', $search1])->all();
+
+
+       return $this->render('search', [
+            'users' => $users,
+       ]);
+
     }
     /**
      * @return User the loaded model
