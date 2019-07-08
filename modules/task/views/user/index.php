@@ -122,4 +122,4 @@ JS;
         </div>
     </div>
 
-<?= CreateTaskWidjet::widget([]) ?>
+<?= CreateTaskWidjet::widget() ?>

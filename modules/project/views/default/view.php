@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use app\modules\project\components\CreateProjectWidget;
 use yii\helpers\Url;
 use app\modules\task\Module;
+use app\components\TimeSupport;
+use app\modules\task\components\CreateTaskWidjet;
 
 
 /* @var $this yii\web\View */
@@ -14,79 +16,140 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'PROJECTS'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
+$time = time();
 ?>
 <div class="project-view">
 
     <br>
     <div class="container">
-        <div class="col-sm-8">
+        <div class="col-md-8">
             <h2><?= $model->title ?> </h2>
             <div class="mod-row">
-                <div class="col-sm-8 mr-3 border rounded-bottom shadow-sm rounded-lg">
+                <div class="col-md-8">
                     <div class="row">
-                        <div class="p-3  bg-info text-white">
+                        <div class="p-3 mb-2 bg-info text-white row mr-1 shadow ">
                             <?= Module::t('module', 'TASKS') ?>
                         </div>
-                        <div class="p-3 bg-light rounded-bottom">
+                        <div class="p-3">
                             <?php foreach ($tasks as $task): ?>
-                                <?php if ($task['project_id'] == $model->id): ?>
-                                    <?php if ($task['status'] == 1): ?>
-                                        <div class="bg-light test">
-                                            <? echo Html::a('выполненно', Url::to(['/task/user/complete', 'id' => $task['id']]), ['class' => 'btn btn-success btn-sm']) ?>
+                                <?php if (($task['project_id'] == $model->id) &&($task['status'] == 1)): ?>
+                                    <div class="bg-light  p-1 shadow-sm row mr-1 del<?= $task['id'] ?>">
+                                        <?php
+                                        $id = $task['id'];
+                                        $idtoggle = 'toggle-event-' . $task['id'];
+                                        $id_del_class = 'div.del' . $task['id'];
+                                        $tool_id = 'tooltip-' . $task['id'];
+                                        $url = Url::to(['/task/user/complete', 'id' => $task['id']]);
+                                        $url = '"http://' . $_SERVER['SERVER_NAME'] . $url . '"';
 
-                                            <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
-                                               class="text-body pl-3">
-                                                <?= $task['title'] ?> </a>
+                                        $script = <<< JS
+$(function() {
+        $('#$idtoggle').change(function() {
+            $('$id_del_class').remove();
+            document.location.href = $url;
+        })
+    })
+   $('#$tool_id').tooltip();
+JS;
 
+                                        $this->registerJs($script, yii\web\View::POS_READY);
+                                        ?>
+                                        <div class="col-xs-1">
+                                            <?= '<input id="' . $idtoggle . '" type="checkbox" checked data-toggle="toggle" data-on="<i class=\'glyphicon glyphicon-remove\'> </i>" data-off="<i class=\'glyphicon glyphicon-ok\'> </i>" data-size="sm" data-onstyle="success">';
+                                            ?>
                                         </div>
-                                        <hr>
-                                    <?php endif; ?>
+                                        <div class="col-xs-8 ml-3">
+                                            <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
+                                               title="<?= $task['description'] ?>" id="<?= $tool_id ?>" class="text-body pl-3">
+                                                <?= $task['title'] ?> </a>
+                                        </div>
+                                        <div class="pull-right col-3">
+                                            <?php if ($task['updated_at'] != null): ?>
+                                                <?= TimeSupport::createtime($task['updated_at'] - $time) ?>
+                                            <? endif; ?>
+                                        </div>
+                                    </div>
+                                    <br>
                                 <?php endif; ?>
                             <?php endforeach; ?>
-                            <?php $datatarget = '#CreateTask' . $model->id; ?>
                             <div class="text-center">
-                                <?= Html::button(Module::t('module', 'TASK_CREATE'), ['data-toggle' => 'modal', 'data-target' => $datatarget, 'class' => 'btn-success btn ']) ?>
+                                <?= Html::button(Module::t('module', 'TASK_CREATE'), ['data-toggle' => 'modal', 'data-target' => '#CreateTask' . $model->id, 'class' => 'btn-success btn']) ?>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3 mr-3 border rounded-bottom shadow-sm rounded-lg">
+                <div class="col-md-3 ml-4 ">
                     <div class="row">
 
-                        <div class="p-3  bg-secondary text-white ">
+                        <div class="p-3 mb-2 bg-secondary text-white row mr-1 shadow  ">
                             <?= Module::t('module', 'TASKS_TIMEOUT') ?>
                         </div>
-                        <div class="p-3 bg-light mod-row">
+                        <div class="p-3">
                             <?php foreach ($tasks as $task): ?>
-                                <?php if ($task['project_id'] == $model->id): ?>
-                                    <?php if ($task['status'] == 2): ?>
-                                        <div class="bg-light test">
+                                <?php if (($task['project_id'] == $model->id) && ($task['status'] == 2)): ?>
+                                    <div class="bg-light  p-1 shadow-sm row mr-1 del<?= $task['id'] ?>">
+                                        <?php
+                                        $id = $task['id'];
+                                        $idtoggle = 'toggle-event-' . $task['id'];
+                                        $id_del_class = 'div.del' . $task['id'];
+                                        $tool_id = 'tooltip-' . $task['id'];
+                                        $url = Url::to(['/task/user/complete', 'id' => $task['id']]);
+                                        $url = '"http://' . $_SERVER['SERVER_NAME'] . $url . '"';
 
-                                            <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
-                                               class="text-body pl-3">
-                                                <?= $task['title'] ?> </a>
+                                        $script = <<< JS
+$(function() {
+        $('#$idtoggle').change(function() {
+            $('$id_del_class').remove();
+            document.location.href = $url;
+        })
+    })
+   $('#$tool_id').tooltip();
+JS;
 
-
-                                            <?= Html::a('(выполнено)', Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/default/view']), ['class' => ' text-secondary']) ?>
+                                        $this->registerJs($script, yii\web\View::POS_READY);
+                                        ?>
+                                        <div class="col-xs-1">
+                                            <?= '<input id="' . $idtoggle . '" type="checkbox" checked data-toggle="toggle" data-on="<i class=\'glyphicon glyphicon-remove\'> </i>" data-off="<i class=\'glyphicon glyphicon-ok\'> </i>" data-size="sm" data-onstyle="warning">';
+                                            ?>
                                         </div>
-                                    <?php endif; ?>
+                                        <div class="col-xs-8 ml-3">
+                                            <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
+                                               title="<?= $task['description'] ?>" id="<?= $tool_id ?>" class="text-body pl-3">
+                                                <?= $task['title'] ?> </a>
+                                        </div>
+                                        <div class="pull-right col-3">
+                                            <?php if ($task['updated_at'] != null): ?>
+                                                <?= TimeSupport::createtime($task['updated_at'] - $time) ?>
+                                            <? endif; ?>
+                                        </div>
+                                    </div>
+                                    <br>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-2 mr-3 border rounded-bottom shadow-sm rounded-lg">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="p-3 mb-2 bg-primary text-white row mr-1 shadow ">
+                        Участники:
+                    </div>
+                    <div class="div">
+                        <?php foreach ($users as $user): ?>
+                        <?= Html::a($user['username'], '/user/profile/index', ['id' => $user['id']]) ?>
+                            <hr>
 
-                <div class="p-3 mb-2 bg-primary text-white ">
-                    Участники:
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-md-4">
+            <h2>Подпроекты:</h2>
             <div class="col-sm-12 mr-3 ">
                 <div class="row">
-                    <br><br><br>
                     <?php if (empty($subprojects)) : ?>
 
                         <h2>В данном проекте отсуствуют подпроекты</h2>
@@ -104,6 +167,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<?= CreateProjectWidget::widget(['parent_id' => $model->id]) ?>
+<?= CreateTaskWidjet::widget(['project' => $model, 'projects' => $subprojects]) ?>
 
 

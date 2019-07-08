@@ -21,12 +21,14 @@ class ProfileController extends Controller
             ],
         ];
     }
-    public function actionIndex()
+
+    public function actionIndex($id)
     {
         return $this->render('index', [
-            'model' => $this->findModel(),
+            'model' => $this->findModel($id),
         ]);
     }
+
     public function actionUpdate()
     {
         $model = $this->findModel();
@@ -54,8 +56,8 @@ class ProfileController extends Controller
     /**
      * @return User the loaded model
      */
-    private function findModel()
+    private function findModel($id)
     {
-        return User::findOne(Yii::$app->user->identity->getId());
+        return User::findOne($id);
     }
 }

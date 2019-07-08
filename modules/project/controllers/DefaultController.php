@@ -4,6 +4,7 @@ namespace app\modules\project\controllers;
 
 use app\modules\project\models\Project;
 use app\modules\task\models\Task;
+use app\modules\user\models\User;
 use yii\web\NotFoundHttpException;
 use Yii;
 
@@ -53,13 +54,14 @@ class DefaultController extends \yii\web\Controller
         $task = new Task();
         $tasks = $task->getTasks();
         $subprojects = $model->getProjectByParent_id($id);
+        $users = Project::find()->where(['id' => $id])->one()->getUsers()->with(['projects'])->all();
 
 
         return $this->render('view', [
             'model' => $model,
             'tasks' => $tasks,
-            'subprojects' => $subprojects
-
+            'subprojects' => $subprojects,
+            'users' => $users
         ]);
     }
 

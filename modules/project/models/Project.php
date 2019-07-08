@@ -90,31 +90,6 @@ class Project extends \yii\db\ActiveRecord
         return new ProjectQuery(get_called_class());
     }
 
-    /**
-     * @param $id
-     * @return Project|null
-     */
-    public function getTitle($id){
-        $model = Project::findOne($id);
-        return $model->title;
-    }
-
-    /**
-     * Возращает задачи определенных проектов по умолчанию еще не выполненные
-     * @param $projects
-     * @return mixed
-     */
-    public function getTasksByProjects($projects, $status = 1){
-
-        $id =[];
-        foreach ($projects as $project) array_push($id, $project->id);
-        foreach ($id as $i) {
-            $t = Task::find()->where(['project_id' => $i, 'status' => $status])->select(['title', 'id'])->all();
-            $task[$i] = $t;
-        }
-        return $task;
-    }
-
     /**Возращает проекты опрделённого родителя
      * asArray надо для виджета вывода проекта с подпроектами
      * @param null $parent_id

@@ -55,10 +55,6 @@ use app\modules\project\components\TimeColorSignWidget;
                 <?php endforeach; ?>
             <?php endforeach; ?>
         <?php endif; ?>
-        <hr>
-        <p>
-            <?= Html::a('Добавить задачу', Url::to(['/task/user/create', 'project_id' => $project['id']]), ['class' => 'btn btn-success']) ?>
-        </p>
 
     </div>
 </div>
