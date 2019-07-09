@@ -1,11 +1,14 @@
 <?php
+
 namespace app\modules\user\controllers;
+
 use app\modules\user\forms\PasswordChangeForm;
 use app\modules\user\models\User;
-use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use Yii;
+use app\modules\user\forms\SearchForm;
+
 class ProfileController extends Controller
 {
     public function behaviors()
@@ -42,6 +45,7 @@ class ProfileController extends Controller
             ]);
         }
     }
+
     public function actionChangePassword()
     {
         $user = $this->findModel(Yii::$app->user->identity->id);
@@ -55,19 +59,24 @@ class ProfileController extends Controller
         }
     }
 
-    public function actionSearch(){
-       $search = Yii::$app->request->get('search');
-
-       $search1 = str_replace(' ', '', $search);
-
-       $users = User::find()->where(['like', 'username', $search1])->all();
+    public function actionSearch()
+    {
+        $model = new SearchForm();
 
 
-       return $this->render('search', [
+        if($query = Yii::$app->request->post('SearchForm')) {
+            $users = $model->searchUser($query);
+        } else {
+            $users = [];
+        }
+
+        return $this->render('search', [
+            'model' => $model,
             'users' => $users,
-       ]);
+        ]);
 
     }
+
     /**
      * @return User the loaded model
      */
