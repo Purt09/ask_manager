@@ -5,12 +5,15 @@ use app\modules\user\forms\LoginForm;
 use app\modules\user\forms\PasswordResetRequestForm;
 use app\modules\user\forms\PasswordResetForm;
 use app\modules\user\forms\SignupForm;
+use app\modules\user\models\User;
 use yii\base\InvalidParamException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use Yii;
+use app\modules\user\models\UserRequestFriend;
+
 class DefaultController extends Controller
 {
     public function behaviors()
@@ -128,6 +131,16 @@ class DefaultController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionAddFriend($id, $redirect = 'index')
+    {
+        $model = new UserRequestFriend();
+
+        $model->createRequest($id);
+
+
+        return $this->redirect([$redirect]);
     }
 
 

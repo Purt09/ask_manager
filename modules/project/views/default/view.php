@@ -40,7 +40,7 @@ $time = time();
                                         $idtoggle = 'toggle-event-' . $task['id'];
                                         $id_del_class = 'div.del' . $task['id'];
                                         $tool_id = 'tooltip-' . $task['id'];
-                                        $url = Url::to(['/task/user/complete', 'id' => $task['id']]);
+                                        $url = Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/' . $model['id']]);
                                         $url = '"http://' . $_SERVER['SERVER_NAME'] . $url . '"';
 
                                         $script = <<< JS
@@ -94,7 +94,7 @@ JS;
                                         $idtoggle = 'toggle-event-' . $task['id'];
                                         $id_del_class = 'div.del' . $task['id'];
                                         $tool_id = 'tooltip-' . $task['id'];
-                                        $url = Url::to(['/task/user/complete', 'id' => $task['id']]);
+                                        $url = Url::to(['/task/user/complete?redirect=/project/' . $model['id'], 'id' => $task['id']]);
                                         $url = '"http://' . $_SERVER['SERVER_NAME'] . $url . '"';
 
                                         $script = <<< JS

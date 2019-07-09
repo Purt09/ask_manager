@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             $idtoggle = 'toggle-event-' . $model['id'];
                             $id_del_class = 'div.del' . $model['id'];
                             $tool_id = 'tooltip-' . $model['id'];
-                            $url = Url::to(['complete', 'id' => $model['id']]);
+                            $url = Url::to(['complete', ['id' => $model['id']]]);
                             $url = '"http://' . $_SERVER['SERVER_NAME'] . $url . '"';
 
                             $script = <<< JS

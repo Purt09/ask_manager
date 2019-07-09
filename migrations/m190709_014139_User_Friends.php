@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m190704_144746_user_project_connections_many_to_many
+ * Class m190709_014139_User_Friends
  */
-class m190704_144746_user_project_connections_many_to_many extends Migration
+class m190709_014139_User_Friends extends Migration
 {
     /**
      * {@inheritdoc}
@@ -17,25 +17,25 @@ class m190704_144746_user_project_connections_many_to_many extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%user_project}}', [
+        $this->createTable('{{%user_friends}}', [
             'id' => $this->primaryKey(),
-            'user_id' => $this->integer()->notNull(),
-            'project_id' => $this->integer()->notNull(),
+            'user_id_1' => $this->integer()->notNull(),
+            'user_id_2' => $this->integer()->notNull(),
         ], $tableOptions);
 
         $this->addForeignKey(
-            'chain_to_project',
-            '{{%user_project}}',
-            'project_id',
-            '{{%project}}',
+            'chain_to_user_1',
+            '{{%user_friends}}',
+            'user_id_1',
+            '{{%user}}',
             'id',
             'CASCADE'
         );
 
         $this->addForeignKey(
-            'project_to_user',
-            '{{%user_project}}',
-            'user_id',
+            'chain_to_user_2',
+            '{{%user_friends}}',
+            'user_id_2',
             '{{%user}}',
             'id',
             'CASCADE'
@@ -48,12 +48,13 @@ class m190704_144746_user_project_connections_many_to_many extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%user_project}}');
+        echo "m190709_014139_User_Friends cannot be reverted.\n";
 
-        $this->dropForeignKey('chain_to_project');
-        $this->dropForeignKey('project_to_user');
+        $this->dropTable('{{%user_friends}}');
 
-        echo "m190622_002746_user_task cannot be reverted.\n";
+        $this->dropForeignKey('chain_to_user_1');
+        $this->dropForeignKey('chain_to_user_2');
+
 
         return false;
     }
@@ -67,7 +68,7 @@ class m190704_144746_user_project_connections_many_to_many extends Migration
 
     public function down()
     {
-        echo "m190622_002746_user_task cannot be reverted.\n";
+        echo "m190709_014139_User_Friends cannot be reverted.\n";
 
         return false;
     }

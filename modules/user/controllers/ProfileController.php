@@ -11,6 +11,7 @@ use app\modules\user\forms\SearchForm;
 
 class ProfileController extends Controller
 {
+
     public function behaviors()
     {
         return [

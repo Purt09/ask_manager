@@ -6,7 +6,6 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 /**
  * This is the model class for table "{{%user}}".
@@ -265,7 +264,7 @@ class User extends ActiveRecord implements IdentityInterface
         return false;
     }
 
-    //todo: жопа
+
     public function login()
     {
         if ($this->validate()) {
