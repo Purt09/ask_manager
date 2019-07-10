@@ -15,6 +15,7 @@ use app\modules\user\models\User;
  * @property string $title
  * @property string $description
  * @property int $parent_id
+ * @property int $creator_id
  *
  * @property Project $parent
  * @property Project[] $projects

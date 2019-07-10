@@ -19,6 +19,8 @@ class DefaultController extends \yii\web\Controller
     {
         $model = new Project();
 
+        $model->creator_id = Yii::$app->user->identity->id;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }

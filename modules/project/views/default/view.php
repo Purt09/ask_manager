@@ -33,7 +33,7 @@ $time = time();
                         </div>
                         <div class="p-3">
                             <?php foreach ($tasks as $task): ?>
-                                <?php if (($task['project_id'] == $model->id) &&($task['status'] == 1)): ?>
+                                <?php if (($task['project_id'] == $model->id) && ($task['status'] == 1)): ?>
                                     <div class="bg-light  p-1 shadow-sm row mr-1 del<?= $task['id'] ?>">
                                         <?php
                                         $id = $task['id'];
@@ -61,7 +61,8 @@ JS;
                                         </div>
                                         <div class="col-xs-8 ml-3">
                                             <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
-                                               title="<?= $task['description'] ?>" id="<?= $tool_id ?>" class="text-body pl-3">
+                                               title="<?= $task['description'] ?>" id="<?= $tool_id ?>"
+                                               class="text-body pl-3">
                                                 <?= $task['title'] ?> </a>
                                         </div>
                                         <div class="pull-right col-3">
@@ -115,7 +116,8 @@ JS;
                                         </div>
                                         <div class="col-xs-8 ml-3">
                                             <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
-                                               title="<?= $task['description'] ?>" id="<?= $tool_id ?>" class="text-body pl-3">
+                                               title="<?= $task['description'] ?>" id="<?= $tool_id ?>"
+                                               class="text-body pl-3">
                                                 <?= $task['title'] ?> </a>
                                         </div>
                                         <div class="pull-right col-3">
@@ -131,20 +133,41 @@ JS;
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="row">
                     <div class="p-3 mb-2 bg-primary text-white row mr-1 shadow ">
                         Участники:
                     </div>
                     <div class="div">
                         <?php foreach ($users as $user): ?>
-                        <?= Html::a($user['username'], '/user/profile/index', ['id' => $user['id']]) ?>
+
+                            <?= Html::a($user['username'], '/user/profile/index', ['id' => $user['id']]) ?>
+                            <?php if ($user['id'] === $model['creator_id']): ?>
+                                <?= "(Создатель)" ?>
+                            <?php endif; ?>
                             <hr>
 
                         <?php endforeach; ?>
                     </div>
                 </div>
             </div>
+            <?php if (Yii::$app->user->identity->id === $model['creator_id']): ?>
+            <div class="col-md-5 ml-5">
+                <div class="row">
+                    <div class="p-3 mb-2 bg-primary text-white row mr-1 shadow ">
+                        Панель управления:
+                    </div>
+                    <div class="div">
+
+
+                                <p>Здесь можно будет управлять проектом, в роли администратора</p>
+
+                            <hr>
+
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
         <div class="col-md-4">
             <h2>Подпроекты:</h2>
