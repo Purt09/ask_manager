@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 use app\modules\task\forms\CreateForm;
 use app\modules\user\models\User;
 
-class CreateTaskWidjet extends Widget
+class CreateTaskWidget extends Widget
 {
 
     /**
@@ -40,7 +40,7 @@ class CreateTaskWidjet extends Widget
             );
         }
 
-        return $this->render('createTaskWidjet',            [
+        return $this->render('createTaskWidget',            [
             'model' => $model,
             'project_id' => $this->project->id,
             'projects' => $this->projects

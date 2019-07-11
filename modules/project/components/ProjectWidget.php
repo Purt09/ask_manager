@@ -10,7 +10,7 @@ use yii\helpers\ArrayHelper;
 class ProjectWidget extends Widget
 {
     /**
-     * @var string шаблон проекта, его вид или часть такого
+     * @var string шаблон проекта, его вид
      */
     public $tpl;
     /**

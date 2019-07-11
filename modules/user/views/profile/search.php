@@ -1,13 +1,16 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\modules\user\Module;
+use app\modules\user\components\UsersWidget;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\user\models\User */
 
 $this->title = 'SEARCH';
 $this->params['breadcrumbs'][] = $this->title;
+
 
 ?>
 
@@ -38,9 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <h1>Результаты поиска:</h1>
-<?php foreach ($users as $user): ?>
-<?= Html::a($user['username'], '/user/profile', ['id' => $user['id']]) ?>
-<hr>
-
-<?php endforeach; ?>
+<?= UsersWidget::widget([
+    'users' => $users,
+    'button' => true,
+    'photo_size' => 1,
+]) ?>
 

@@ -152,7 +152,6 @@ class AuthVk
         }
 
         $this->redirect(Url::to('/task/user/index'));
-        //TODO: Сделать нормальные пути
     }
 
 }

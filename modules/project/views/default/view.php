@@ -1,11 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-use app\modules\project\components\CreateProjectWidget;
+use app\modules\user\components\UsersWidget;
 use yii\helpers\Url;
 use app\modules\task\Module;
 use app\components\TimeSupport;
-use app\modules\task\components\CreateTaskWidjet;
+use app\modules\task\components\CreateTaskWidget;
 
 
 /* @var $this yii\web\View */
@@ -138,17 +138,10 @@ JS;
                     <div class="p-3 mb-2 bg-primary text-white row mr-1 shadow ">
                         Участники:
                     </div>
-                    <div class="div">
-                        <?php foreach ($users as $user): ?>
-
-                            <?= Html::a($user['username'], '/user/profile/index', ['id' => $user['id']]) ?>
-                            <?php if ($user['id'] === $model['creator_id']): ?>
-                                <?= "(Создатель)" ?>
-                            <?php endif; ?>
-                            <hr>
-
-                        <?php endforeach; ?>
-                    </div>
+                    <?= UsersWidget::widget([
+                        'users' => $users,
+                        'button' => true,
+                    ]) ?>
                 </div>
             </div>
             <?php if (Yii::$app->user->identity->id === $model['creator_id']): ?>
@@ -157,14 +150,10 @@ JS;
                     <div class="p-3 mb-2 bg-primary text-white row mr-1 shadow ">
                         Панель управления:
                     </div>
-                    <div class="div">
-
-
                                 <p>Здесь можно будет управлять проектом, в роли администратора</p>
 
                             <hr>
 
-                    </div>
                 </div>
             </div>
             <?php endif; ?>
@@ -190,6 +179,6 @@ JS;
     </div>
 </div>
 
-<?= CreateTaskWidjet::widget(['project' => $model, 'projects' => $subprojects]) ?>
+<?= CreateTaskWidget::widget(['project' => $model, 'projects' => $subprojects]) ?>
 
 

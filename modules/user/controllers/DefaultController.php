@@ -133,11 +133,13 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionAddFriend($id, $redirect = 'index')
+    public function actionAddRequest($id, $redirect = 'index')
     {
         $model = new UserRequestFriend();
 
         $model->createRequest($id);
+
+        Yii::$app->getSession()->setFlash('success', 'Запрос в друзья, был отправлен пользователю');
 
 
         return $this->redirect([$redirect]);

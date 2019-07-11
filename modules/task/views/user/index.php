@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use app\modules\task\Module;
 use yii\helpers\Url;
 use app\components\TimeSupport;
-use app\modules\task\components\CreateTaskWidjet;
+use app\modules\task\components\CreateTaskWidget;
 
 /* @var $modelsactive app\modules\task\models\Task */
 $time = time();
@@ -122,4 +122,4 @@ JS;
         </div>
     </div>
 
-<?= CreateTaskWidjet::widget() ?>
+<?= CreateTaskWidget::widget() ?>

@@ -7,6 +7,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "{{%user}}".
  *
@@ -284,6 +285,10 @@ class User extends ActiveRecord implements IdentityInterface
             $this->_user = User::findByEmail($this->email);
         }
         return $this->_user;
+    }
+
+    public function getUsersByIds($ids){
+        return User::find()->where(['in', 'id', $ids])->all();
     }
 
     /** Connect many to many with task

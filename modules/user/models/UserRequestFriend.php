@@ -3,6 +3,7 @@
 namespace app\modules\user\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "keys_user_request_for_friend".
@@ -54,5 +55,20 @@ class UserRequestFriend extends \yii\db\ActiveRecord
         $this->taker = $id;
         $this->accept = self::STATUS_WAIT;
         $this->save();
+    }
+
+    public function checkRequest(){
+        $request = UserRequestFriend::find()->where(['taker' => Yii::$app->user->identity->id])->one();
+        if(empty($request))
+            return null;
+        else return UserRequestFriend::find()->where(['taker' => Yii::$app->user->identity->id])->count();
+    }
+
+    public function getRequests(){
+        return $requests = UserRequestFriend::find()->select('sender')->where(['taker' => Yii::$app->user->identity->id])->asArray()->all();
+    }
+
+    public function deleteRequest(){
+
     }
 }

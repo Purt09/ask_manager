@@ -49,6 +49,25 @@ class UserFriend extends \yii\db\ActiveRecord
         ];
     }
 
+    public function createFriend($id){
+        $this->user_id_1 = Yii::$app->user->identity->id;
+        $this->user_id_2 = $id;
+        $this->save();
+    }
+
+    public function checkFriend(){
+
+    }
+
+    public function getFriends(){
+        //return
+    }
+
+    public function deleteFriend(){
+
+    }
+    
+
     /**
      * @return \yii\db\ActiveQuery
      */

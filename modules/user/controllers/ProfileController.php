@@ -3,11 +3,13 @@
 namespace app\modules\user\controllers;
 
 use app\modules\user\forms\PasswordChangeForm;
+use app\modules\user\models\UserRequestFriend;
 use app\modules\user\models\User;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use Yii;
 use app\modules\user\forms\SearchForm;
+use yii\helpers\ArrayHelper;
 
 class ProfileController extends Controller
 {
@@ -29,8 +31,11 @@ class ProfileController extends Controller
 
     public function actionIndex($id)
     {
+        $request = new UserRequestFriend();
+        $requests = $request->checkRequest();
         return $this->render('index', [
             'model' => $this->findModel($id),
+            'requests' => $requests,
         ]);
     }
 
@@ -76,6 +81,20 @@ class ProfileController extends Controller
             'users' => $users,
         ]);
 
+    }
+
+    public function actionRequest()
+    {
+        $request = new UserRequestFriend();
+        $user = new User();
+
+        $requests = $request->getRequests();
+        $ids = ArrayHelper::getColumn($requests, 'sender');
+        $users = $user->getUsersByIds($ids);
+
+        return $this->render('request', [
+            'users' => $users,
+        ]);
     }
 
     /**
