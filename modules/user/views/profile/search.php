@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\modules\user\Module;
-use app\modules\user\components\UsersWidget;
+use app\modules\user\components\UsersListWidget;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\user\models\User */
@@ -41,9 +41,14 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <h1>Результаты поиска:</h1>
-<?= UsersWidget::widget([
+<?= UsersListWidget::widget([
     'users' => $users,
-    'button' => true,
+    'button' =>  [
+        'text' => 'Добавить в друзья',
+        'url' => 'default/add-request',
+        'class' => 'btn btn-success',
+        'redirect' => '/user/profile/search'
+    ],
     'photo_size' => 1,
 ]) ?>
 

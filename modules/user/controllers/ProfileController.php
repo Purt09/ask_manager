@@ -3,6 +3,7 @@
 namespace app\modules\user\controllers;
 
 use app\modules\user\forms\PasswordChangeForm;
+use app\modules\user\models\UserFriend;
 use app\modules\user\models\UserRequestFriend;
 use app\modules\user\models\User;
 use yii\filters\AccessControl;
@@ -32,10 +33,14 @@ class ProfileController extends Controller
     public function actionIndex($id)
     {
         $request = new UserRequestFriend();
-        $requests = $request->checkRequest();
+        $user = new User();
+        $requests = $request->getRequests(true);
+       // $users = $user->getFriends();
+
         return $this->render('index', [
             'model' => $this->findModel($id),
             'requests' => $requests,
+            'users' => $users,
         ]);
     }
 

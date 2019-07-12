@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use app\modules\user\components\UsersWidget;
+use app\modules\user\components\UsersListWidget;
 use yii\helpers\Url;
 use app\modules\task\Module;
 use app\components\TimeSupport;
@@ -23,11 +23,11 @@ $time = time();
 
     <br>
     <div class="container">
-        <div class="col-md-8">
+        <div class="col-sm-8">
             <h2><?= $model->title ?> </h2>
-            <div class="mod-row">
-                <div class="col-md-8">
-                    <div class="row">
+            <div class="row no-gutters">
+                <div class="col-sm-8">
+                    <div class="row no-gutters">
                         <div class="p-3 mb-2 bg-info text-white row mr-1 shadow ">
                             <?= Module::t('module', 'TASKS') ?>
                         </div>
@@ -80,7 +80,7 @@ JS;
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 ml-4 ">
+                <div class="col-sm-3 ml-4  ">
                     <div class="row">
 
                         <div class="p-3 mb-2 bg-secondary text-white row mr-1 shadow  ">
@@ -133,19 +133,19 @@ JS;
                     </div>
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-sm-5">
                 <div class="row">
                     <div class="p-3 mb-2 bg-primary text-white row mr-1 shadow ">
                         Участники:
                     </div>
-                    <?= UsersWidget::widget([
+                    <?= UsersListWidget::widget([
                         'users' => $users,
                         'button' => true,
                     ]) ?>
                 </div>
             </div>
             <?php if (Yii::$app->user->identity->id === $model['creator_id']): ?>
-            <div class="col-md-5 ml-5">
+            <div class="col-sm-5 ml-5">
                 <div class="row">
                     <div class="p-3 mb-2 bg-primary text-white row mr-1 shadow ">
                         Панель управления:
@@ -158,7 +158,7 @@ JS;
             </div>
             <?php endif; ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-4">
             <h2>Подпроекты:</h2>
             <div class="col-sm-12 mr-3 ">
                 <div class="row">
@@ -168,8 +168,6 @@ JS;
                         <?= Html::button(\app\modules\project\Module::t('module', 'SUBPROJECT_ADD'), ['data-toggle' => 'modal', 'data-target' => '#CreateProject', 'class' => 'btn-success btn']) ?>
                     <?php else: ?>
                         <?= \app\modules\project\components\ProjectWidget::widget(['projects' => $subprojects, 'csscol' => 12, 'id' => $model->id]) ?>
-
-                        <br>
                     <?php endif; ?>
                 </div>
             </div>

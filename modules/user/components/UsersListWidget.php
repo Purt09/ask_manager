@@ -4,15 +4,17 @@ namespace app\modules\user\components;
 
 use yii\base\Widget;
 
-class UsersWidget extends Widget
+class UsersListWidget extends Widget
 {
     public $users;
 
-    public $button = false;
+    public $button = [];
 
     public $tpl = 'usersListWidget';
 
     public $photo_size = 0;
+
+    public $info = '';
 
     public function run()
     {

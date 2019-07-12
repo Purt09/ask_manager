@@ -3,7 +3,6 @@
 namespace app\modules\user\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "keys_user_request_for_friend".
@@ -51,24 +50,35 @@ class UserRequestFriend extends \yii\db\ActiveRecord
     }
 
     public function createRequest($id){
+        $request = new UserRequestFriend();
+
+        if($request->checkRequest($id)) return false;
+
         $this->sender = Yii::$app->user->identity->id;
         $this->taker = $id;
         $this->accept = self::STATUS_WAIT;
-        $this->save();
+        return $this->save();
     }
 
-    public function checkRequest(){
-        $request = UserRequestFriend::find()->where(['taker' => Yii::$app->user->identity->id])->one();
-        if(empty($request))
-            return null;
-        else return UserRequestFriend::find()->where(['taker' => Yii::$app->user->identity->id])->count();
+    public function checkRequest($id){
+        $request =  UserRequestFriend::find()->where(['sender' => Yii::$app->user->identity->id, 'taker' => $id])->exists();
+
+        if(empty($request)) return false;
+            else return true;
     }
 
-    public function getRequests(){
-        return $requests = UserRequestFriend::find()->select('sender')->where(['taker' => Yii::$app->user->identity->id])->asArray()->all();
+    public function getRequests($count = false){
+        if($count) return UserRequestFriend::find()->select('sender')->where(['taker' => Yii::$app->user->identity->id])->asArray()->count();
+            return UserRequestFriend::find()->select('sender')->where(['taker' => Yii::$app->user->identity->id])->asArray()->all();
     }
 
-    public function deleteRequest(){
+    public function deleteRequest($id){
+            $request = UserRequestFriend::find()->where(['sender' => Yii::$app->user->identity->id, 'taker' => $id])->orWhere(['taker' => Yii::$app->user->identity->id, 'sender' => $id])->one();
+            if(empty($request)) return false;
 
+            $request->delete();
+
+            if(!empty($request)) return false;
+            return true;
     }
 }

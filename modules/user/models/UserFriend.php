@@ -50,20 +50,37 @@ class UserFriend extends \yii\db\ActiveRecord
     }
 
     public function createFriend($id){
+        $request = new UserRequestFriend();
+        $friend = new UserFriend();
+
+        if($friend->checkFriend($id)) return false;
+
+       if($request->deleteRequest($id)) return false;
+
         $this->user_id_1 = Yii::$app->user->identity->id;
         $this->user_id_2 = $id;
-        $this->save();
+        return $this->save();
     }
 
-    public function checkFriend(){
+    public function checkFriend($id){
+        $friend = UserFriend::find()->where(['user_id_1' => Yii::$app->user->identity->id, 'user_id_2' => $id])->orWhere(['user_id_2' => Yii::$app->user->identity->id, 'user_id_1' => $id])->exists();
+
+        if (empty($friend)) return false;
+            else    return true;
 
     }
 
-    public function getFriends(){
-        //return
-    }
-
-    public function deleteFriend(){
+    public function deleteFriend($id){
+        if (isset($id)) {
+            $friends = UserFriend::find()->where(['user_id_1' => Yii::$app->user->identity->id, 'user_id_2' => $id])->orWhere(['user_id_2' => Yii::$app->user->identity->id, 'user_id_1' => $id])->all();
+            if(empty($friends)) return false;
+            foreach ($friends as $friend){
+                $friend->delete();
+            }
+            if(!empty($friends)) return false;
+            return true;
+        }
+        return false;
 
     }
     

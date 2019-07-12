@@ -18,8 +18,8 @@ use yii\helpers\Html;
 
         </div>
         <div class="col-md-2">
-            <?php if($button === true): ?>
-                <?= Html::a('Добавить',['/user/default/add-request', 'id' => $user['id'], 'redirect' => 'profile/search'], ['class' => 'btn btn-success'])?>
+            <?php if(!empty($button)): ?>
+                <?= Html::a($button['text'],[$button['url'], 'id' => $user['id'], 'redirect' => $button['redirect']], ['class' => $button['class']])?>
             <?php endif; ?>
         </div>
     </div>

@@ -7,7 +7,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use yii\helpers\ArrayHelper;
+use yii\db\Query;
 /**
  * This is the model class for table "{{%user}}".
  *
@@ -310,5 +310,6 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Project::className(), ['id' => 'project_id'])
             ->viaTable('{{%user_project}}', ['user_id' => 'id']);
     }
+
 
 }

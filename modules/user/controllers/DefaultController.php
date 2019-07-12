@@ -6,6 +6,7 @@ use app\modules\user\forms\PasswordResetRequestForm;
 use app\modules\user\forms\PasswordResetForm;
 use app\modules\user\forms\SignupForm;
 use app\modules\user\models\User;
+use app\modules\user\models\UserFriend;
 use yii\base\InvalidParamException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -135,11 +136,34 @@ class DefaultController extends Controller
 
     public function actionAddRequest($id, $redirect = 'index')
     {
-        $model = new UserRequestFriend();
+        $request = new UserRequestFriend();
+        $friend = new UserFriend();
 
-        $model->createRequest($id);
+        if($friend->checkFriend($id)) {
+            Yii::$app->getSession()->setFlash('warning', 'Пользователь уже у вас в друзьях');
+            return $this->redirect([$redirect]);
+        }
 
-        Yii::$app->getSession()->setFlash('success', 'Запрос в друзья, был отправлен пользователю');
+        if($request->createRequest($id)) Yii::$app->getSession()->setFlash('success', 'Запрос в друзья, был отправлен пользователю');
+            else    Yii::$app->getSession()->setFlash('warning', 'Вы уже отпрравляли запрос в друзья данному пользователю');
+
+        return $this->redirect([$redirect]);
+    }
+
+    public function actionAddFriend($id, $redirect = 'index'){
+        $friend = new UserFriend();
+
+        if($friend->createFriend($id))  Yii::$app->getSession()->setFlash('success', 'Пользователь добавлен в друзья');
+            else  Yii::$app->getSession()->setFlash('error', 'Произошла внутреняя ошибка при добавление в друзья');
+
+        return $this->redirect([$redirect]);
+    }
+
+    public function actionDelete($id, $redirect = 'index'){
+        $friend = new UserFriend();
+
+        if($friend->deleteFriend($id))  Yii::$app->getSession()->setFlash('success', 'Пользователь удален из друзей');
+        else  Yii::$app->getSession()->setFlash('error', 'Произошла внутреняя ошибка при удаление друга');
 
 
         return $this->redirect([$redirect]);
