@@ -21,7 +21,7 @@ class UserFriend extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_user_friends';
+        return '{{%user_friends}}';
     }
 
     /**

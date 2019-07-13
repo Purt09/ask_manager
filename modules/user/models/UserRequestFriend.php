@@ -22,7 +22,7 @@ class UserRequestFriend extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_user_request_for_friend';
+        return '{{%user_request_for_friend}}';
     }
 
     /**
