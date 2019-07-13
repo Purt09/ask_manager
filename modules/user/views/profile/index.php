@@ -42,14 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="p-3 mb-2 bg-info text-white row mr-1 shadow ">
         Друзья:
     </div>
-<!--    --><?//= UsersListWidget::widget([
-//        'users' => $users,
-//        'button' =>  [
-//            'text' => 'Удалить из друзей',
-//            'url' => 'default/add-request',
-//            'class' => 'btn btn-error',
-//            'redirect' => 'profile/index'
-//        ],
-//        'photo_size' => 1,
-//    ]) ?>
+    <?= UsersListWidget::widget([
+        'users' => $users,
+        'button' =>  [
+            'text' => 'Удалить из друзей',
+            'url' => 'default/delete-friend',
+            'class' => 'btn btn-warning',
+            'redirect' => 'profile/index'
+        ],
+    ]) ?>
 </div>

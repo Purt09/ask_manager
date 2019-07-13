@@ -6,6 +6,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use yii\db\Query;
 /**
@@ -309,6 +310,29 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Project::className(), ['id' => 'project_id'])
             ->viaTable('{{%user_project}}', ['user_id' => 'id']);
+    }
+
+
+
+    public function getFriends($friends, $id){
+        $ids = [];
+        $i = 0;
+        foreach ($friends as $friend){
+            $friend1 = array(
+                $i => $friend->user_id_1
+            );
+            $i++;
+            $friend2 = array(
+                $i => $friend->user_id_2
+            );
+            $ids += ArrayHelper::merge($friend1,$friend2);
+            $i++;
+        }
+        $ids = array_unique($ids);
+        if (($key = array_search($id, $ids)) !== false) {
+            unset($ids[$key]);
+        }
+        return User::find()->where(['in', 'id', $ids])->all();
     }
 
 

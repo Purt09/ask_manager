@@ -33,9 +33,13 @@ class ProfileController extends Controller
     public function actionIndex($id)
     {
         $request = new UserRequestFriend();
+        $friend = new UserFriend();
         $user = new User();
+
         $requests = $request->getRequests(true);
-       // $users = $user->getFriends();
+
+        $friends = $friend->getUserFriends(Yii::$app->user->identity->id);
+        $users = $user->getFriends($friends, Yii::$app->user->identity->id);
 
         return $this->render('index', [
             'model' => $this->findModel($id),

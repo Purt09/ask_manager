@@ -54,6 +54,7 @@ class DefaultController extends \yii\web\Controller
     {
         $model = $this->findModel($id);
         $task = new Task();
+
         $tasks = $task->getTasks();
         $subprojects = $model->getProjectByParent_id($id);
         $users = Project::find()->where(['id' => $id])->one()->getUsers()->with(['projects'])->all();

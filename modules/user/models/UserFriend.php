@@ -77,27 +77,14 @@ class UserFriend extends \yii\db\ActiveRecord
             foreach ($friends as $friend){
                 $friend->delete();
             }
-            if(!empty($friends)) return false;
             return true;
         }
         return false;
 
     }
-    
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserId1()
+    public function getUserFriends($id)
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id_1']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserId2()
-    {
-        return $this->hasOne(User::className(), ['id' => 'user_id_2']);
+        return UserFriend::find()->where(['user_id_1' => $id])->orWhere(['user_id_2' => $id])->all();
     }
 }

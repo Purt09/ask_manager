@@ -159,14 +159,14 @@ class DefaultController extends Controller
         return $this->redirect([$redirect]);
     }
 
-    public function actionDelete($id, $redirect = 'index'){
+    public function actionDeleteFriend($id, $redirect = 'index'){
         $friend = new UserFriend();
 
         if($friend->deleteFriend($id))  Yii::$app->getSession()->setFlash('success', 'Пользователь удален из друзей');
         else  Yii::$app->getSession()->setFlash('error', 'Произошла внутреняя ошибка при удаление друга');
 
 
-        return $this->redirect([$redirect]);
+        return $this->redirect([$redirect, 'id' => Yii::$app->user->identity->id]);
     }
 
 
