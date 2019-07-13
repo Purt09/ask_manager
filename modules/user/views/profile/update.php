@@ -17,6 +17,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
+        <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+
         <div class="form-group">
             <?= Html::submitButton(Yii::t('app', 'BUTTON_SAVE'), ['class' => 'btn btn-primary']) ?>
         </div>

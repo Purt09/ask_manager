@@ -8,8 +8,9 @@ use app\modules\user\components\UsersListWidget;
 /* @var $this yii\web\View */
 /* @var $model app\modules\user\models\User */
 
-$this->title = 'SEARCH';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Module::t('module', 'SEARCH');
+$this->params['breadcrumbs'][] = ['label' => Module::t('module', 'PROFILE'), 'url' => ['index','id' => Yii::$app->user->identity->id], 'id' => 3];
+$this->params['breadcrumbs'][] = ['label' => Module::t('module', 'SEARCH')];
 
 
 ?>
@@ -43,11 +44,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <h1>Результаты поиска:</h1>
 <?= UsersListWidget::widget([
     'users' => $users,
-    'button' =>  [
-        'text' => 'Добавить в друзья',
-        'url' => 'default/add-request',
-        'class' => 'btn btn-success',
-        'redirect' => '/user/profile/search'
+    'button' =>
+        [
+            '0' => [
+                'text' => 'Добавить в друзья',
+                'url' => 'default/add-request',
+                'class' => 'btn btn-success',
+                'redirect' => '/user/profile/search'
+            ],
     ],
     'photo_size' => 1,
 ]) ?>

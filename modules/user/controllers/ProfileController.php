@@ -38,8 +38,9 @@ class ProfileController extends Controller
 
         $requests = $request->getRequests(true);
 
-        $friends = $friend->getUserFriends(Yii::$app->user->identity->id);
-        $users = $user->getFriends($friends, Yii::$app->user->identity->id);
+        $friends = $friend->getUserFriends($id);
+        $users = $user->getFriends($friends, $id);
+
 
         return $this->render('index', [
             'model' => $this->findModel($id),
@@ -50,10 +51,11 @@ class ProfileController extends Controller
 
     public function actionUpdate()
     {
-        $model = $this->findModel(Yii::$app->user->identity->id);
+        $id = Yii::$app->user->identity->id;
+        $model = $this->findModel($id);
         $model->scenario = User::SCENARIO_PROFILE;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index', 'id' => $id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -102,6 +104,22 @@ class ProfileController extends Controller
         $users = $user->getUsersByIds($ids);
 
         return $this->render('request', [
+            'users' => $users,
+        ]);
+    }
+
+    public function actionFriend()
+    {
+        $friend = new UserFriend();
+        $user = new User();
+        $id = Yii::$app->user->identity->id;
+
+        $friends = $friend->getUserFriends($id);
+        $users = $user->getFriends($friends, $id);
+
+
+        return $this->render('friend', [
+            'model' => $this->findModel($id),
             'users' => $users,
         ]);
     }

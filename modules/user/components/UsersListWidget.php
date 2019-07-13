@@ -14,13 +14,16 @@ class UsersListWidget extends Widget
 
     public $photo_size = 0;
 
-    public $info = '';
+    public $limit = null;
 
     public function run()
     {
+        if($this->limit !== null){
+            $this->users = array_slice($this->users, 0 , $limit);
+        }
         return $this->render($this->tpl, [
             'users' => $this->users,
-            'button' => $this->button,
+            'buttons' => $this->button,
             'photo_size' => $this->photo_size,
         ]);
     }

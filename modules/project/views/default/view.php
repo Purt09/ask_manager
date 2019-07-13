@@ -135,27 +135,34 @@ JS;
             </div>
             <div class="col-sm-5">
                 <div class="row">
-                    <div class="p-3 mb-2 bg-primary text-white row mr-1 shadow ">
+                    <div class="p-3 mb-2 bg-primary text-white row shadow ">
                         Участники:
                     </div>
                     <?= UsersListWidget::widget([
                         'users' => $users,
-                        'button' => true,
+                        'button' => [
+                            '0' => [
+                                'text' => 'тест',
+                                'url' => 'default/delete-friend',
+                                'class' => 'btn btn-warning btn-sm',
+                                'redirect' => 'profile/test'
+                            ],
+                        ],
                     ]) ?>
                 </div>
             </div>
             <?php if (Yii::$app->user->identity->id === $model['creator_id']): ?>
-            <div class="col-sm-5 ml-5">
-                <div class="row">
-                    <div class="p-3 mb-2 bg-primary text-white row mr-1 shadow ">
-                        Панель управления:
+                <div class="col-sm-5 ml-5">
+                    <div class="row">
+                        <div class="p-3 ml-1 mb-2 bg-primary text-white row shadow ">
+                            Панель управления:
+                        </div>
+                        <p>Здесь можно будет управлять проектом, в роли администратора</p>
+
+                        <hr>
+
                     </div>
-                                <p>Здесь можно будет управлять проектом, в роли администратора</p>
-
-                            <hr>
-
                 </div>
-            </div>
             <?php endif; ?>
         </div>
         <div class="col-sm-4">
