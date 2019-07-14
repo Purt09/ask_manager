@@ -2,10 +2,9 @@
 
 use yii\helpers\Html;
 use app\modules\user\components\UsersListWidget;
-use yii\helpers\Url;
 use app\modules\task\Module;
-use app\components\TimeSupport;
 use app\modules\task\components\CreateTaskWidget;
+use app\modules\task\components\UserListWidget;
 
 
 /* @var $this yii\web\View */
@@ -17,7 +16,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'PROJECTS'), 'url' =>
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
-$time = time();
 ?>
 <div class="project-view">
 
@@ -25,145 +23,70 @@ $time = time();
     <div class="container">
         <div class="col-sm-8">
             <h2><?= $model->title ?> </h2>
-            <div class="row no-gutters">
-                <div class="col-sm-8">
-                    <div class="row no-gutters">
-                        <div class="p-3 mb-2 bg-info text-white row mr-1 shadow ">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="p-3 mb-2 bg-info text-white row shadow ">
                             <?= Module::t('module', 'TASKS') ?>
                         </div>
-                        <div class="p-3">
-                            <?php foreach ($tasks as $task): ?>
-                                <?php if (($task['project_id'] == $model->id) && ($task['status'] == 1)): ?>
-                                    <div class="bg-light  p-1 shadow-sm row mr-1 del<?= $task['id'] ?>">
-                                        <?php
-                                        $id = $task['id'];
-                                        $idtoggle = 'toggle-event-' . $task['id'];
-                                        $id_del_class = 'div.del' . $task['id'];
-                                        $tool_id = 'tooltip-' . $task['id'];
-                                        $url = Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/' . $model['id']]);
-                                        $url = '"http://' . $_SERVER['SERVER_NAME'] . $url . '"';
+                        <?= UserListWidget::widget([
+                            'tasks' => $tasks,
+                            'status' => 1,
+                            'redirect' => '/project/default/' . $model['id'],
+                        ])?>
 
-                                        $script = <<< JS
-$(function() {
-        $('#$idtoggle').change(function() {
-            $('$id_del_class').remove();
-            document.location.href = $url;
-        })
-    })
-   $('#$tool_id').tooltip();
-JS;
-
-                                        $this->registerJs($script, yii\web\View::POS_READY);
-                                        ?>
-                                        <div class="col-xs-1">
-                                            <?= '<input id="' . $idtoggle . '" type="checkbox" checked data-toggle="toggle" data-on="<i class=\'glyphicon glyphicon-remove\'> </i>" data-off="<i class=\'glyphicon glyphicon-ok\'> </i>" data-size="sm" data-onstyle="success">';
-                                            ?>
-                                        </div>
-                                        <div class="col-xs-8 ml-3">
-                                            <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
-                                               title="<?= $task['description'] ?>" id="<?= $tool_id ?>"
-                                               class="text-body pl-3">
-                                                <?= $task['title'] ?> </a>
-                                        </div>
-                                        <div class="pull-right col-3">
-                                            <?php if ($task['updated_at'] != null): ?>
-                                                <?= TimeSupport::createtime($task['updated_at'] - $time) ?>
-                                            <? endif; ?>
-                                        </div>
-                                    </div>
-                                    <br>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
                             <div class="text-center">
                                 <?= Html::button(Module::t('module', 'TASK_CREATE'), ['data-toggle' => 'modal', 'data-target' => '#CreateTask' . $model->id, 'class' => 'btn-success btn']) ?>
                             </div>
                         </div>
-                    </div>
                 </div>
-                <div class="col-sm-3 ml-4  ">
+                <div class="col-sm-5 col-sm-offset-1">
                     <div class="row">
 
-                        <div class="p-3 mb-2 bg-secondary text-white row mr-1 shadow  ">
+                        <div class="p-3 mb-2 bg-secondary text-white row shadow  ">
                             <?= Module::t('module', 'TASKS_TIMEOUT') ?>
                         </div>
-                        <div class="p-3">
-                            <?php foreach ($tasks as $task): ?>
-                                <?php if (($task['project_id'] == $model->id) && ($task['status'] == 2)): ?>
-                                    <div class="bg-light  p-1 shadow-sm row mr-1 del<?= $task['id'] ?>">
-                                        <?php
-                                        $id = $task['id'];
-                                        $idtoggle = 'toggle-event-' . $task['id'];
-                                        $id_del_class = 'div.del' . $task['id'];
-                                        $tool_id = 'tooltip-' . $task['id'];
-                                        $url = Url::to(['/task/user/complete?redirect=/project/' . $model['id'], 'id' => $task['id']]);
-                                        $url = '"http://' . $_SERVER['SERVER_NAME'] . $url . '"';
+                        <?= UserListWidget::widget([
+                                'tasks' => $tasks,
+                                'status' => 2,
+                        ])?>
 
-                                        $script = <<< JS
-$(function() {
-        $('#$idtoggle').change(function() {
-            $('$id_del_class').remove();
-            document.location.href = $url;
-        })
-    })
-   $('#$tool_id').tooltip();
-JS;
-
-                                        $this->registerJs($script, yii\web\View::POS_READY);
-                                        ?>
-                                        <div class="col-xs-1">
-                                            <?= '<input id="' . $idtoggle . '" type="checkbox" checked data-toggle="toggle" data-on="<i class=\'glyphicon glyphicon-remove\'> </i>" data-off="<i class=\'glyphicon glyphicon-ok\'> </i>" data-size="sm" data-onstyle="warning">';
-                                            ?>
-                                        </div>
-                                        <div class="col-xs-8 ml-3">
-                                            <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
-                                               title="<?= $task['description'] ?>" id="<?= $tool_id ?>"
-                                               class="text-body pl-3">
-                                                <?= $task['title'] ?> </a>
-                                        </div>
-                                        <div class="pull-right col-3">
-                                            <?php if ($task['updated_at'] != null): ?>
-                                                <?= TimeSupport::createtime($task['updated_at'] - $time) ?>
-                                            <? endif; ?>
-                                        </div>
-                                    </div>
-                                    <br>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-5">
-                <div class="row">
-                    <div class="p-3 mb-2 bg-primary text-white row shadow ">
-                        Участники:
-                    </div>
-                    <?= UsersListWidget::widget([
-                        'users' => $users,
-                        'button' => [
-                            '0' => [
-                                'text' => 'тест',
-                                'url' => 'default/delete-friend',
-                                'class' => 'btn btn-warning btn-sm',
-                                'redirect' => 'profile/test'
-                            ],
-                        ],
-                    ]) ?>
-                </div>
-            </div>
-            <?php if (Yii::$app->user->identity->id === $model['creator_id']): ?>
-                <div class="col-sm-5 ml-5">
+                <div class="col-sm-7">
                     <div class="row">
-                        <div class="p-3 ml-1 mb-2 bg-primary text-white row shadow ">
-                            Панель управления:
+                        <div class="p-3 mb-2 bg-primary text-white row shadow ">
+                            Участники:
                         </div>
-                        <p>Здесь можно будет управлять проектом, в роли администратора</p>
-
-                        <hr>
-
+                        <?= UsersListWidget::widget([
+                            'users' => $users,
+                            'button' => [
+                                '0' => [
+                                    'text' => 'тест',
+                                    'url' => 'default/delete-friend',
+                                    'class' => 'btn btn-warning btn-sm',
+                                    'redirect' => 'profile/test'
+                                ],
+                            ],
+                        ]) ?>
                     </div>
                 </div>
-            <?php endif; ?>
+                <?php if (Yii::$app->user->identity->id === $model['creator_id']): ?>
+                    <div class="col-sm-5">
+                        <div class="row">
+                            <div class="p-3 ml-1 mb-2 bg-primary text-white row shadow ">
+                                Панель управления:
+                            </div>
+                            <p>Здесь можно будет управлять проектом, в роли администратора</p>
+
+                            <hr>
+
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+
         </div>
         <div class="col-sm-4">
             <h2>Подпроекты:</h2>

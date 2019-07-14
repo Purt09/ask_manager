@@ -16,10 +16,14 @@ class UsersListWidget extends Widget
 
     public $limit = null;
 
+    public $hide = false;
+
     public $button_bottom = [];
 
     public function run()
     {
+
+
         if(count($this->users) >= $this->limit) {
             $this->button_bottom['status'] = true;
         }

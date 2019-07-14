@@ -10,18 +10,25 @@ use app\modules\user\components\UsersListWidget;
 
 $this->title = Module::t('module', 'PROFILE');
 $this->params['breadcrumbs'][] = $this->title;
+$hide = true;    //Только чтобы фильтровть данные в виджете, котрый ниже
 ?>
 <div class="col-md-6">
-    <div class="user-profile">
+    <div class="user-profile text-center">
 
         <h1><?= Html::encode($this->title) ?></h1>
 
+
+        <?php
+        if ($model->id == Yii::$app->user->identity->id) :
+        $hide = false//Только чтобы фильтровть данные в виджете, котрый ниже
+        ?>
         <p>
-            <?= Html::a(Module::t('module', 'BUTTON_UPDATE'), ['update'], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a(Module::t('module', 'LINK_PASSWORD_CHANGE'), ['change-password'], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a(Module::t('module', 'SEARCH_USER'), 'profile/search', ['class' => 'btn btn-primary']) ?>
+            <?= Html::a(Module::t('module', 'BUTTON_UPDATE'), ['update'], ['class' => 'btn btn-primary mt-1']) ?>
+            <?= Html::a(Module::t('module', 'LINK_PASSWORD_CHANGE'), ['change-password'], ['class' => 'btn btn-primary mt-1']) ?>
+            <?= Html::a(Module::t('module', 'SEARCH_USER'), 'profile/search', ['class' => 'btn btn-primary mt-1']) ?>
             <?php if ($requests != 0) : ?>
-                <?= Html::a('Заявки в друзья(' . $requests . ')', ['request'], ['class' => 'btn btn-warning']) ?>
+                <?= Html::a('Заявки в друзья(' . $requests . ')', ['request'], ['class' => 'btn btn-warning mt-1']) ?>
+            <?php endif; ?>
             <?php endif; ?>
 
 
@@ -54,7 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'text' => Module::t('module', 'DELETE_FRIEND'),
                     'url' => 'default/delete-friend',
                     'class' => 'btn btn-warning btn-sm',
-                    'redirect' => 'profile/index'
+                    'redirect' => 'profile/index',
+                    'hide' => $hide,
                 ],
                 '1' => [
                     'text' => Module::t('module', 'LOOK_PROFILE'),

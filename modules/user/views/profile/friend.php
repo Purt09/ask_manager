@@ -11,7 +11,7 @@ use app\modules\user\components\UsersListWidget;
 $this->title = Module::t('module', 'FRIENDS');
 $this->params['breadcrumbs'][] = ['label' => Module::t('module', 'PROFILE'), 'url' => ['index','id' => Yii::$app->user->identity->id], 'id' => 3];
 $this->params['breadcrumbs'][] = $this->title;
-
+if ($model->id != Yii::$app->user->identity->id) $hide = true;
 
 ?>
 
@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'url' => 'default/delete-friend',
                 'class' => 'btn btn-warning',
                 'redirect' => 'profile/index',
+                'hide' => $hide,
 
             ],
             '1' => [

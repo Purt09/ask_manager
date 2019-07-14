@@ -7,7 +7,7 @@ use app\modules\project\components\TimeColorSignWidget;
 ?>
 <div class="col-sm-<?= $csscol ?> ">
     <a href="">
-        <div class="bg-light pb-2 border rounded-bottom shadow-sm rounded-lg">
+        <div class="bg-light pb-2 border rounded-bottom shadow-sm rounded-lg mt-3">
             <div class="p-3 mb-2 bg-info text-white text-center">
                 <a href="<?= Url::to(['view', 'id' => $project['id']]) ?>"
                    class="text-body pl-3"> <?= $project['title'] ?></a>
@@ -34,15 +34,19 @@ use app\modules\project\components\TimeColorSignWidget;
             <?php endif; ?>
         <?php endforeach; ?>
         <?php if (isset($project['projects'])): ?>
+        <hr>
             <?php foreach ($project['projects'] as $child): ?>
-                <hr>
-                <b>
+        <dl>
+            <dt>
+
+
                     <a href="<?= Url::to(['view', 'id' => $child['id']]) ?>"
                        class="text-body pl-3 "> <?= $child['title'] ?>:</a>
-                </b><br>
+                <br></dt>
 
 
                 <?php foreach ($tasks as $task): ?>
+                    <dd>
                     <?php if (($task['project_id'] == $child['id'])): ?>
 
                             <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
@@ -50,9 +54,10 @@ use app\modules\project\components\TimeColorSignWidget;
                             <?= Html::a('(выполнено) ', Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/default']), ['class' => ' text-secondary']) ?>
                             <?= TimeColorSignWidget::widget(['seconds' => $task['updated_at']]); ?>
 
-                        <br>
+                        </dd>
                     <?php endif; ?>
                 <?php endforeach; ?>
+        </dl>
             <?php endforeach; ?>
         <?php endif; ?>
 

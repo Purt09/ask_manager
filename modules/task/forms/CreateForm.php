@@ -28,7 +28,7 @@ class CreateForm extends \yii\base\Model
             ['status', 'default', 'value' => Task::STATUS_ACTIVE],
             ['status', 'in', 'range' => array_keys(Task::getStatusesArray())],
 
-            ['updated_at', 'integer', 'min' => time(), 'tooSmall' => Module::t('module', 'TASK_VALID_TIME_SMALL') ],
+            ['updated_at', 'integer', 'min' => time() - 86400, 'tooSmall' => Module::t('module', 'TASK_VALID_TIME_SMALL') ],
         ];
     }
 
