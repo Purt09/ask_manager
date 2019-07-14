@@ -8,9 +8,9 @@ use app\modules\user\components\UsersListWidget;
 /* @var $this yii\web\View */
 /* @var $model app\modules\user\models\User */
 
-$this->title = Module::t('module', 'FRIEND');
+$this->title = Module::t('module', 'FRIENDS');
 $this->params['breadcrumbs'][] = ['label' => Module::t('module', 'PROFILE'), 'url' => ['index','id' => Yii::$app->user->identity->id], 'id' => 3];
-$this->params['breadcrumbs'][] = ['label' => Module::t('module', 'FRIEND')];
+$this->params['breadcrumbs'][] = $this->title;
 
 
 ?>
@@ -23,14 +23,14 @@ $this->params['breadcrumbs'][] = ['label' => Module::t('module', 'FRIEND')];
     'button' =>
         [
             '0' => [
-                'text' => 'Удалить из друзей',
+                'text' => Module::t('module', 'DELETE_FRIEND'),
                 'url' => 'default/delete-friend',
                 'class' => 'btn btn-warning',
                 'redirect' => 'profile/index',
 
             ],
             '1' => [
-                'text' => 'Посмотреть профиль',
+                'text' => Module::t('module', 'LOOK_PROFILE'),
                 'url' => 'profile/index',
                 'class' => 'btn btn-success mt-2'
             ],

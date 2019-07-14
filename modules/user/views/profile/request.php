@@ -6,9 +6,9 @@ use app\modules\user\components\UsersListWidget;
 /* @var $this yii\web\View */
 /* @var $model app\modules\user\models\User */
 
-$this->title = 'REQUESTS';
+$this->title = Module::t('module', 'REQUESTS');
 $this->params['breadcrumbs'][] = ['label' => Module::t('module', 'PROFILE'), 'url' => ['index','id' => Yii::$app->user->identity->id], 'id' => 3];
-$this->params['breadcrumbs'][] = ['label' => Module::t('module', 'REQUESTS')];
+$this->params['breadcrumbs'][] = $this->title;
 
 
 ?>
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = ['label' => Module::t('module', 'REQUESTS')];
     'button' =>
         [
             '0' => [
-                'text' => 'Принять',
+                'text' => Module::t('module', 'ACCEPT'),
                 'url' => 'default/add-friend',
                 'class' => 'btn btn-success',
                 'redirect' => '/user/profile/request'

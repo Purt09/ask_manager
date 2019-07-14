@@ -10,7 +10,7 @@ use app\modules\user\components\UsersListWidget;
 
 $this->title = Module::t('module', 'SEARCH');
 $this->params['breadcrumbs'][] = ['label' => Module::t('module', 'PROFILE'), 'url' => ['index','id' => Yii::$app->user->identity->id], 'id' => 3];
-$this->params['breadcrumbs'][] = ['label' => Module::t('module', 'SEARCH')];
+$this->params['breadcrumbs'][] = $this->title;
 
 
 ?>

@@ -1,10 +1,11 @@
 <?php
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use app\modules\user\Module;
 /* @var $this yii\web\View */
 /* @var $model app\modules\user\models\User */
 $this->title = Yii::t('app', 'TITLE_UPDATE');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'TITLE_PROFILE'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Module::t('module', 'PROFILE'), 'url' => ['index', 'id' => Yii::$app->user->identity->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-profile-update">
@@ -15,13 +16,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $form = ActiveForm::begin(['id' => 'profile-update-form']); ?>
 
-        <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'email')->textInput(['placeholder' => $model->getAttributeLabel('email')]) ?>
 
-        <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'first_name')->textInput(['placeholder' => $model->getAttributeLabel('first_name')]) ?>
 
-        <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'last_name')->textInput(['placeholder' => $model->getAttributeLabel('last_name')]) ?>
 
-        <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
+            'mask' => '+7 (999) 999 99 99',
+        ])->textInput(['placeholder' => $model->getAttributeLabel('phone')]); ?>
 
         <div class="form-group">
             <?= Html::submitButton(Yii::t('app', 'BUTTON_SAVE'), ['class' => 'btn btn-primary']) ?>

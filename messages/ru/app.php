@@ -33,7 +33,7 @@ return [
     'USER_REMEMBER_ME' => 'Запомнить меня',
     'USER_CREATED' => 'Создан',
     'USER_UPDATED' => 'Обновлён',
-    'USER_EMAIL' => 'Email',
+    'USER_EMAIL' => 'Почта',
     'USER_STATUS' => 'Статус',
     'USER_STATUS_BLOCKED' => 'Заблокирован',
     'USER_STATUS_ACTIVE' => 'Активен',

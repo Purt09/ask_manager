@@ -11,7 +11,7 @@ use yii\helpers\Html;
         </div>
         <div class="col-md-5 ml-5 ">
             <b>
-                <?= $user['username'] ?>
+                <?= Html::a($user['username'], ['/user/profile/index', 'id' => $user['id']], ['class' => 'text-dark']) ?>
             </b>
             <hr>
             <div class="text-secondary">
@@ -29,3 +29,8 @@ use yii\helpers\Html;
         </div>
     </div>
 <?php endforeach; ?>
+<?php if($button_bottom['status'] == true): ?>
+<div class="text-center">
+    <?= Html::a($button_bottom['text'], [$button_bottom['url'], 'redirect' => $button_bottom['redirect']], ['class' => $button_bottom['class']]) ?>
+</div>
+<?php endif; ?>

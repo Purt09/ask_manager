@@ -2,12 +2,13 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use app\modules\user\Module;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\user\models\ChangePasswordForm */
 
-$this->title = Yii::t('app', 'TITLE_PASSWORD_CHANGE');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'TITLE_PROFILE'), 'url' => ['index']];
+$this->title = Module::t('module', 'TITLE_PASSWORD_CHANGE');
+$this->params['breadcrumbs'][] = ['label' => Module::t('module', 'PROFILE'), 'url' => ['index', 'id' => Yii::$app->user->identity->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-profile-password-change">

@@ -3,13 +3,12 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\modules\user\Module;
-use yii\widgets\ActiveForm;
 use app\modules\user\components\UsersListWidget;
 
-/* @var $this yii\web\View */
-/* @var $model app\modules\user\models\User */
+/* @var $this Module\web\View */
+/* @var $model module\modules\user\models\User */
 
-$this->title = Yii::t('app', 'TITLE_PROFILE');
+$this->title = Module::t('module', 'PROFILE');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="col-md-6">
@@ -18,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1><?= Html::encode($this->title) ?></h1>
 
         <p>
-            <?= Html::a(Yii::t('app', 'BUTTON_UPDATE'), ['update'], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a(Yii::t('app', 'LINK_PASSWORD_CHANGE'), ['change-password'], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a(Module::t('module', 'BUTTON_UPDATE'), ['update'], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a(Module::t('module', 'LINK_PASSWORD_CHANGE'), ['change-password'], ['class' => 'btn btn-primary']) ?>
             <?= Html::a(Module::t('module', 'SEARCH_USER'), 'profile/search', ['class' => 'btn btn-primary']) ?>
             <?php if ($requests != 0) : ?>
                 <?= Html::a('Заявки в друзья(' . $requests . ')', ['request'], ['class' => 'btn btn-warning']) ?>
@@ -44,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <div class="col-md-5">
     <div class="p-3 mb-2 bg-info text-white row shadow ">
-        Друзья:
+        <?= Module::t('module', 'FRIENDS') ?>: (<?= count($users) ?>)
     </div>
     <?= UsersListWidget::widget([
         'users' => $users,
@@ -52,17 +51,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'button' =>
             [
                 '0' => [
-                    'text' => 'Удалить из друзей',
+                    'text' => Module::t('module', 'DELETE_FRIEND'),
                     'url' => 'default/delete-friend',
                     'class' => 'btn btn-warning btn-sm',
                     'redirect' => 'profile/index'
                 ],
                 '1' => [
-                    'text' => 'Посмотреть профиль',
+                    'text' => Module::t('module', 'LOOK_PROFILE'),
                     'url' => 'profile/index',
                     'class' => 'btn btn-success mt-2 btn-sm'
                 ],
 
             ],
+        'button_bottom' =>
+            [
+                'text' => 'Показать всех',
+                'url' => 'profile/friend',
+                'class' => 'btn btn-info btn-sm',
+            ],
+
     ]) ?>
 </div>
