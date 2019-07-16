@@ -7,6 +7,7 @@ use app\modules\task\models\Task;
 use app\modules\user\models\User;
 use yii\web\NotFoundHttpException;
 use Yii;
+use app\modules\user\models\UserFriend;
 
 class DefaultController extends \yii\web\Controller
 {
@@ -75,11 +76,83 @@ class DefaultController extends \yii\web\Controller
     {
         if (isset($id)) {
             if (Project::deleteAll(['in', 'id', $id])) {
+                Task::deleteAll(['in', 'project_id', $id]);
                 $this->redirect(['index']);
             }
         } else {
             $this->redirect(['index']);
         }
+    }
+
+
+    /**
+     * @param bool $id
+     */
+    public function actionFriends($project_id){
+        $friend = new UserFriend();
+        $user = new User();
+        $id = Yii::$app->user->identity->id;
+
+        $friends = $friend->getUserFriends($id);
+        $users = $user->getFriends($friends, $id);
+
+        return $this->render('friend', [
+            'project_id' => $project_id,
+            'users' => $users
+        ]);
+    }
+
+    /**
+     * @param bool $id
+     */
+    public function actionAddFriend($id, $user_id)
+    {
+        $user = User::findOne($user_id);
+        $project = Project::findOne($id);
+
+        $projects = $project->getSubprojectsByProject($project);
+        // Связываем нового пользователя и проекты
+        foreach ($projects as $p)
+            $p->link('users', $user);
+
+        $tasks = Task::getTasksFromProjects($projects);
+        // Связываем нового пользователя и задачи
+        foreach ($tasks as $t)
+            $t->link('users', $user);
+
+        return $this->redirect('/project/' . $project->id);
+    }
+
+    /**
+     * @param bool $id
+     */
+    public function actionDelFriend($id, $user_id)
+    {
+        $user = User::findOne($user_id);
+        $project = Project::findOne($id);
+
+        $projects = $project->getSubprojectsByProject($project);
+//        foreach ($projects as $p)
+//            $p->link('users', $user);
+
+        $tasks = Task::getTasksFromProjects($projects);
+//        foreach ($tasks as $t)
+//            $t->link('users', $user);
+
+        return $this->redirect('/project/' . $project->id);
+    }
+
+    /**
+     * @param bool $id
+     */
+    public function actionNewLeader($id, $redirect = 'view',  $user_id)
+    {
+        $project = Project::findOne($id);
+        $projects = $project->getSubprojectsByProject($project);
+        foreach ($projects as $p) {
+            Project::setLeader($user_id, $p);
+        }
+        return $this->redirect([$redirect]);
     }
     /**
      * Finds the Project model based on its primary key value.

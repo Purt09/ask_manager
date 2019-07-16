@@ -165,6 +165,13 @@ class Task extends \yii\db\ActiveRecord
         return $tasks;
     }
 
+    public function getTasksFromProjects(array $projects){
+        $ids = array();
+        foreach ($projects as $p)
+                array_push($ids, $p->id);
+        return $all_tasks = Task::find()->where(['in', 'project_id', $ids])->all();
+    }
+
     /**
      * connects many to many with users
      * @return \yii\db\ActiveQuery

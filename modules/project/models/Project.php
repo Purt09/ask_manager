@@ -129,4 +129,23 @@ class Project extends \yii\db\ActiveRecord
             ->viaTable('{{%user_project}}', ['project_id' => 'id']);
     }
 
+
+    public function setLeader($user_id,Project $project){
+        $project->creator_id = $user_id;
+        return $project->save();
+    }
+
+    public function getSubprojectsByProject(Project $project){
+        $projects = array($project);
+
+        $all_projects = Project::find()->all();
+        foreach ($all_projects as $p) {
+            if ($p->parent_id == $project->id) {
+                array_push($projects, $p);
+            }
+        }
+        return $projects;
+
+    }
+
 }

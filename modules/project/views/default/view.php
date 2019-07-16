@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'PROJECTS'), 'url' =>
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
+
+if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
 ?>
 <div class="project-view">
 
@@ -62,28 +64,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             'users' => $users,
                             'button' => [
                                 '0' => [
-                                    'text' => 'тест',
-                                    'url' => 'default/delete-friend',
+                                    'text' => 'Удалить из проекта',
+                                    'url' => '/project/default/del-friend',
                                     'class' => 'btn btn-warning btn-sm',
-                                    'redirect' => 'profile/test'
+                                    'redirect' => 'default/view',
+                                    'hide' => $hide,
+                                ],
+                                '1' => [
+                                    'text' => 'Назначить лидером',
+                                    'url' => '/project/default/new-leader',
+                                    'class' => 'btn btn-default btn-sm',
+                                    'redirect' => '/project/' . $model->id,
+                                    'hide' => $hide,
+                                    'id' => $model->id,
                                 ],
                             ],
                         ]) ?>
                     </div>
                 </div>
-                <?php if (Yii::$app->user->identity->id === $model['creator_id']): ?>
-                    <div class="col-sm-5">
-                        <div class="row">
-                            <div class="p-3 ml-1 mb-2 bg-primary text-white row shadow ">
-                                Панель управления:
-                            </div>
-                            <p>Здесь можно будет управлять проектом, в роли администратора</p>
-
-                            <hr>
-
-                        </div>
-                    </div>
-                <?php endif; ?>
             </div>
 
 
@@ -101,6 +99,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php endif; ?>
                 </div>
             </div>
+            <?php if (Yii::$app->user->identity->id == $model['creator_id']): ?>
+                <div class="col-sm-12">
+                        <div class="p-3 mb-2 mt-4 bg-primary text-white ">
+                            Панель управления:
+                        </div>
+                        <?= Html::a('Добавить друга', ['default/friends', 'project_id' => $model->id], ['class' => 'btn btn-default btn-block'])?>
+                        <?= Html::a('Статистика', ['default/stat'], ['class' => 'btn btn-default btn-block '])?>
+                        <hr>
+
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
 
 

@@ -36,6 +36,5 @@ if ($model->id != Yii::$app->user->identity->id) $hide = true;
                 'class' => 'btn btn-success mt-2'
             ],
         ],
-    'photo_size' => 1,
 ]) ?>
 
