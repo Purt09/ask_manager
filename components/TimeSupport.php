@@ -29,6 +29,7 @@ class TimeSupport
             $text = 'Осталось: ';
         }
 
+        $date = Date('Y-m-d     h:m',time() + $seconds);
         $seconds = abs($seconds);
         $times = array();
 
@@ -53,14 +54,13 @@ class TimeSupport
 
 
         // значения времени константы
-        $times_values = array('сек.', 'мин.', 'час.', 'дней', 'год');
+        $times_values = array('сек.', 'минут', 'часов', 'дней', 'год');
 
         $time = ($times);
         // Выводит только 2 значения (мин и сек или часы и мин или дни и часы)
         for ($i = count($time) - 1; $i >= count($time) - 2; $i--)
             $result .= $time[$i] . ' ' . $times_values[$i] . ' ';
-
-        $html = Html::tag('span', Html::encode($text . $result), ['class' => 'label label-' . $class]);
+        $html = Html::tag('span', Html::encode($text . $result . '   (' . $date . ')'), ['class' => 'label label-' . $class]);
         return $html;
     }
 

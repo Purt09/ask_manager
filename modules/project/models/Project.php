@@ -6,6 +6,7 @@ use Yii;
 use app\modules\task\models\Task;
 use app\modules\project\Module;
 use app\modules\user\models\User;
+use app\modules\user\models\connections\ProjectUser;
 
 /**
  * This is the model class for table "{{%project}}".
@@ -114,6 +115,18 @@ class Project extends \yii\db\ActiveRecord
             $project = Project::find()->where(['id' => $this->id])->one();
 
             $project->link('users', $user);
+
+            // при создание подпроекта необходимо привязать всех участников к этому проекту
+            if($project->parent_id != null) {
+                $userProjects = ProjectUser::find()->where(['project_id' => $project->parent_id])->all();
+                $userIds = array();
+                foreach ($userProjects as $userProject) {
+                    array_push($userIds, $userProject->user_id);
+                }
+                $users = User::find()->where(['in', 'id', $userIds])->all();
+                foreach ($users as $u)
+                    $project->link('users', $u);
+            }
         }
         parent::afterSave($insert, $changedAttributes);
     }

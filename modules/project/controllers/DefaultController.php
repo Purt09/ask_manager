@@ -2,12 +2,15 @@
 
 namespace app\modules\project\controllers;
 
+use app\components\Vardump;
 use app\modules\project\models\Project;
 use app\modules\task\models\Task;
 use app\modules\user\models\User;
 use yii\web\NotFoundHttpException;
 use Yii;
 use app\modules\user\models\UserFriend;
+use app\modules\user\models\connections\ProjectUser;
+use app\modules\user\models\connections\TaskUser;
 
 class DefaultController extends \yii\web\Controller
 {
@@ -45,6 +48,7 @@ class DefaultController extends \yii\web\Controller
 
         ]);
     }
+
     /**
      * Displays a single Project model.
      * @param integer $id
@@ -56,23 +60,29 @@ class DefaultController extends \yii\web\Controller
         $model = $this->findModel($id);
         $task = new Task();
 
-        $tasks = $task->getTasks();
+        $ts = $task->getTasks();
+        $tasks = array();
+        foreach ($ts as $t)
+            if ($t['project_id'] == $id)
+                array_push($tasks, $t);
+
         $subprojects = $model->getProjectByParent_id($id);
         $users = Project::find()->where(['id' => $id])->one()->getUsers()->with(['projects'])->all();
 
 
-        return $this->render('view', [
-            'model' => $model,
+
+
+        return $this->render('view', ['model' => $model,
             'tasks' => $tasks,
             'subprojects' => $subprojects,
-            'users' => $users
-        ]);
+            'users' => $users]);
     }
 
     /**
      * @param bool $id
      */
-    public function actionDelete($id)
+    public
+    function actionDelete($id)
     {
         if (isset($id)) {
             if (Project::deleteAll(['in', 'id', $id])) {
@@ -88,7 +98,9 @@ class DefaultController extends \yii\web\Controller
     /**
      * @param bool $id
      */
-    public function actionFriends($project_id){
+    public
+    function actionFriends($project_id)
+    {
         $friend = new UserFriend();
         $user = new User();
         $id = Yii::$app->user->identity->id;
@@ -105,7 +117,8 @@ class DefaultController extends \yii\web\Controller
     /**
      * @param bool $id
      */
-    public function actionAddFriend($id, $user_id)
+    public
+    function actionAddFriend($id, $user_id)
     {
         $user = User::findOne($user_id);
         $project = Project::findOne($id);
@@ -126,18 +139,20 @@ class DefaultController extends \yii\web\Controller
     /**
      * @param bool $id
      */
-    public function actionDelFriend($id, $user_id)
+    public
+    function actionDelFriend($id, $user_id)
     {
         $user = User::findOne($user_id);
         $project = Project::findOne($id);
 
         $projects = $project->getSubprojectsByProject($project);
-//        foreach ($projects as $p)
-//            $p->link('users', $user);
+        foreach ($projects as $p)
+            ProjectUser::deleteAll(['project_id' => $p->id, 'user_id' => $user_id]);
+
 
         $tasks = Task::getTasksFromProjects($projects);
-//        foreach ($tasks as $t)
-//            $t->link('users', $user);
+        foreach ($tasks as $t)
+            TaskUser::deleteAll(['task_id' => $t->id, 'user_id' => $user_id]);
 
         return $this->redirect('/project/' . $project->id);
     }
@@ -145,7 +160,8 @@ class DefaultController extends \yii\web\Controller
     /**
      * @param bool $id
      */
-    public function actionNewLeader($id, $redirect = 'view',  $user_id)
+    public
+    function actionNewLeader($id, $redirect = 'view', $user_id)
     {
         $project = Project::findOne($id);
         $projects = $project->getSubprojectsByProject($project);
@@ -154,6 +170,7 @@ class DefaultController extends \yii\web\Controller
         }
         return $this->redirect([$redirect]);
     }
+
     /**
      * Finds the Project model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -161,13 +178,26 @@ class DefaultController extends \yii\web\Controller
      * @return Project the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected
+    function findModel($id)
     {
         if (($model = Project::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public
+    function actionComplete($id)
+    {
+        $task = new Task();
+
+        $tasks = $task->getTasks();
+
+        return $this->render('complete', [
+            'tasks' => $tasks,
+        ]);
     }
 
 }

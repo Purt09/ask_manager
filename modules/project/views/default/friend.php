@@ -12,7 +12,7 @@ use app\modules\user\components\UsersListWidget;
                     'text' => 'Пригласить в проект',
                     'url' => 'default/add-friend',
                     'class' => 'btn btn-default',
-                    'redirect' => '/profile/' . $project_id,
+                    'redirect' => '/project/' . $project_id,
                     'id' => $project_id,
 
                 ],

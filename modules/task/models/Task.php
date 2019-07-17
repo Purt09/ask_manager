@@ -4,6 +4,8 @@ namespace app\modules\task\models;
 
 use app\modules\project\models\Project;
 use app\modules\task\Module;
+use app\modules\user\models\connections\ProjectUser;
+use app\modules\user\models\connections\TaskUser;
 use app\modules\user\models\User;
 use Yii;
 use app\components\TimeSupport;
@@ -190,6 +192,18 @@ class Task extends \yii\db\ActiveRecord
             $task = Task::find()->where(['id' => $this->id])->one();
 
             $task->link('users', $user);
+
+
+            if($task->project_id != null) {
+                $userProjects = ProjectUser::find()->where(['project_id' => $task->project_id])->all();
+                $userIds = array();
+                foreach ($userProjects as $userProject) {
+                    array_push($userIds, $userProject->user_id);
+                }
+                $users = User::find()->where(['in', 'id', $userIds])->all();
+                foreach ($users as $u)
+                    $task->link('users', $u);
+            }
         }
         parent::afterSave($insert, $changedAttributes);
     }
