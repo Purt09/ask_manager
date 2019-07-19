@@ -56,7 +56,6 @@ class ProjectWidget extends Widget
 
     public function run()
     {
-        $model = new Task();
         foreach ($this->projects as $project) {
             static $i = 0;
             $this->ids += array($i => $project['id']);
@@ -69,18 +68,6 @@ class ProjectWidget extends Widget
                 $this->ids += array($i => $child['id']);
             }
             $i++;
-        }
-
-        $tasks = $model->getTasks();
-        foreach ($tasks as $t) {
-            foreach ($this->ids as $i)
-                if (($t['project_id'] == $i) && ($t['status'] != 0)) {
-                    $t = ArrayHelper::toArray($t);
-                    $t = array(
-                        $t['id'] => $t,
-                    );
-                    $this->tasks = ArrayHelper::merge($this->tasks, $t);
-                }
         }
         $this->tree = $this->getTree();
 

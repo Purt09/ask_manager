@@ -2,8 +2,7 @@
 
 use yii\helpers\Html;
 use app\modules\task\Module;
-use yii\helpers\Url;
-use app\modules\task\components\UserListWidget;
+use app\modules\task\components\TasksListWidget;
 use app\modules\task\components\CreateTaskWidget;
 
 /* @var $modelsactive app\modules\task\models\Task */
@@ -38,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="p-3 mb-3 bg-info text-white row shadow ">
                     <?= Module::t('module', 'TASK_ACTIVE') ?>:
                 </div>
-                <?= UserListWidget::widget([
+                <?= TasksListWidget::widget([
                     'tasks' => $models,
                     'status' => 1,
                 ])?>
@@ -49,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="p-3 mb-2 bg-danger text-white row shadow ">
                     <?= Module::t('module', 'TASK_OVERDUE') ?>:
                 </div>
-                <?= UserListWidget::widget([
+                <?= TasksListWidget::widget([
                     'tasks' => $models,
                     'status' => 2,
                 ])?>

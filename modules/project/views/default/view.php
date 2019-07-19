@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use app\modules\user\components\UsersListWidget;
 use app\modules\task\Module;
 use app\modules\task\components\CreateTaskWidget;
-use app\modules\task\components\UserListWidget;
+use app\modules\task\components\TasksListWidget;
 
 
 /* @var $this yii\web\View */
@@ -31,7 +31,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                             <div class="p-3 mb-2 bg-info text-white row shadow ">
                                 <?= Module::t('module', 'TASKS') ?>
                             </div>
-                            <?= UserListWidget::widget([
+                            <?= TasksListWidget::widget([
                                 'tasks' => $tasks,
                                 'status' => 1,
                                 'redirect' => '/project/default/' . $model['id'],
@@ -48,7 +48,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                             <div class="p-3 mb-2 bg-secondary text-white row shadow  ">
                                 <?= Module::t('module', 'TASKS_TIMEOUT') ?>
                             </div>
-                            <?= UserListWidget::widget([
+                            <?= TasksListWidget::widget([
                                 'tasks' => $tasks,
                                 'status' => 2,
                             ]) ?>
@@ -130,6 +130,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                     <?= Html::a('Выполненные задачи', ['/project/default/complete', 'id' => $model->id], ['class' => 'btn btn-default btn-block'])?>
                     <?php if (Yii::$app->user->identity->id == $model['creator_id']): ?>
                         <?= Html::a('Добавить друга', ['default/friends', 'project_id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
+                        <?= Html::a('Закрыть проект', ['default/delete', 'id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
                     <?php endif; ?>
                 </div>
             </div>

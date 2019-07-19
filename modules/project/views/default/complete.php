@@ -1,6 +1,6 @@
 <?php
 
-use app\modules\task\components\UserListWidget;
+use app\modules\task\components\TasksListWidget;
 
 ?>
 <div class="container">
@@ -8,10 +8,11 @@ use app\modules\task\components\UserListWidget;
         <div class="p-3 mb-2 bg-info text-white row shadow ">
             Выполненные задачи:
         </div>
-        <?= UserListWidget::widget([
+        <?= TasksListWidget::widget([
             'tasks' => $tasks,
             'status' => 0,
             'redirect' => '/project/default/' . $model['id'],
+            'complete' => 'uncomplete'
         ]) ?>
     </div>
 </div>

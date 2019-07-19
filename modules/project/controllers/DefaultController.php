@@ -2,8 +2,9 @@
 
 namespace app\modules\project\controllers;
 
-use app\components\Vardump;
+
 use app\modules\project\models\Project;
+use app\modules\task\components\TasksListWidget;
 use app\modules\task\models\Task;
 use app\modules\user\models\User;
 use yii\web\NotFoundHttpException;
@@ -23,8 +24,6 @@ class DefaultController extends \yii\web\Controller
     {
         $model = new Project();
 
-        $model->creator_id = Yii::$app->user->identity->id;
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -40,11 +39,17 @@ class DefaultController extends \yii\web\Controller
     public function actionIndex()
     {
         $model = new Project();
-        $projects = $model->getProjectByParent_id(null);
+        $task = new Task();
+        $user = User::findOne(Yii::$app->user->identity->id);
+
+        $projects = $model->getProjectByParent($model, $user);
+        $tasks = $task->getTasks($user);
+
 
 
         return $this->render('index', [
-            'projects' => $projects
+            'projects' => $projects,
+            'tasks' => $tasks,
 
         ]);
     }
@@ -59,17 +64,16 @@ class DefaultController extends \yii\web\Controller
     {
         $model = $this->findModel($id);
         $task = new Task();
+        $user = User::findOne(Yii::$app->user->identity->id);
 
-        $ts = $task->getTasks();
+        $ts = $task->getTasks($user);
         $tasks = array();
         foreach ($ts as $t)
             if ($t['project_id'] == $id)
                 array_push($tasks, $t);
 
-        $subprojects = $model->getProjectByParent_id($id);
-        $users = Project::find()->where(['id' => $id])->one()->getUsers()->with(['projects'])->all();
-
-
+        $subprojects = $model->getProjectByParent($model, $user);
+        $users = $model->getUsersFromProject($model);
 
 
         return $this->render('view', ['model' => $model,
@@ -81,16 +85,20 @@ class DefaultController extends \yii\web\Controller
     /**
      * @param bool $id
      */
-    public
-    function actionDelete($id)
+    public function actionDelete($id)
     {
         if (isset($id)) {
-            if (Project::deleteAll(['in', 'id', $id])) {
-                Task::deleteAll(['in', 'project_id', $id]);
-                $this->redirect(['index']);
+            $model = Project::findOne($id);
+            $subprojects = $model->getSubprojectsByProject($model);
+            foreach ($subprojects as $s) {
+                Task::deleteAll(['in', 'project_id', $s->id]) ;
+                $s->delete();
             }
-        } else {
-            $this->redirect(['index']);
+            Task::deleteAll(['in', 'project_id', $id]) ;
+
+            Yii::$app->getSession()->setFlash('error', 'Произошла ошибка, не получилось удалить проект');
+//            $this->redirect(['index']);
+
         }
     }
 
@@ -98,8 +106,7 @@ class DefaultController extends \yii\web\Controller
     /**
      * @param bool $id
      */
-    public
-    function actionFriends($project_id)
+    public function actionFriends($project_id)
     {
         $friend = new UserFriend();
         $user = new User();
@@ -117,8 +124,7 @@ class DefaultController extends \yii\web\Controller
     /**
      * @param bool $id
      */
-    public
-    function actionAddFriend($id, $user_id)
+    public function actionAddFriend($id, $user_id)
     {
         $user = User::findOne($user_id);
         $project = Project::findOne($id);
@@ -192,12 +198,18 @@ class DefaultController extends \yii\web\Controller
     function actionComplete($id)
     {
         $task = new Task();
+        $user = User::findOne(Yii::$app->user->identity->id);
 
-        $tasks = $task->getTasks();
+        $tasks = $task->getTasks($user);
 
         return $this->render('complete', [
             'tasks' => $tasks,
         ]);
+    }
+
+    public function actionTest(){
+        $id = ['0' => 3,
+            '1' => 14];
     }
 
 }

@@ -2,8 +2,7 @@
 
 use app\modules\task\Module;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use app\modules\task\components\UserListWidget;
+use app\modules\task\components\TasksListWidget;
 /* @var $models app\modules\task\models\Task */
 
 $this->title = "Выполненные задачи";
@@ -30,9 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="p-3 mb-2 bg-warning shadow  text-black row mb-5">
                 <?= Module::t('module', 'TASK_COMPLETE') ?> :
             </div>
-            <?= UserListWidget::widget([
+            <?= TasksListWidget::widget([
                 'tasks' => $models,
                 'status' => 0,
+                'complete' => 'uncomplete',
             ])?>
         </div>
     </div>

@@ -30,7 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <br><br>
     <hr/>
     <div class="row">
-        <?= \app\modules\project\components\ProjectWidget::widget(['projects' => $projects]) ?>
+        <?= \app\modules\project\components\ProjectWidget::widget([
+                'projects' => $projects,
+                'tasks' => $tasks,
+            ]) ?>
     </div>
 </div>
 

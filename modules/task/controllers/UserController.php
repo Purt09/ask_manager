@@ -3,6 +3,7 @@
 namespace app\modules\task\controllers;
 
 use app\modules\task\models\Task;
+use app\modules\user\models\User;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -12,8 +13,9 @@ class UserController extends Controller
 {
     public function actionIndex(){
         $model = new Task();
+        $user = User::findOne(Yii::$app->user->identity->id);
 
-        $models = $model->getTasks();
+        $models = $model->getTasks($user);
 
         return $this->render('index', [
             'models' => $models,
@@ -22,8 +24,9 @@ class UserController extends Controller
 
     public function actionDone(){
         $model = new Task();
+        $user = User::findOne(Yii::$app->user->identity->id);
 
-        $models = $model->getTasks();
+        $models = $model->getTasks($user);
 
 
         return $this->render('done', [
@@ -110,9 +113,7 @@ class UserController extends Controller
      * @throws NotFoundHttpException
      */
     public function actionComplete($id = false, $redirect = 'index'){
-        if(\Yii::$app->request->isAjax){
-            vardump(Yii::$app->request->post());
-        }
+
         $model = $this->findModel($id);
 
         $model->setStatus();

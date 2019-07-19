@@ -161,8 +161,8 @@ class Task extends \yii\db\ActiveRecord
      * Возвращает задачи определленного пользователя
      * @return Task[]|array
      */
-    public function getTasks(){
-        $tasks = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getTasks()->all(); // Сложный запрос, связь многие ко многим
+    public function getTasks(User $user){
+        $tasks = $user->getTasks()->all(); // Сложный запрос, связь многие ко многим
         TimeSupport::changeStatus($tasks); // Проверка статуса задачи
         return $tasks;
     }

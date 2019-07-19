@@ -6,7 +6,7 @@ namespace app\modules\task\components;
 use Yii;
 use yii\base\Widget;
 
-class UserListWidget extends Widget
+class TasksListWidget extends Widget
 {
     public $tasks;
 
@@ -14,13 +14,16 @@ class UserListWidget extends Widget
 
     public $redirect;
 
+    public $complete = 'complete';
+
 
     public function run()
     {
-        return $this->render('userListWidget', [
+        return $this->render('tasksListWidget', [
             'tasks' => $this->tasks,
             'status' => $this->status,
             'redirect' => $this->redirect,
+            'complete' => $this->complete,
         ]);
     }
 }

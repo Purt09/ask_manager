@@ -15,7 +15,7 @@ $time = time();
             $idtoggle = 'toggle-event-' . $task['id'];
             $id_del_class = 'div.del' . $task['id'];
             $tool_id = 'tooltip-' . $task['id'];
-            $url = Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => $redirect]);
+            $url = Url::to(['/task/user/' . $complete, 'id' => $task['id'], 'redirect' => $redirect]);
             $url = '"http://' . $_SERVER['SERVER_NAME'] . $url . '"';
             $script = <<< JS
                 $(function() {
