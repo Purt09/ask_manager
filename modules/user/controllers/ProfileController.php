@@ -34,16 +34,17 @@ class ProfileController extends Controller
     {
         $request = new UserRequestFriend();
         $friend = new UserFriend();
-        $user = new User();
+        $user = $this->findModel($id);
 
         $requests = $request->getRequests(true);
 
         $friends = $friend->getUserFriends($id);
         $users = $user->getFriends($friends, $id);
 
+        if(!empty($user->phone)) $user->phone = substr($user->phone, 0, -5) . '** **';
 
         return $this->render('index', [
-            'model' => $this->findModel($id),
+            'model' => $user,
             'requests' => $requests,
             'users' => $users,
         ]);
@@ -54,7 +55,10 @@ class ProfileController extends Controller
         $id = Yii::$app->user->identity->id;
         $model = $this->findModel($id);
         $model->scenario = User::SCENARIO_PROFILE;
+
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
             return $this->redirect(['index', 'id' => $id]);
         } else {
             return $this->render('update', [

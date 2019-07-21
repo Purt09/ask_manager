@@ -20,7 +20,7 @@ use app\modules\project\models\Project;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'parent_id')->dropDownList(Project::find()->select(['title', 'id'])->indexBy('id')->column(), ['prompt' => '']) ?>
+    <?= $form->field($model, 'parent_id')->dropDownList(Project::find()->where(['parent_id' => null])->select(['title', 'id'])->indexBy('id')->column(), ['prompt' => '']) ?>
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 

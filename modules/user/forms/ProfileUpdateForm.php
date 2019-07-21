@@ -3,7 +3,6 @@
 namespace app\modules\user\forms;
 
 use yii\base\Model;
-use yii\db\ActiveQuery;
 use Yii;
 use app\modules\user\models\User;
 
@@ -24,7 +23,7 @@ class ProfileUpdateForm extends Model
     {
         $this->_user = $user;
         $this->email = $user->email;
-        $this->phone = $user->phone;
+        $this->phone = preg_replace("/[^0-9]/", '', $user->phone);
         $this->last_name = $user->last_name;
         $this->first_name = $user->first_name;
         parent::__construct($config);

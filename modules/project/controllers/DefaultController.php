@@ -15,6 +15,16 @@ use app\modules\user\models\connections\TaskUser;
 
 class DefaultController extends \yii\web\Controller
 {
+
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ]
+        ];
+    }
+
     /**
      * Creates a new Project model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -46,7 +56,6 @@ class DefaultController extends \yii\web\Controller
         $tasks = $task->getTasks($user);
 
 
-
         return $this->render('index', [
             'projects' => $projects,
             'tasks' => $tasks,
@@ -62,24 +71,21 @@ class DefaultController extends \yii\web\Controller
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-        $task = new Task();
+        $project = $this->findModel($id);
         $user = User::findOne(Yii::$app->user->identity->id);
+        $subprojects = $project->getProjectsByParent($project, $user);
 
-        $ts = $task->getTasks($user);
-        $tasks = array();
-        foreach ($ts as $t)
-            if ($t['project_id'] == $id)
-                array_push($tasks, $t);
-
-        $subprojects = $model->getProjectByParent($model, $user);
-        $users = $model->getUsersFromProject($model);
+        $users = $project->getUsersFromProject($project);
+        $tasks = Task::getTasksFromProjects($subprojects, $user);
 
 
-        return $this->render('view', ['model' => $model,
+        return $this->render('view', [
+            'model' => $project,
             'tasks' => $tasks,
             'subprojects' => $subprojects,
-            'users' => $users]);
+            'users' => $users,
+            'subtasks' => $tasks,
+        ]);
     }
 
     /**
@@ -87,19 +93,17 @@ class DefaultController extends \yii\web\Controller
      */
     public function actionDelete($id)
     {
-        if (isset($id)) {
-            $model = Project::findOne($id);
-            $subprojects = $model->getSubprojectsByProject($model);
+        $model = Project::findOne($id);
+        $subprojects = $model->getSubprojectsByProject($model);
+        if (!empty($subprojects)) {
             foreach ($subprojects as $s) {
-                Task::deleteAll(['in', 'project_id', $s->id]) ;
+                Task::deleteAll(['project_id' => $s->id]);
                 $s->delete();
             }
-            Task::deleteAll(['in', 'project_id', $id]) ;
-
-            Yii::$app->getSession()->setFlash('error', 'Произошла ошибка, не получилось удалить проект');
-//            $this->redirect(['index']);
-
         }
+        Yii::$app->getSession()->setFlash('success', 'Проект успешно удален');
+
+        $this->redirect('/project/default/index');
     }
 
 
@@ -207,7 +211,8 @@ class DefaultController extends \yii\web\Controller
         ]);
     }
 
-    public function actionTest(){
+    public function actionTest()
+    {
         $id = ['0' => 3,
             '1' => 14];
     }

@@ -5,6 +5,8 @@ use app\modules\user\components\UsersListWidget;
 use app\modules\task\Module;
 use app\modules\task\components\CreateTaskWidget;
 use app\modules\task\components\TasksListWidget;
+use app\modules\project\components\CreateProjectWidget;
+use app\modules\project\components\ProjectWidget;
 
 
 /* @var $this yii\web\View */
@@ -13,6 +15,7 @@ use app\modules\task\components\TasksListWidget;
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'PROJECTS'), 'url' => ['index']];
+
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
@@ -88,17 +91,25 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
 
             </div>
             <div class="col-sm-4 text-center">
-                <h2>Подпроекты:</h2>
-                <div class="col-sm-12 mr-3 ">
-                    <div class="row">
-                        <?php if (empty($subprojects)) : ?>
-                            <h2>В данном проекте отсуствуют подпроекты</h2>
-                        <?php else: ?>
-                            <?= \app\modules\project\components\ProjectWidget::widget(['projects' => $subprojects, 'csscol' => 12, 'id' => $model->id]) ?>
-                        <?php endif; ?>
-                        <?= Html::button(\app\modules\project\Module::t('module', 'SUBPROJECT_ADD'), ['data-toggle' => 'modal', 'data-target' => '#CreateProject', 'class' => 'btn-success btn ']) ?>
+                <?php if ($model['parent_id'] == null): ?>
+                    <h2>Подпроекты:</h2>
+                    <div class="col-sm-12 mr-3 ">
+                        <div class="row">
+                            <?php if (empty($subprojects)) : ?>
+                                <h2>В данном проекте отсуствуют подпроекты</h2>
+                            <?php else: ?>
+                                <?= ProjectWidget::widget([
+                                    'tasks' => $subtasks,
+                                    'projects' => $subprojects,
+                                    'csscol' => 12,
+                                    'id' => $model->id,
+                                    'parent' => false,
+                                    ]) ?>
+                            <?php endif; ?>
+                            <?= Html::button(\app\modules\project\Module::t('module', 'SUBPROJECT_ADD'), ['data-toggle' => 'modal', 'data-target' => '#CreateProject', 'class' => 'btn-success btn ']) ?>
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
 
                 <div class="col-sm-12 text-left">
                     <div class="p-3 mb-2 mt-4 bg-primary text-white ">
@@ -127,7 +138,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                         <dd> Выполненных: <?= $done ?></dd>
                         <dd> Просроченных: <?= $passive ?></dd>
                     </dl>
-                    <?= Html::a('Выполненные задачи', ['/project/default/complete', 'id' => $model->id], ['class' => 'btn btn-default btn-block'])?>
+                    <?= Html::a('Выполненные задачи', ['/project/default/complete', 'id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
                     <?php if (Yii::$app->user->identity->id == $model['creator_id']): ?>
                         <?= Html::a('Добавить друга', ['default/friends', 'project_id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
                         <?= Html::a('Закрыть проект', ['default/delete', 'id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
@@ -142,6 +153,6 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
     </div>
 
 <?= CreateTaskWidget::widget(['project' => $model, 'projects' => $subprojects]) ?>
-<?= \app\modules\project\components\CreateProjectWidget::widget(['parent_id' => $model->id]);
+<?= CreateProjectWidget::widget(['parent_id' => $model->id]);
 
 

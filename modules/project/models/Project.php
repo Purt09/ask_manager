@@ -97,8 +97,11 @@ class Project extends \yii\db\ActiveRecord
      * @param null $parent_id
      * @return mixed
      */
-    public function getProjectByParent(Project $parent, User $user) {
-        return $projects = $user->getProjects()->with('projects')->where(['parent_id' => $parent->id])->indexBy('id')->asArray()->all(); // Сложный запрос, связь многие ко многим
+    public function getProjectsByParent(Project $parent, User $user) {
+        $projects = $user->getProjects()->where(['parent_id' => $parent->id])->indexBy('id')->all(); // Сложный запрос, связь многие ко многим
+        $projects += array($parent['id'] => $parent);
+        return $projects;
+
     }
 
 
@@ -148,8 +151,8 @@ class Project extends \yii\db\ActiveRecord
             ->viaTable('{{%user_project}}', ['project_id' => 'id']);
     }
 
-    public function getUsersFromProject($project) : array {
-        return $project->getUsers()->with(['projects'])->all();
+    public function getUsersFromProject(Project $project) : array {
+        return $project->getUsers()->all();
     }
 
     public function setLeader($user_id,Project $project){
@@ -158,15 +161,8 @@ class Project extends \yii\db\ActiveRecord
     }
 
     public function getSubprojectsByProject(Project $project){
-        $projects = array($project);
 
-        $all_projects = Project::find()->all();
-        foreach ($all_projects as $p) {
-            if ($p->parent_id == $project->id) {
-                array_push($projects, $p);
-            }
-        }
-        return $projects;
+        return Project::find()->where(['parent_id' => $project->id])->indexBy('id')->all();
 
     }
 

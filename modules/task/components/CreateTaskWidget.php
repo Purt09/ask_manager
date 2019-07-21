@@ -31,7 +31,7 @@ class CreateTaskWidget extends Widget
             Yii::$app->response->refresh();
         }
 
-        if(empty($this->projects)) {
+        if (empty($this->projects)) {
             $this->projects = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getProjects()->with('projects')->select('title')->indexBy('id')->column(); // Сложный запрос, связь многие ко многим
         } else {
             $this->projects = ArrayHelper::getColumn($this->projects, 'title');
@@ -40,11 +40,11 @@ class CreateTaskWidget extends Widget
             );
         }
 
-        return $this->render('createTaskWidget',            [
+        return $this->render('createTaskWidget', [
             'model' => $model,
             'project_id' => $this->project->id,
             'projects' => $this->projects
-             ]);
+        ]);
     }
 
 

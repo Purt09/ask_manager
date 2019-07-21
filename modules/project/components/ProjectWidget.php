@@ -26,20 +26,25 @@ class ProjectWidget extends Widget
      */
     public $projectHtml;
 
-    public $id;
-
-    /**
-     * @var integer id проекта для которого строим виджет
-     */
-    public $ids = [];
 
     public $projects = [];
     /**
-     * @var array Задачи проекта
+     * @var array Задачи проектов
      */
     public $tasks = [];
 
+    /**
+     * @var int Размер модуля
+     */
     public $csscol = 4;
+
+    /**
+     * @var bool Параметр оьвечающий за вывод родителькой категории. С parent_id = null
+     *
+     * Если true - то выводит
+     * false - не выводит
+     */
+    public $parent = true;
 
     /**
      *
@@ -56,18 +61,16 @@ class ProjectWidget extends Widget
 
     public function run()
     {
+
         foreach ($this->projects as $project) {
-            static $i = 0;
-            $this->ids += array($i => $project['id']);
-            $i++;
+            if ((!$this->parent) && ($project['parent_id'] === null))
+                continue;
 
             // формируем массив проектов, для их дальнейшего преобразования в дерево
             $this->data += [$project['id'] => $project];
             foreach ($project['projects'] as $child) {
                 $this->data += array($child['id'] => $child);
-                $this->ids += array($i => $child['id']);
             }
-            $i++;
         }
         $this->tree = $this->getTree();
 

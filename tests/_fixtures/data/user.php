@@ -1,11 +1,14 @@
 <?php
 return [
     [
+        'id' => 1,
         'username' => 'admin',
         'auth_key' => 'eckb2DLY9uv6r1hM6D73eoHPvv6BfnXc',
         'password_hash' => '$2y$13$miidR65322Nj5imDluxSPOtboxcCxbR0ox7cw062E4dQscvUAL/uq',
         'password_reset_token' => null,
         'email_confirm_token' => null,
+        'first_name' => 'first_alex_admin',
+        'last_name' => 'last_alex_admin',
         'created_at' => '1439635619',
         'updated_at' => '1439635619',
         'email' => 'admin@admin.ru',

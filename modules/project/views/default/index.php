@@ -22,8 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-sm-6">
             <div class="row">
-
-                <?= Html::a(Module::t('module', 'PROJECT_COMPLETE'), Url::to('default/create'), ['class' => 'btn btn-warning']) ?>
             </div>
         </div>
     </div>

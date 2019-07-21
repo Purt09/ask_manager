@@ -27,6 +27,7 @@ use yii\db\Query;
  * @property string $photo_medium
  * @property string $first_name
  * @property string $last_name
+ * @property  int $phone
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -58,6 +59,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'integer'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => array_keys(self::getStatusesArray())],
+            ['first_name', 'string', 'max' => 60],
+            ['last_name', 'string', 'max' => 60],
         ];
     }
     public function scenarios()
