@@ -24,6 +24,7 @@ class CreateTaskWidget extends Widget
 
     public function run()
     {
+        $this->projects = array_column($this->projects, 'title', 'id');
         $model = new CreateForm();
         $model->project_id = $this->project->id;
 
@@ -31,14 +32,6 @@ class CreateTaskWidget extends Widget
             Yii::$app->response->refresh();
         }
 
-        if (empty($this->projects)) {
-            $this->projects = User::find()->where(['id' => Yii::$app->user->identity->id])->one()->getProjects()->with('projects')->select('title')->indexBy('id')->column(); // Сложный запрос, связь многие ко многим
-        } else {
-            $this->projects = ArrayHelper::getColumn($this->projects, 'title');
-            $this->projects += array(
-                $this->project->id => $this->project->title,
-            );
-        }
 
         return $this->render('createTaskWidget', [
             'model' => $model,

@@ -28,10 +28,10 @@
         "codeception/codeception": "^2.2.3",
         "codeception/verify": "~0.3.1",
         "codeception/specify": "~0.4.3",
-        "kartik-v/yii2-widget-datepicker":"*",
         "kartik-v/yii2-field-range":"*",
-        "kartik-v/yii2-widget-datetimepicker": "dev-master",
-        "kartik-v/yii2-datecontrol": "dev-master"
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "kartik-v/yii2-datecontrol": "*",
+        "kartik-v/yii2-widget-datepicker": "*"
     },
     "config": {
         "process-timeout": 1800,

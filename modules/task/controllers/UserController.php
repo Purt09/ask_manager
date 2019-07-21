@@ -2,6 +2,7 @@
 
 namespace app\modules\task\controllers;
 
+use app\modules\project\models\Project;
 use app\modules\task\models\Task;
 use app\modules\user\models\User;
 use yii\web\Controller;
@@ -16,9 +17,11 @@ class UserController extends Controller
         $user = User::findOne(Yii::$app->user->identity->id);
 
         $models = $model->getTasks($user);
+        $projects = Project::find()->all();
 
         return $this->render('index', [
             'models' => $models,
+            'projects' => $projects,
         ]);
     }
 

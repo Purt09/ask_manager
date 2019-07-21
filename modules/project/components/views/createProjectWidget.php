@@ -28,7 +28,7 @@ use app\modules\task\Module;
 
                 <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'parent_id')->dropDownList(Project::find()->where(['parent_id' => null])->select(['title', 'id'])->indexBy('id')->column(), ['prompt' => '']) ?>
+                <?= $form->field($model, 'parent_id')->dropDownList($projects, ['prompt' => '']) ?>
 
                 <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 

@@ -59,4 +59,4 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-<?= CreateTaskWidget::widget() ?>
+<?= CreateTaskWidget::widget(['projects' => $projects]) ?>

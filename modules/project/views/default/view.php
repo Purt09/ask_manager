@@ -95,12 +95,12 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                     <h2>Подпроекты:</h2>
                     <div class="col-sm-12 mr-3 ">
                         <div class="row">
-                            <?php if (empty($subprojects)) : ?>
+                            <?php if (empty($projects)) : ?>
                                 <h2>В данном проекте отсуствуют подпроекты</h2>
                             <?php else: ?>
                                 <?= ProjectWidget::widget([
                                     'tasks' => $subtasks,
-                                    'projects' => $subprojects,
+                                    'projects' => $projects,
                                     'csscol' => 12,
                                     'id' => $model->id,
                                     'parent' => false,
@@ -122,7 +122,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                         <?php foreach ($users as $user): ?>
                             <dd><?= $user->username ?></dd>
                         <?php endforeach; ?>
-                        <dt>Подкатегорий: <?= count($subprojects) ?></dt>
+                        <dt>Подкатегорий: <?= count($projects) ?></dt>
                         <dt>Задач: <?= count($tasks) ?></dt>
                         <?php
                         $done = 0;
@@ -152,7 +152,10 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
     </div>
     </div>
 
-<?= CreateTaskWidget::widget(['project' => $model, 'projects' => $subprojects]) ?>
-<?= CreateProjectWidget::widget(['parent_id' => $model->id]);
+<?= CreateTaskWidget::widget(['project' => $model, 'projects' => $projects]) ?>
+<?= CreateProjectWidget::widget([
+        'parent_id' => $model->id,
+        'projects' => $projects,
+]);
 
 

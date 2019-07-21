@@ -35,4 +35,4 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<?= CreateProjectWidget::widget([]) ?>
+<?= CreateProjectWidget::widget(['projects' => $projects]) ?>

@@ -98,8 +98,11 @@ class Project extends \yii\db\ActiveRecord
      * @return mixed
      */
     public function getProjectsByParent(Project $parent, User $user) {
-        $projects = $user->getProjects()->where(['parent_id' => $parent->id])->indexBy('id')->all(); // Сложный запрос, связь многие ко многим
-        $projects += array($parent['id'] => $parent);
+        $projects = $user->getProjects()->where(['parent_id' => $parent->id])->indexBy('id')->all();
+
+        // Удаление родительского метода, точнее его не добавление для project/default/index
+        if($parent['id'] != null)
+            $projects += array($parent['id'] => $parent);
         return $projects;
 
     }

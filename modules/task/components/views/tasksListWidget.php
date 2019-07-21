@@ -4,7 +4,6 @@ use app\components\TimeSupport;
 use yii\helpers\Url;
 use yii\bootstrap\Html;
 
-$time = time();
 ?>
 
 <?php foreach ($tasks as $task) : ?>
@@ -46,7 +45,7 @@ JS;
                 </a>
                 <br>
                 <?php if ($task['updated_at'] != null): ?>
-                    <?= TimeSupport::createtime($task['updated_at'] - $time) ?>
+                    <?= TimeSupport::createtime($task['updated_at']) ?>
                 <? endif; ?>
             </div>
             <div class="col-xs-1 ">
