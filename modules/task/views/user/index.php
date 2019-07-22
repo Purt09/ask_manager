@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= TasksListWidget::widget([
                     'tasks' => $models,
                     'status' => 1,
-                ])?>
+                ]) ?>
             </div>
             <br>
 
@@ -51,12 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= TasksListWidget::widget([
                     'tasks' => $models,
                     'status' => 2,
-                ])?>
+                ]) ?>
             </div>
             <div class="col-sm-2 ml-4">
                 wqe
             </div>
         </div>
     </div>
-
 <?= CreateTaskWidget::widget(['projects' => $projects]) ?>
+

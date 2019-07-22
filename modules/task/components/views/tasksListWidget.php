@@ -14,19 +14,17 @@ use yii\bootstrap\Html;
             $idtoggle = 'toggle-event-' . $task['id'];
             $id_del_class = 'div.del' . $task['id'];
             $tool_id = 'tooltip-' . $task['id'];
-            $url = Url::to(['/task/user/' . $complete, 'id' => $task['id'], 'redirect' => $redirect]);
-            $url = '"http://' . $_SERVER['SERVER_NAME'] . $url . '"';
             $script = <<< JS
                 $(function() {
                         $('#$idtoggle').change(function() {
-                            $('$id_del_class').remove();
-                            document.location.href = $url;
+                            setTimeout(function(){ $('$id_del_class').remove();}, 500);
                         })
                     })
                    $('#$tool_id').tooltip();
 JS;
             $this->registerJs($script, yii\web\View::POS_READY);
             ?>
+
             <div class="col-xs-1 pl-1 mr-3 pt-2">
                 <?= Html::input('checkbox', 'test', '123', [
                     'id' => $idtoggle,
@@ -51,5 +49,45 @@ JS;
             <div class="col-xs-1 ">
             </div>
         </div>
+        <?php if(($status == 1) || ($status == 2)) {
+            $js = <<<JS
+ $("#$idtoggle").change(function() {
+ var data = $(this).serialize();
+ $.ajax({
+ url: '/task/user/complete',
+ type: 'GET',
+ data: "id=$id",
+ success: function(res){
+ console.log(res);
+ },
+ error: function(){
+ alert('Error!');
+ }
+ });
+ return false;
+ });
+JS;
+        } else {
+            $js = <<<JS
+ $("#$idtoggle").change(function() {
+ var data = $(this).serialize();
+ $.ajax({
+ url: '/task/user/uncomplete',
+ type: 'GET',
+ data: "id=$id",
+ success: function(res){
+ console.log(res);
+ },
+ error: function(){
+ alert('Error!');
+ }
+ });
+ return false;
+ });
+JS;
+        }
+        $this->registerJs($js, \yii\web\View::POS_END);
+        ?>
     <? endif; ?>
 <?php endforeach; ?>
+

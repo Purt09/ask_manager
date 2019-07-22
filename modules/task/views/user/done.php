@@ -32,8 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= TasksListWidget::widget([
                 'tasks' => $models,
                 'status' => 0,
-                'complete' => 'uncomplete',
-            ])?>
+            ]) ?>
         </div>
     </div>
 </div>

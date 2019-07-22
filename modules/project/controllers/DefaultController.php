@@ -101,6 +101,7 @@ class DefaultController extends \yii\web\Controller
                 $s->delete();
             }
         }
+        $model->delete();
         Yii::$app->getSession()->setFlash('success', 'Проект успешно удален');
 
         $this->redirect('/project/default/index');

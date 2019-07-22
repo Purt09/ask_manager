@@ -30,10 +30,11 @@ class UserController extends Controller
         $user = User::findOne(Yii::$app->user->identity->id);
 
         $models = $model->getTasks($user);
-
+        $projects = Project::find()->all();
 
         return $this->render('done', [
             'models' => $models,
+            'projects' => $projects,
         ]);
     }
 
@@ -115,13 +116,21 @@ class UserController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionComplete($id = false, $redirect = 'index'){
+    public function actionComplete($id = false){
 
-        $model = $this->findModel($id);
+        if(\Yii::$app->request->isAjax){
 
-        $model->setStatus();
+            $model = $this->findModel($id);
 
-        return $this->redirect([$redirect]);
+            $model->setStatus();
+            return Yii::$app->request->post('id', '3333');
+        } else {
+            return $this->redirect(['index']);
+        }
+
+
+
+
     }
 
     /**
@@ -134,11 +143,17 @@ class UserController extends Controller
     public function actionUncomplete($id = false){
 
 
-        $model = $this->findModel($id);
+        if(\Yii::$app->request->isAjax){
 
-        $model->setStatus(Task::STATUS_ACTIVE);
+            $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
+            $model->setStatus(1);
+            return Yii::$app->request->post('id', '3333');
+        } else {
+            return $this->redirect(['index']);
+        }
+
+
     }
 
 
