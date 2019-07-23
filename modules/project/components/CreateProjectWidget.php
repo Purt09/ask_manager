@@ -15,10 +15,11 @@ class CreateProjectWidget extends Widget
     public function run()
     {
         $this->projects = array_column($this->projects, 'title', 'id');
+
         $model = new Project();
         $model->parent_id = $this->parent_id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->response->refresh();
+            Yii::$app->response->redirect(['/project/' . $this->parent_id]);
         }
         return $this->render('createProjectWidget', [
             'model' => $model,

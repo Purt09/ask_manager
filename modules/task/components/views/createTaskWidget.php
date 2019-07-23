@@ -29,9 +29,7 @@ use app\modules\task\Module;
                 ]) ?>
 
 
-                <?= $form->field($model, 'project_id')->dropDownList($projects, [
-                        'prompt' => '',
-                ])?>
+                <?= $form->field($model, 'project_id')->dropDownList($projects)?>
 
 
                 <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>

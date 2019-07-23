@@ -73,6 +73,7 @@ class DefaultController extends \yii\web\Controller
     {
         $project = $this->findModel($id);
         $user = User::findOne(Yii::$app->user->identity->id);
+
         $projects = $project->getProjectsByParent($project, $user);
 
         $users = $project->getUsersFromProject($project);
@@ -127,19 +128,23 @@ class DefaultController extends \yii\web\Controller
     }
 
     /**
-     * @param bool $id
+     * @param $id
+     * @param $user_id
+     * @return \yii\web\Respons
      */
     public function actionAddFriend($id, $user_id)
     {
         $user = User::findOne($user_id);
+        $creator = User::findOne(Yii::$app->user->identity->id);
         $project = Project::findOne($id);
 
         $projects = $project->getSubprojectsByProject($project);
+        array_push($projects, $project);
         // Связываем нового пользователя и проекты
         foreach ($projects as $p)
             $p->link('users', $user);
 
-        $tasks = Task::getTasksFromProjects($projects);
+        $tasks = Task::getTasksFromProjects($projects, $creator);
         // Связываем нового пользователя и задачи
         foreach ($tasks as $t)
             $t->link('users', $user);

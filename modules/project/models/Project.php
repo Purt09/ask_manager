@@ -4,8 +4,8 @@ namespace app\modules\project\models;
 
 use Yii;
 use app\modules\task\models\Task;
-use app\modules\project\Module;
 use app\modules\user\models\User;
+use app\modules\project\Module;
 use app\modules\user\models\connections\ProjectUser;
 
 /**
@@ -117,10 +117,7 @@ class Project extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if (Yii::$app->request->post()) {
-            $user = User::findOne(\Yii::$app->user->identity->id);
             $project = Project::find()->where(['id' => $this->id])->one();
-
-            $project->link('users', $user);
 
             // при создание подпроекта необходимо привязать всех участников к этому проекту
             if($project->parent_id != null) {
@@ -154,7 +151,7 @@ class Project extends \yii\db\ActiveRecord
             ->viaTable('{{%user_project}}', ['project_id' => 'id']);
     }
 
-    public function getUsersFromProject(Project $project) : array {
+    public function getUsersFromProject(Project $project) {
         return $project->getUsers()->all();
     }
 

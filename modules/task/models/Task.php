@@ -186,11 +186,7 @@ class Task extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if (Yii::$app->request->post()) {
-            $user = User::findOne(\Yii::$app->user->identity->id);
             $task = Task::find()->where(['id' => $this->id])->one();
-
-            $task->link('users', $user);
-
 
             if($task->project_id != null) {
                 $userProjects = ProjectUser::find()->where(['project_id' => $task->project_id])->all();
