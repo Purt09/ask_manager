@@ -8,6 +8,9 @@ use yii\base\Widget;
 class TimeColorSignWidget extends Widget
 {
 
+    /**
+     * @var int время в секундах до заверешения задачи или проекта
+     */
     public $seconds;
 
     public function run(){

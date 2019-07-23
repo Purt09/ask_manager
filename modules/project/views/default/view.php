@@ -37,7 +37,6 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                             <?= TasksListWidget::widget([
                                 'tasks' => $tasks,
                                 'status' => 1,
-                                'redirect' => '/project/default/' . $model['id'],
                             ]) ?>
 
                             <div class="text-center">
@@ -104,7 +103,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                                     'csscol' => 12,
                                     'id' => $model->id,
                                     'parent' => false,
-                                    ]) ?>
+                                ]) ?>
                             <?php endif; ?>
                             <?= Html::button(\app\modules\project\Module::t('module', 'SUBPROJECT_ADD'), ['data-toggle' => 'modal', 'data-target' => '#CreateProject', 'class' => 'btn-success btn ']) ?>
                         </div>
@@ -140,8 +139,10 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                     </dl>
                     <?= Html::a('Выполненные задачи', ['/project/default/complete', 'id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
                     <?php if (Yii::$app->user->identity->id == $model['creator_id']): ?>
-                        <?= Html::a('Добавить друга', ['default/friends', 'project_id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
                         <?= Html::a('Закрыть проект', ['default/delete', 'id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
+                        <?php if ($model['parent_id'] === null) : ?>
+                            <?= Html::a('Добавить друга', ['default/friends', 'project_id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div>
             </div>
@@ -154,8 +155,8 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
 
 <?= CreateTaskWidget::widget(['project' => $model, 'projects' => $projects]) ?>
 <?= CreateProjectWidget::widget([
-        'parent_id' => $model->id,
-        'projects' => $projects,
+    'parent_id' => $model->id,
+    'projects' => $projects,
 ]);
 
 

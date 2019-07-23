@@ -25,21 +25,24 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Страница выводи все выполненные хадачи пользователем
+     *
+     * @return string
+     */
     public function actionDone(){
         $model = new Task();
         $user = User::findOne(Yii::$app->user->identity->id);
 
         $models = $model->getTasks($user);
-        $projects = Project::find()->all();
 
         return $this->render('done', [
             'models' => $models,
-            'projects' => $projects,
         ]);
     }
 
     /**
-     * Страница для редактирования задачи с опред id
+     * Страница для редактирования задачи
      *
      * @param $id
      * @return string|\yii\web\Response
@@ -96,6 +99,8 @@ class UserController extends Controller
     }
 
     /**
+     * Удаляет задачу
+     *
      * @param bool $id
      */
     public function actionDelete($id = false)
@@ -123,18 +128,14 @@ class UserController extends Controller
             $model = $this->findModel($id);
 
             $model->setStatus();
-            return Yii::$app->request->post('id', '3333');
+            return Yii::$app->request->post('id');
         } else {
             return $this->redirect(['index']);
         }
-
-
-
-
     }
 
     /**
-     * Change status model on uncomplete (Task->complete)
+     * Change status model on uncomplete (Task->uncomplete)
      *
      * @param bool $id
      * @return \yii\web\Response
@@ -148,7 +149,7 @@ class UserController extends Controller
             $model = $this->findModel($id);
 
             $model->setStatus(1);
-            return Yii::$app->request->post('id', '3333');
+            return Yii::$app->request->post('id');
         } else {
             return $this->redirect(['index']);
         }

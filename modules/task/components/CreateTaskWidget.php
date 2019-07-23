@@ -24,6 +24,7 @@ class CreateTaskWidget extends Widget
 
     public function run()
     {
+        // Нормализует вид
         $this->projects = array_column($this->projects, 'title', 'id');
 
         $model = new CreateForm();

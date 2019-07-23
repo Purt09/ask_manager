@@ -44,6 +44,8 @@ class DefaultController extends \yii\web\Controller
     }
 
     /**
+     * Страница выводи все проекты пользователя
+     *
      * @return string
      */
     public function actionIndex()
@@ -75,6 +77,9 @@ class DefaultController extends \yii\web\Controller
         $user = User::findOne(Yii::$app->user->identity->id);
 
         $projects = $project->getProjectsByParent($project, $user);
+        $projects += array(
+            $project['id'] => $project,
+        );
 
         $users = $project->getUsersFromProject($project);
         $tasks = Task::getTasksFromProjects($projects, $user);
@@ -90,7 +95,12 @@ class DefaultController extends \yii\web\Controller
     }
 
     /**
-     * @param bool $id
+     * Удаляет проект, а также все его подпроекты.
+     *
+     * @param $id
+     * @return \yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
@@ -102,15 +112,21 @@ class DefaultController extends \yii\web\Controller
                 $s->delete();
             }
         }
-        $model->delete();
-        Yii::$app->getSession()->setFlash('success', 'Проект успешно удален');
 
-        $this->redirect('/project/default/index');
+        if($model->delete())
+            Yii::$app->getSession()->setFlash('success', 'Проект успешно закрыт');
+        else
+            Yii::$app->getSession()->setFlash('error', 'Проект невозможно закрыть');
+
+        return $this->redirect('/project/default/index');
     }
 
 
     /**
-     * @param bool $id
+     * Выводит всех друзей, которых пользователь может добавить в проект
+     *
+     * @param $project_id
+     * @return string
      */
     public function actionFriends($project_id)
     {
@@ -128,62 +144,55 @@ class DefaultController extends \yii\web\Controller
     }
 
     /**
+     * Добавляет пользователя в проект
+     *
      * @param $id
      * @param $user_id
-     * @return \yii\web\Respons
+     * @return \yii\web\Response
      */
     public function actionAddFriend($id, $user_id)
     {
         $user = User::findOne($user_id);
-        $creator = User::findOne(Yii::$app->user->identity->id);
         $project = Project::findOne($id);
 
-        $projects = $project->getSubprojectsByProject($project);
-        array_push($projects, $project);
-        // Связываем нового пользователя и проекты
-        foreach ($projects as $p)
-            $p->link('users', $user);
-
-        $tasks = Task::getTasksFromProjects($projects, $creator);
-        // Связываем нового пользователя и задачи
-        foreach ($tasks as $t)
-            $t->link('users', $user);
+        $project->setUserInProjects($user, $project);
 
         return $this->redirect('/project/' . $project->id);
     }
 
     /**
-     * @param bool $id
+     * Удаляет пользователя из проекта
+     *
+     * @param $id
+     * @param $user_id
+     * @return \yii\web\Response
      */
-    public
-    function actionDelFriend($id, $user_id)
+    public function actionDelFriend($id, $user_id)
     {
         $user = User::findOne($user_id);
         $project = Project::findOne($id);
 
-        $projects = $project->getSubprojectsByProject($project);
-        foreach ($projects as $p)
-            ProjectUser::deleteAll(['project_id' => $p->id, 'user_id' => $user_id]);
-
-
-        $tasks = Task::getTasksFromProjects($projects);
-        foreach ($tasks as $t)
-            TaskUser::deleteAll(['task_id' => $t->id, 'user_id' => $user_id]);
+        $project->delUser($user, $project);
 
         return $this->redirect('/project/' . $project->id);
     }
 
     /**
-     * @param bool $id
+     * Добавляет нового лидера в проект и во всех СабПроектах меняет лидера
+     *
+     * @param $id
+     * @param string $redirect
+     * @param $user_id
+     * @return \yii\web\Response
      */
-    public
-    function actionNewLeader($id, $redirect = 'view', $user_id)
+    public function actionNewLeader($id, $redirect = 'view', $user_id)
     {
         $project = Project::findOne($id);
         $projects = $project->getSubprojectsByProject($project);
         foreach ($projects as $p) {
             Project::setLeader($user_id, $p);
         }
+
         return $this->redirect([$redirect]);
     }
 
@@ -204,13 +213,21 @@ class DefaultController extends \yii\web\Controller
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 
-    public
-    function actionComplete($id)
+    /**
+     * Выводит все выполненные задачи.
+     *
+     * @param $id
+     * @return string
+     */
+    public function actionComplete($id)
     {
         $task = new Task();
-        $user = User::findOne(Yii::$app->user->identity->id);
+        $project = Project::findOne($id);
 
-        $tasks = $task->getTasks($user);
+        $user = User::findOne(Yii::$app->user->id);
+
+        $projects = $project->getProjectsByParent($project, $user);
+        $tasks = $task->getTasksFromProjects($projects, $user);
 
         return $this->render('complete', [
             'tasks' => $tasks,
@@ -219,8 +236,6 @@ class DefaultController extends \yii\web\Controller
 
     public function actionTest()
     {
-        $id = ['0' => 3,
-            '1' => 14];
     }
 
 }

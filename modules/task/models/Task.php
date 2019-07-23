@@ -149,8 +149,11 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * Change status task
-     * @param $id
+     * Меняет статус задачи
+     *
+     * @param int $status
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function setStatus($status = self::STATUS_COMPLETE){
         $this->status = $status;
@@ -158,18 +161,48 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * Возвращает задачи определленного пользователя
-     * @return Task[]|array
+     * Возвращает все задачи пользователя
+     *
+     * Проверяет вышло ли время на выполнение этой задачи
+     *
+     * @param User $user
+     * @return array|ActiveRecord[]
+     * @throws \yii\base\InvalidConfigException
      */
     public function getTasks(User $user){
-        $tasks = $user->getTasks()->all(); // Сложный запрос, связь многие ко многим
+        $tasks = $user->getTasks()->all();
         TimeSupport::changeStatus($tasks); // Проверка статуса задачи
         return $tasks;
     }
 
+    /**
+     * Возвращает все задачи всех $projects определенного $user
+     *
+     * @param array $projects
+     * @param User $user
+     * @return array|ActiveRecord[]
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getTasksFromProjects(array $projects, User $user){
         $ids = array_keys($projects);
-        return $all_tasks = $user->getTasks()->where(['in', 'project_id', $ids])->all();
+        return $user->getTasks()->where(['in', 'project_id', $ids])->all();
+    }
+
+    /**
+     * Добавляет пользователя во все задачи проетов $projects
+     *
+     * @param User $user
+     * @param array $projects
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function setUserInTasks(User $user, array $projects){
+        $task = new Task();
+        $userCreator = User::findOne(Yii::$app->user->identity->id);
+        $tasks = $task->getTasksFromProjects($projects, $userCreator);
+        // Связываем нового пользователя и задачи
+        foreach ($tasks as $t)
+            $t->link('users', $user);
+
     }
 
     /**
@@ -183,10 +216,17 @@ class Task extends \yii\db\ActiveRecord
             ->viaTable('{{%user_task}}', ['task_id' => 'id']);
     }
 
+    public function delUser(array $projects, User $user){
+        $tasks = Task::getTasksFromProjects($projects, $user);
+        foreach ($tasks as $t)
+            TaskUser::deleteAll(['task_id' => $t->id, 'user_id' => $user->id]);
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
         if (Yii::$app->request->post()) {
             $task = Task::find()->where(['id' => $this->id])->one();
+
 
             if($task->project_id != null) {
                 $userProjects = ProjectUser::find()->where(['project_id' => $task->project_id])->all();

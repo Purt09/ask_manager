@@ -92,40 +92,67 @@ class Project extends \yii\db\ActiveRecord
         return new ProjectQuery(get_called_class());
     }
 
-    /**Возращает проекты опрделённого родителя
-     * asArray надо для виджета вывода проекта с подпроектами
-     * @param null $parent_id
-     * @return mixed
+    /**
+     * Возвращает массив объектов Project имеющих обзий родитель $parent->id
+     *
+     * А также созданные все пользователем $user
+     *
+     * В возвращаемый массив не входит сам $parent
+     *
+     * @param Project $parent
+     * @param User $user
+     * @return array|\yii\db\ActiveRecord[]
+     * @throws \yii\base\InvalidConfigException
      */
     public function getProjectsByParent(Project $parent, User $user) {
         $projects = $user->getProjects()->where(['parent_id' => $parent->id])->indexBy('id')->all();
 
-        // Удаление родительского метода, точнее его не добавление для project/default/index
-        if($parent['id'] != null)
-            $projects += array($parent['id'] => $parent);
+
         return $projects;
+    }
+
+
+    /**
+     * Добавляет пользователя в проект и во все подпроекты этого проекта
+     *
+     * @param User $user
+     * @param Project $project
+     *
+     */
+    public function setUserInProjects(User $user, Project $project){
+        $task = new Task();
+        $projects = $project->getSubprojectsByProject($project);
+        $projects += array(
+            $project->id => $project,
+        );
+        // Связываем нового пользователя и проекты
+        foreach ($projects as $p)
+            $p->link('users', $user);
+
+        $task->setUserInTasks($user, $projects);
 
     }
 
 
-
     /**
-     * Сохраняет данные, со связью многие ко многим
      * @param bool $insert
      * @param array $changedAttributes
      */
     public function afterSave($insert, $changedAttributes)
     {
         if (Yii::$app->request->post()) {
+            $user = User::findOne(Yii::$app->user->identity->id);
             $project = Project::find()->where(['id' => $this->id])->one();
+            $project->link('users', $user);
 
             // при создание подпроекта необходимо привязать всех участников к этому проекту
             if($project->parent_id != null) {
-                $userProjects = ProjectUser::find()->where(['project_id' => $project->parent_id])->all();
-                $userIds = array();
-                foreach ($userProjects as $userProject) {
-                    array_push($userIds, $userProject->user_id);
-                }
+                $userProjects = ProjectUser::find()->where(['project_id' => $project->parent_id])->indexBy(['user_id'])->all();
+
+                $userIds = array_keys($userProjects);
+                // Удаляет пользователя, который уже создал проект(для избежания дублей в бд
+                unset($userIds[array_search(Yii::$app->user->identity->id, $userIds)]);
+
                 $users = User::find()->where(['in', 'id', $userIds])->all();
                 foreach ($users as $u)
                     $project->link('users', $u);
@@ -134,6 +161,10 @@ class Project extends \yii\db\ActiveRecord
         parent::afterSave($insert, $changedAttributes);
     }
 
+    /**
+     * @param bool $insert
+     * @return bool
+     */
     public function beforeSave($insert)
     {
         $this->creator_id = Yii::$app->user->identity->id;
@@ -141,7 +172,6 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
-     * connects many to many with users
      * @return \yii\db\ActiveQuery
      * @throws \yii\base\InvalidConfigException
      */
@@ -151,19 +181,55 @@ class Project extends \yii\db\ActiveRecord
             ->viaTable('{{%user_project}}', ['project_id' => 'id']);
     }
 
+    /**
+     * Возвращает всех пользователей определенного проекта
+     *
+     * @param Project $project
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getUsersFromProject(Project $project) {
         return $project->getUsers()->all();
     }
 
-    public function setLeader($user_id,Project $project){
+    /**
+     * Устанавливает нового создателя в проект
+     *
+     * @param $user_id
+     * @param Project $project
+     * @return bool
+     */
+    public function setLeader($user_id, Project $project){
         $project->creator_id = $user_id;
         return $project->save();
     }
 
+    /**
+     * Возвращает все подпроекты без самого $project
+     *
+     * @param Project $project
+     * @return Project[]|array
+     */
     public function getSubprojectsByProject(Project $project){
-
         return Project::find()->where(['parent_id' => $project->id])->indexBy('id')->all();
+    }
 
+    /**
+     * Удаляет пользователя из проекта и всех его подпроектов жтого $project
+     *
+     * @param User $user
+     * @param Project $project
+     */
+    public function delUser(User $user, Project $project){
+        $task = new Task();
+        $projects = $project->getSubprojectsByProject($project);
+        $projects += array(
+            $project->id => $project,
+        );
+        foreach ($projects as $p)
+            ProjectUser::deleteAll(['project_id' => $p->id, 'user_id' => $user->id]);
+
+        $task->delUser($projects, $user);
     }
 
 }

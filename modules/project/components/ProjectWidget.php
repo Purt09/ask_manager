@@ -22,11 +22,12 @@ class ProjectWidget extends Widget
      */
     public $tree;
     /**
-     * @var string
+     * @var string для вывода html
      */
     public $projectHtml;
-
-
+    /**
+     * @var array Project Все проекты учавсующие в создание виджета для их вывода
+     */
     public $projects = [];
     /**
      * @var array Задачи проектов
@@ -40,9 +41,6 @@ class ProjectWidget extends Widget
 
     /**
      * @var bool Параметр оьвечающий за вывод родителькой категории. С parent_id = null
-     *
-     * Если true - то выводит
-     * false - не выводит
      */
     public $parent = true;
 
@@ -95,6 +93,12 @@ class ProjectWidget extends Widget
         return $tree;
     }
 
+    /**
+     * Формирует сами модули
+     *
+     * @param $tree
+     * @return string
+     */
     protected function getProjectHtml($tree)
     {
         $str = '';
@@ -105,6 +109,14 @@ class ProjectWidget extends Widget
         return $str;
     }
 
+    /**
+     * Передает все параметры в шаблон
+     *
+     * @param $project
+     * @param $tasks
+     * @param $csscol
+     * @return false|string весь шаблон для вывода
+     */
     protected function catToTemplate($project, $tasks, $csscol)
     {
         ob_start();
