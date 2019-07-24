@@ -23,7 +23,7 @@ class TaskUser extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_user_task';
+        return '{{%user_task}}';
     }
 
     /**

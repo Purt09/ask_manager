@@ -21,7 +21,7 @@ class ProjectUser extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_user_project';
+        return '{{%user_project}}';
     }
 
     /**
