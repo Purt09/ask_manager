@@ -57,11 +57,6 @@ return [
                 ],
             ],
         ],
-        'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'yYy4YYYX8lYyYyQOl8vOcO6ROo7i8twO',
-            'baseUrl' => ''
-        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
         ],
