@@ -7,6 +7,7 @@ use app\modules\task\components\CreateTaskWidget;
 use app\modules\task\components\TasksListWidget;
 use app\modules\project\components\CreateProjectWidget;
 use app\modules\project\components\ProjectWidget;
+use app\modules\task\components\RandomTaskWidget;
 
 
 /* @var $this yii\web\View */
@@ -69,7 +70,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                                         'text' => 'Удалить из проекта',
                                         'url' => '/project/default/del-friend',
                                         'class' => 'btn btn-warning btn-sm',
-                                        'redirect' => 'default/view',
+                                        'redirect' => '/project/' . $model->id,
                                         'hide' => $hide,
                                         'id' => $model->id,
                                     ],
@@ -98,7 +99,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                                 <h2>В данном проекте отсуствуют подпроекты</h2>
                             <?php else: ?>
                                 <?= ProjectWidget::widget([
-                                    'tasks' => $subtasks,
+                                    'tasks' => $tasks,
                                     'projects' => $projects,
                                     'csscol' => 12,
                                     'id' => $model->id,
@@ -138,6 +139,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                         <dd> Просроченных: <?= $passive ?></dd>
                     </dl>
                     <?= Html::a('Выполненные задачи', ['/project/default/complete', 'id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
+                    <?= RandomTaskWidget::widget(['tasks' => $tasks]); ?>
                     <?php if (Yii::$app->user->identity->id == $model['creator_id']): ?>
                         <?= Html::a('Закрыть проект', ['default/delete', 'id' => $model->id], ['class' => 'btn btn-default btn-block']) ?>
                         <?php if ($model['parent_id'] === null) : ?>

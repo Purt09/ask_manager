@@ -34,6 +34,7 @@ class DefaultController extends \yii\web\Controller
     {
         $model = new Project();
 
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -90,7 +91,6 @@ class DefaultController extends \yii\web\Controller
             'tasks' => $tasks,
             'projects' => $projects,
             'users' => $users,
-            'subtasks' => $tasks,
         ]);
     }
 
@@ -113,7 +113,7 @@ class DefaultController extends \yii\web\Controller
             }
         }
 
-        if($model->delete())
+        if ($model->delete())
             Yii::$app->getSession()->setFlash('success', 'Проект успешно закрыт');
         else
             Yii::$app->getSession()->setFlash('error', 'Проект невозможно закрыть');
@@ -164,17 +164,18 @@ class DefaultController extends \yii\web\Controller
      * Удаляет пользователя из проекта
      *
      * @param $id
+     * @param string $redirect
      * @param $user_id
      * @return \yii\web\Response
      */
-    public function actionDelFriend($id, $user_id)
+    public function actionDelFriend($id, $redirect = 'index', $user_id)
     {
         $user = User::findOne($user_id);
         $project = Project::findOne($id);
 
         $project->delUser($user, $project);
 
-        return $this->redirect('/project/' . $project->id);
+        return $this->redirect([$redirect]);
     }
 
     /**
@@ -187,11 +188,10 @@ class DefaultController extends \yii\web\Controller
      */
     public function actionNewLeader($id, $redirect = 'view', $user_id)
     {
-        $project = Project::findOne($id);
-        $projects = $project->getSubprojectsByProject($project);
-        foreach ($projects as $p) {
-            Project::setLeader($user_id, $p);
-        }
+        $model = $this->findModel($id);
+        $user = User::findOne($user_id);
+
+        $model->setLeader($user, $model);
 
         return $this->redirect([$redirect]);
     }
@@ -203,8 +203,7 @@ class DefaultController extends \yii\web\Controller
      * @return Project the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected
-    function findModel($id)
+    protected function findModel($id)
     {
         if (($model = Project::findOne($id)) !== null) {
             return $model;
@@ -222,11 +221,14 @@ class DefaultController extends \yii\web\Controller
     public function actionComplete($id)
     {
         $task = new Task();
-        $project = Project::findOne($id);
-
-        $user = User::findOne(Yii::$app->user->id);
+        $project = $this->findModel($id);
+        $user = User::findOne(Yii::$app->user->identity->id);
 
         $projects = $project->getProjectsByParent($project, $user);
+        $projects += array(
+            $project['id'] => $project,
+        );
+
         $tasks = $task->getTasksFromProjects($projects, $user);
 
         return $this->render('complete', [

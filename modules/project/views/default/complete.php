@@ -11,8 +11,6 @@ use app\modules\task\components\TasksListWidget;
         <?= TasksListWidget::widget([
             'tasks' => $tasks,
             'status' => 0,
-            'redirect' => '/project/default/' . $model['id'],
-            'complete' => 'uncomplete'
         ]) ?>
     </div>
 </div>
