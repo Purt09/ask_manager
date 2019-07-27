@@ -72,13 +72,13 @@ class TimeSupport
     /**Присвает статус задаче исходя из ее времени
      * @param $tasks
      */
-    public
-    static function changeStatus($tasks)
+    public static function changeStatus($tasks)
     {
+        $time = time();
         foreach ($tasks as $t) {
             if ($t['updated_at'] != null && $t['status'] != 0) {
                 // Проверка закончилось ли время
-                if ($t['updated_at'] - time() < 0) {
+                if ($t['updated_at'] - $time < 0) {
                     $t->setStatus(2);
                 } else {
                     $t->setStatus(1);

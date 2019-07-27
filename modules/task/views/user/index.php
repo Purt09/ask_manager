@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use app\modules\task\Module;
 use app\modules\task\components\TasksListWidget;
 use app\modules\task\components\CreateTaskWidget;
+use app\modules\task\components\RandomTaskWidget;
 
 /* @var $modelsactive app\modules\task\models\Task */
 $time = time();
@@ -54,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) ?>
             </div>
             <div class="col-sm-2 ml-4">
-                wqe
+                <?= RandomTaskWidget::widget(['tasks' => $models])?>
             </div>
         </div>
     </div>

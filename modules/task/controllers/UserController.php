@@ -142,19 +142,27 @@ class UserController extends Controller
      * @throws NotFoundHttpException
      */
     public function actionUncomplete($id = false){
-
-
         if(\Yii::$app->request->isAjax){
-
             $model = $this->findModel($id);
-
             $model->setStatus(1);
             return Yii::$app->request->post('id');
         } else {
             return $this->redirect(['index']);
         }
+    }
 
+    public function actionSetExecutor($user_id, $task_id, $project_id){
+        $task = $this->findModel($task_id);
+        $task->user_id = $user_id;
+        $task->save();
+        return $this->redirect('/project/' . $project_id);
+    }
 
+    public function actionDelExecutor($task_id, $project_id){
+        $task = $this->findModel($task_id);
+        $task->user_id = null;
+        $task->save();
+        return $this->redirect('/project/' . $project_id);
     }
 
 

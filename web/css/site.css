@@ -140,3 +140,6 @@ hr {
 div.test > div:nth-of-type(odd) {
     background: #e0e0e0;
 }
+.dropdown-toggle::after {
+    display:none;
+}

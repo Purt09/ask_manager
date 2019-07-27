@@ -30,32 +30,28 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
             <div class="col-sm-8">
                 <h2><?= $model->title ?> </h2>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-11">
                         <div class="row">
                             <div class="p-3 mb-2 bg-info text-white row shadow ">
                                 <?= Module::t('module', 'TASKS') ?>
                             </div>
                             <?= TasksListWidget::widget([
                                 'tasks' => $tasks,
+                                'status' => 2,
+                                'users' => $users,
+                                'project' => $model,
+                            ]) ?>
+                            <hr>
+                            <?= TasksListWidget::widget([
+                                'tasks' => $tasks,
                                 'status' => 1,
+                                'users' => $users,
+                                'project' => $model,
                             ]) ?>
 
                             <div class="text-center">
                                 <?= Html::button(Module::t('module', 'TASK_CREATE'), ['data-toggle' => 'modal', 'data-target' => '#CreateTask' . $model->id, 'class' => 'btn-success btn']) ?>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-5 col-sm-offset-1">
-                        <div class="row">
-
-                            <div class="p-3 mb-2 bg-secondary text-white row shadow  ">
-                                <?= Module::t('module', 'TASKS_TIMEOUT') ?>
-                            </div>
-                            <?= TasksListWidget::widget([
-                                'tasks' => $tasks,
-                                'status' => 2,
-                            ]) ?>
-
                         </div>
                     </div>
                     <div class="col-sm-7">
