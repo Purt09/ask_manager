@@ -3,16 +3,13 @@
 namespace app\modules\project\components;
 
 use yii\base\Widget;
-use app\modules\project\models\Project;
-use app\modules\task\models\Task;
-use yii\helpers\ArrayHelper;
 
 class ProjectWidget extends Widget
 {
     /**
      * @var string шаблон проекта, его вид
      */
-    public $tpl;
+    public $tpl = null;
     /**
      * @var array Все данные из бд, с проекта
      */
@@ -71,7 +68,6 @@ class ProjectWidget extends Widget
             }
         }
         $this->tree = $this->getTree();
-
 
         $this->projectHtml = $this->getProjectHtml($this->tree);
         return $this->projectHtml;

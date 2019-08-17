@@ -5,6 +5,7 @@ namespace app\modules\task\controllers;
 use app\modules\project\models\Project;
 use app\modules\task\models\Task;
 use app\modules\user\models\User;
+use phpDocumentor\Reflection\Types\Integer;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -13,15 +14,18 @@ use app\modules\task\forms\CreateForm;
 class UserController extends Controller
 {
     public function actionIndex(){
-        $model = new Task();
+        $task = new Task();
+        $project = new Project();
         $user = User::findOne(Yii::$app->user->identity->id);
 
-        $models = $model->getTasks($user);
-        $projects = Project::find()->all();
+        $projects = $project->getProjectsByUser($user);
+        $tasks = $task->getTasksFromProjects($projects, $user);
 
         return $this->render('index', [
-            'models' => $models,
+            'project' => $user->getProjects()->one(),
+            'tasks' => $tasks,
             'projects' => $projects,
+            'users' => array('0' => $user),
         ]);
     }
 
@@ -125,9 +129,41 @@ class UserController extends Controller
 
         if(\Yii::$app->request->isAjax){
 
+
             $model = $this->findModel($id);
 
             $model->setStatus();
+            return Yii::$app->request->post('id');
+        } else {
+            return $this->redirect(['index']);
+        }
+    }
+
+    public function actionCreateTaskAjax($title, $project_id, $description = 'null', $updated_at = 'null'){
+        if(\Yii::$app->request->isAjax){
+            $task = new Task();
+            $task->title = $title;
+            $task->project_id = $project_id;
+            if ($description != 'null') $task->description = $description;
+            if ($updated_at != 'null') $task->updated_at = $updated_at;
+            $task->save();
+
+
+            return Yii::$app->request->post('id');
+        } else {
+            return $this->redirect(['index']);
+        }
+    }
+
+    public function actionAddPersonalTask( $user_id, $task_id){
+        if($user_id == 'null') $user_id = null;
+        if(\Yii::$app->request->isAjax){
+            $task = $this->findModel($task_id);
+            $task->user_id = $user_id;
+            $task->save();
+
+
+
             return Yii::$app->request->post('id');
         } else {
             return $this->redirect(['index']);
@@ -152,10 +188,15 @@ class UserController extends Controller
     }
 
     public function actionSetExecutor($user_id, $task_id, $project_id){
-        $task = $this->findModel($task_id);
-        $task->user_id = $user_id;
-        $task->save();
-        return $this->redirect('/project/' . $project_id);
+        if(\Yii::$app->request->isAjax){
+            $task = $this->findModel($task_id);
+            $task->user_id = $user_id;
+            $task->save();
+            return Yii::$app->request->post('id');
+        } else {
+            return $this->redirect('/project/' . $project_id);
+        }
+
     }
 
     public function actionDelExecutor($task_id, $project_id){

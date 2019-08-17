@@ -15,20 +15,15 @@ class TimeSupport
      * @param $seconds
      * @return string
      */
-    public static function createtime($time)
+    public function createtime($time)
     {
         $seconds = $time - time();
         if ($seconds < 0) {
-            $class = 'danger';
             $text = 'Просрочено на: ';
-        } elseif ($seconds < 3600) {
-            $class = 'danger';
         } elseif ($seconds < 86400) {
-            $class = 'warning';
             $text = 'Осталось: ';
 
         } else {
-            $class = 'success';
             $text = 'Осталось: ';
         }
 
@@ -63,9 +58,9 @@ class TimeSupport
 // Выводит только 2 значения (мин и сек или часы и мин или дни и часы)
         for ($i = count($time) - 1; $i >= count($time) - 2; $i--)
             $result .= $time[$i] . ' ' . $times_values[$i] . ' ';
-        $html = Html::tag('span', Html::encode($text . $result . '   (' . $date . ')'), ['class' => 'label label-' . $class]);
+//        $html = Html::tag('span', Html::encode($text . $result . '   (' . $date . ')'), ['class' => 'label label-' . $class]);
         if ($seconds < 0) $html = '';
-        return $html;
+        return $text . $result . '   (' . $date . ')';
     }
 
 

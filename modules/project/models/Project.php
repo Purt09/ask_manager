@@ -93,25 +93,6 @@ class Project extends \yii\db\ActiveRecord
         return new ProjectQuery(get_called_class());
     }
 
-    /**
-     * Возвращает массив объектов Project имеющих обзий родитель $parent->id
-     *
-     * А также созданные все пользователем $user
-     *
-     * В возвращаемый массив не входит сам $parent
-     *
-     * @param Project $parent
-     * @param User $user
-     * @return array|\yii\db\ActiveRecord[]
-     * @throws \yii\base\InvalidConfigException
-     */
-    public function getProjectsByParent(Project $parent, User $user) {
-        $projects = $user->getProjects()->where(['parent_id' => $parent->id])->indexBy('id')->all();
-
-
-        return $projects;
-    }
-
 
     /**
      * Добавляет пользователя в проект и во все подпроекты этого проекта
@@ -192,6 +173,10 @@ class Project extends \yii\db\ActiveRecord
      */
     public function getUsersFromProject(Project $project) {
         return $project->getUsers()->all();
+    }
+
+    public function getProjectsByUser(User $user){
+        return $user->getProjects()->indexBy('id')->all();
     }
 
     /**

@@ -1,10 +1,8 @@
 <?php
-
 use app\components\TimeSupport;
 use yii\helpers\Url;
 use yii\bootstrap\Html;
 use app\modules\user\models\User;
-
 ?>
 
 <?php foreach ($tasks as $task) : ?>
@@ -150,4 +148,3 @@ JS;
         ?>
     <? endif; ?>
 <?php endforeach; ?>
-

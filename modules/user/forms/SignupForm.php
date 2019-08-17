@@ -56,6 +56,7 @@ class SignupForm extends Model
             $user->username = $this->username;
             $user->email = $this->email;
             $user->setPassword($this->password);
+            $user->photo = '/img/default/Not_photo_avatar.png';
             $user->status = User::STATUS_WAIT;
             $user->generateAuthKey();
             $user->generateEmailConfirmToken();

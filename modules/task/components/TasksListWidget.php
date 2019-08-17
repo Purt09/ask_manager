@@ -3,18 +3,23 @@
 
 namespace app\modules\task\components;
 
-use app\modules\admin\models\User;
+use app\modules\user\models\User;
 use app\modules\project\models\Project;
+use app\components\TimeSupport;
+use app\modules\task\models\Task;
 use Yii;
 use yii\base\Widget;
-use app\components\TimeSupport;
 
 class TasksListWidget extends Widget
 {
+    /*
+     * Определяет шаблон
+     */
+    public $tpl = 'tasksListWidget';
     /**
      * @var array все задачи для вывода
      */
-    public $tasks;
+    public $tasks = null;
     /**
      * @var int определяет с каким статусом надо вывести задачи
      */
@@ -33,13 +38,30 @@ class TasksListWidget extends Widget
     public $color_toggle = null;
 
 
-
+    /**
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     */
     public function run()
     {
-        $this->tasks = $this->sort($this->tasks);
-        TimeSupport::changeStatus($this->tasks);
+        if($this->tasks === null){
+            $task = new Task();
+            $user = User::findOne(Yii::$app->user->id);
+            $this->tasks = $task->getTasksFromProjects($this->project, $user);
 
-        return $this->render('tasksListWidget', [
+        }
+        $this->tasks = $this->sort($this->tasks);
+//        TimeSupport::changeStatus($this->tasks);
+
+//        foreach ($this->tasks as $task){
+//            if ($task['updated_at'] != null)
+////                $task['updated_at'] = TimeSupport::createtime($task['updated_at']);
+//        }
+
+
+
+
+        return $this->render($this->tpl, [
             'tasks' => $this->tasks,
             'status' => $this->status,
             'users' => $this->users,

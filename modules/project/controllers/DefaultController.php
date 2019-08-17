@@ -55,7 +55,7 @@ class DefaultController extends \yii\web\Controller
         $task = new Task();
         $user = User::findOne(Yii::$app->user->identity->id);
 
-        $projects = $model->getProjectsByParent($model, $user);
+        $projects = $model->getSubprojectsByProject($model);
         $tasks = $task->getTasks($user);
 
 
@@ -77,7 +77,7 @@ class DefaultController extends \yii\web\Controller
         $project = $this->findModel($id);
         $user = User::findOne(Yii::$app->user->identity->id);
 
-        $projects = $project->getProjectsByParent($project, $user);
+        $projects = $project->getSubprojectsByProject($project);
         $projects += array(
             $project['id'] => $project,
         );
@@ -224,7 +224,7 @@ class DefaultController extends \yii\web\Controller
         $project = $this->findModel($id);
         $user = User::findOne(Yii::$app->user->identity->id);
 
-        $projects = $project->getProjectsByParent($project, $user);
+        $projects = $project->getSubprojectsByProject($project);
         $projects += array(
             $project['id'] => $project,
         );

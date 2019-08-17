@@ -45,3 +45,4 @@ use app\modules\task\Module;
             </div>
         </div>
     </div>
+</div>

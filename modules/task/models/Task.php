@@ -222,11 +222,12 @@ class Task extends \yii\db\ActiveRecord
             TaskUser::deleteAll(['task_id' => $t->id, 'user_id' => $user->id]);
     }
 
+    /*
+     * Сохраняет для всех пользователдей задачу, которые есть в данной категории!
+     */
     public function afterSave($insert, $changedAttributes)
     {
-        if (Yii::$app->request->post()) {
             $task = Task::find()->where(['id' => $this->id])->one();
-
 
             if($task->project_id != null) {
                 $userProjects = ProjectUser::find()->where(['project_id' => $task->project_id])->all();
@@ -238,7 +239,6 @@ class Task extends \yii\db\ActiveRecord
                 foreach ($users as $u)
                     $task->link('users', $u);
             }
-        }
         parent::afterSave($insert, $changedAttributes);
     }
 }

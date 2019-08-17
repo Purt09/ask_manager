@@ -7,7 +7,6 @@ use app\modules\task\components\CreateTaskWidget;
 use app\modules\task\components\RandomTaskWidget;
 
 /* @var $modelsactive app\modules\task\models\Task */
-$time = time();
 
 $this->title = Module::t('module', 'TASKS');
 $this->params['breadcrumbs'][] = $this->title;
@@ -34,30 +33,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <hr/>
         <div class="row">
-            <div class="col-sm-6">
-                <div class="p-3 mb-3 bg-info text-white row shadow ">
-                    <?= Module::t('module', 'TASK_ACTIVE') ?>:
-                </div>
-                <?= TasksListWidget::widget([
-                    'tasks' => $models,
-                    'status' => 1,
-                ]) ?>
-            </div>
-            <br>
-
-            <div class="col-sm-3 ml-4">
-                <div class="p-3 mb-2 bg-danger text-white row shadow ">
-                    <?= Module::t('module', 'TASK_OVERDUE') ?>:
-                </div>
-                <?= TasksListWidget::widget([
-                    'tasks' => $models,
-                    'status' => 2,
-                ]) ?>
+            <div class="col-sm-10">
+            <?= \app\modules\project\components\FullProjectWidget::widget([
+                'tasks' => $tasks,
+                'project' => ['title' =>  'Все', 'id' =>  0],
+                'projects' => $projects,
+                'users' => $users,
+            ]) ?>
             </div>
             <div class="col-sm-2 ml-4">
-                <?= RandomTaskWidget::widget(['tasks' => $models])?>
+                <?= RandomTaskWidget::widget(['tasks' => $tasks])?>
             </div>
         </div>
     </div>
-<?= CreateTaskWidget::widget(['projects' => $projects]) ?>
 
