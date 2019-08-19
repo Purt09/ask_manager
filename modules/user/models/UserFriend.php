@@ -10,7 +10,7 @@ use Yii;
  * @property int $id
  * @property int $user_id_1
  * @property int $user_id_2
- *
+ * @property  int $chat_id
  * @property User $userId1
  * @property User $userId2
  */
@@ -31,7 +31,7 @@ class UserFriend extends \yii\db\ActiveRecord
     {
         return [
             [['user_id_1', 'user_id_2'], 'required'],
-            [['user_id_1', 'user_id_2'], 'integer'],
+            [['user_id_1', 'user_id_2', 'chat_id'], 'integer'],
             [['user_id_1'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id_1' => 'id']],
             [['user_id_2'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id_2' => 'id']],
         ];

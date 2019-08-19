@@ -17,7 +17,7 @@ use app\modules\user\models\connections\ProjectUser;
  * @property string $description
  * @property int $parent_id
  * @property int $creator_id
- *
+ * @property int $chat_id
  * @property Project $parent
  * @property Project[] $projects
  * @property Task[] $tasks
@@ -39,7 +39,7 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             [ 'title', 'required'],
-            [['time_at', 'parent_id', 'creator_id'], 'integer'],
+            [['time_at', 'parent_id', 'creator_id', 'chat_id'], 'integer'],
             [['title', 'description'], 'string', 'max' => 255],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['parent_id' => 'id']],
         ];
