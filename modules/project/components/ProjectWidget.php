@@ -4,6 +4,12 @@ namespace app\modules\project\components;
 
 use yii\base\Widget;
 
+/**
+ * Виджет выводит проект и немного информации мз него
+ *
+ * Class ProjectWidget
+ * @package app\modules\project\components
+ */
 class ProjectWidget extends Widget
 {
     /**

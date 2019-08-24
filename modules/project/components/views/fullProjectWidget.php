@@ -187,7 +187,10 @@ use yii\helpers\Json;
                                         data-dismiss="modal">Открепить
                                 </button>
                             </div>
-                            <div v-show="flash" class="alert alert-success">Задача поручена!</div>
+                            <div class="alert alert-success"
+                                 v-show="flash">
+                                Задача поручена!
+                            </div>
                             <ul class="list-group" @click="flash = true">
                                 <a @click="addPersonalTask(task.id, user.id)" v-for="user in users" href="#"
                                    class="text-dark list-group-item">{{user.username}}</a>
@@ -234,8 +237,10 @@ Yii::$app->view->registerJs("var userAuth = " . Json::encode(Yii::$app->user->id
 
 
 $js = <<<JS
-if(users.length > 0)
+if((users.length > 0) && (userAuth == project.creator_id))
   user_show = true;
+else
+  user_show = false;
 
 new Vue({
 el: '#project',
@@ -283,7 +288,6 @@ methods: {
          alert('Error!');
          }
          });
-         return false;
      },
      addTask(project_id, title, description, time) {
           if (time != null) time += time_now;

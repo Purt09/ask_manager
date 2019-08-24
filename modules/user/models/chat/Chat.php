@@ -2,8 +2,7 @@
 
 namespace app\modules\user\models\chat;
 
-use Yii;
-
+use app\modules\project\models\Project;
 /**
  * This is the model class for table "keys_chat_chat".
  *
@@ -18,7 +17,7 @@ class Chat extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_chat_chat';
+        return '{{%chat_chat}}';
     }
 
     /**
@@ -43,5 +42,26 @@ class Chat extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'name' => 'Name',
         ];
+    }
+
+    public function addMessage($message, $user_id = 0){
+        $mess = new ChatMessage();
+        $mess->addMessage($this, $message, $user_id);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMessages()
+    {
+        return $this->hasMany(ChatMessage::className(), ['chat_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProject()
+    {
+        return $this->hasMany(Project::className(), ['chat_id' => 'id']);
     }
 }

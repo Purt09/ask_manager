@@ -8,9 +8,14 @@ use app\modules\project\models\Project;
 use app\modules\task\forms\CreateForm;
 use app\modules\user\models\User;
 
+/**
+ * Модальное окно создания задачи
+ *
+ * Class CreateTaskWidget
+ * @package app\modules\task\components
+ */
 class CreateTaskWidget extends Widget
 {
-
     /**
      * @var Project object определяет к какому проекту относится задача
      */

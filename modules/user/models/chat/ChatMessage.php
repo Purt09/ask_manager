@@ -20,7 +20,7 @@ class ChatMessage extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_chat_message';
+        return '{{%chat_message}}';
     }
 
     /**
@@ -47,5 +47,22 @@ class ChatMessage extends \yii\db\ActiveRecord
             'content' => 'Content',
             'created_at' => 'Created At',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChat()
+    {
+        return $this->hasOne(Chat::className(), ['id' => 'chat_id']);
+    }
+
+    public function addMessage(Chat $chat, $message, $user_id = 0){
+        $mess = new ChatMessage();
+        $mess->content = $message;
+        $mess->chat_id = $chat->id;
+        $mess->user_id = $user_id;
+        $mess->created_at = time();
+        $mess->save();
     }
 }

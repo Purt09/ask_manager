@@ -128,6 +128,15 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function actionStandartAvatar(){
+        $user = User::findOne(Yii::$app->user->id);
+        $uri = $str = mb_strtoupper($user->username[0]);
+        $user->photo = 'http://placehold.it/50/' . random_html_color() . '/fff&text=' . $uri;
+        $user->save();
+
+        return $this->redirect(['index', 'id' => $user->id]);
+    }
+
     /**
      * @return User the loaded model
      */

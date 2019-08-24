@@ -17,7 +17,7 @@ class ChatUsers extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_chat_users';
+        return '{{%chat_users}}';
     }
 
     /**

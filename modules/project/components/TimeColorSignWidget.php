@@ -5,6 +5,12 @@ namespace app\modules\project\components;
 
 use yii\base\Widget;
 
+/**
+ * Виджет просто рисует часики возле задачи
+ *
+ * Class TimeColorSignWidget
+ * @package app\modules\project\components
+ */
 class TimeColorSignWidget extends Widget
 {
 

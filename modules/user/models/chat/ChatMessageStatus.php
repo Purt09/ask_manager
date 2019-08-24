@@ -18,7 +18,7 @@ class ChatMessageStatus extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_chat_message_status';
+        return '{{%chat_message_status}}';
     }
 
     /**

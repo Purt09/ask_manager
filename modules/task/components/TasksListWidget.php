@@ -10,6 +10,13 @@ use app\modules\task\models\Task;
 use Yii;
 use yii\base\Widget;
 
+
+/**
+ * Выводит список задач
+ *
+ * Class TasksListWidget
+ * @package app\modules\task\components
+ */
 class TasksListWidget extends Widget
 {
     /*

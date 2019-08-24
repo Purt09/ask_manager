@@ -5,6 +5,13 @@ namespace app\modules\task\components;
 use yii\base\Widget;
 use app\modules\task\models\Task;
 
+/**
+ * Виджет-кнопка при клике на которую выводится случайная задача
+ * Можно также вывести случайный проект, если в переменную tasks отправить массив проектов
+ *
+ * Class RandomTaskWidget
+ * @package app\modules\task\components
+ */
 class RandomTaskWidget extends  Widget
 {
     /**
@@ -24,8 +31,10 @@ class RandomTaskWidget extends  Widget
                 }
             }
 
-
-        $task = $tasks[array_rand($tasks)];
+        if(!empty($tasks))
+            $task = $tasks[array_rand($tasks)];
+        else
+            $task['title'] = 'Все задачи выполнены, добавьте новую!';
 
         return $this->render('randomTaskWidget', [
                 'task' => $task,

@@ -10,6 +10,15 @@ use app\modules\task\models\Task;
 use yii\helpers\ArrayHelper;
 use yii\base\Widget;
 
+/**
+ * Виджет выводит все проеты и задачи к ним.
+ *
+ * Внимание нельзя использовать проекты с id  0 1 2 3
+ * Они зарезервированы под глобальные
+ *
+ * Class FullProjectWidget
+ * @package app\modules\project\components
+ */
 class FullProjectWidget extends Widget
 {
     public $users;
@@ -48,7 +57,7 @@ class FullProjectWidget extends Widget
     }
 
     /*
-     * Формирует цвет кнопки в виджете, при клтике на котрую задача автоматически выполняется
+     * Формирует цвет кнопки в виджете, при клтике на котрую задача выполняется
      */
     public function getColorTasks($tasks)
     {
@@ -70,7 +79,7 @@ class FullProjectWidget extends Widget
     }
 
     /**
-     * Получить все задачи определенных проектов
+     * Возвращяает все задачи определенных проектов
      *
      * @param $projects
      * @return array|\yii\db\ActiveRecord[]

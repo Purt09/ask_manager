@@ -16,7 +16,7 @@ use app\modules\project\components\TimeColorSignWidget;
 
         <div class="text-center">
             <?php foreach ($tasks as $task): ?>
-                <?php if (($task['project_id'] == $project['id'])): ?>
+                <?php if (($task['project_id'] == $project['id']) && ($task['status'] != 0)): ?>
 
                     <?= Html::a($task['title'],['/task/user/update', 'id' => $task['id']],['class' => 'text-body pl-3'])?>
                     <?= Html::a('(выполнено) ', Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/default']), ['class' => ' text-secondary']) ?>

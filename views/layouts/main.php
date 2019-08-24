@@ -22,7 +22,7 @@ AppAsset::register($this);
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-    <body>
+    <body data-spy="scroll" data-target=".chat">
     <?php $this->beginBody() ?>
 
     <div class="wrap">

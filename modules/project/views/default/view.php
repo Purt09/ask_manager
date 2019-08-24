@@ -2,12 +2,9 @@
 
 use yii\helpers\Html;
 use app\modules\user\components\UsersListWidget;
-use app\modules\task\Module;
-use app\modules\task\components\CreateTaskWidget;
-use app\modules\task\components\TasksListWidget;
 use app\modules\project\components\CreateProjectWidget;
-use app\modules\project\components\ProjectWidget;
 use app\modules\task\components\RandomTaskWidget;
+use app\modules\user\components\ChatWidget;
 
 
 /* @var $this yii\web\View */
@@ -28,7 +25,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
         <div class="container">
             <div class="col-sm-9">
                 <h2><?= $model->title ?> </h2>
-                <div class="col-sm-11">
+                <div class="col-sm-12">
                     <div class="row">
                         <?= \app\modules\project\components\FullProjectWidget::widget([
                             'project' => $model,
@@ -38,7 +35,17 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                         ]) ?>
                     </div>
                 </div>
-                <div class="col-sm-7">
+                <?php if ($model['chat_id'] != 0): ?>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <?= ChatWidget::widget([
+                                'chat_id' => $model->chat_id,
+                                'users' => $users,
+                            ]) ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <div class="col-sm-12">
                     <div class="row">
                         <div class="p-3 mb-2 bg-primary text-white row shadow ">
                             Участники:
@@ -106,6 +113,10 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
 
                     <?php if (Yii::$app->user->identity->id == $model['creator_id']): ?>
                         <?= Html::a('Закрыть проект', ['default/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-block']) ?>
+                        <?php if ($model['chat_id'] == 0): ?>
+                            <?= Html::a('Создать чат', ['default/create-chat', 'id' => $model->id, 'title' => $model->title], ['class' => 'btn btn-success btn-block']) ?>
+                        <?php endif; ?>
+
                         <?php if ($model['parent_id'] === null) : ?>
                             <?= Html::a('Добавить друга', ['default/friends', 'project_id' => $model->id], ['class' => 'btn btn-success btn-block']) ?>
                         <?php endif; ?>

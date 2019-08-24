@@ -32,6 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php ActiveForm::end(); ?>
 
+        <?= Html::a('Сделать аватар стандартным' , ['standart-avatar'], ['class' => 'btn btn-primary mt-1']) ?>
+
     </div>
 
 </div>

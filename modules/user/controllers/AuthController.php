@@ -13,7 +13,13 @@ use app\modules\user\models\AuthVk;
 use Yii;
 use app\modules\user\Module;
 
-
+/**
+ *
+ * Авторизация через соц сети
+ *
+ * Class AuthController
+ * @package app\modules\user\controllers
+ */
 class AuthController extends Controller
 {
 

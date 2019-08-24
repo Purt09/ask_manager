@@ -130,7 +130,7 @@ JS;
  $("#$idtoggle").change(function() {
  var data = $(this).serialize();
  $.ajax({
- url: '/task/user/uncomplete',
+ url: '/task/user/complete',
  type: 'GET',
  data: "id=$id",
  success: function(res){

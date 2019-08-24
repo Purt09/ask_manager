@@ -11,7 +11,6 @@ use Yii;
 use app\components\TimeSupport;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
-use yii\db\Expression;
 
 /**
  * This is the model class for table "{{%task}}".
@@ -57,8 +56,6 @@ class Task extends \yii\db\ActiveRecord
 
             [['created_at', 'project_id', 'context_id', 'user_id', 'status', 'updated_at'], 'integer'],
 
-
-
             ['description', 'string', 'max' => 255],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -80,16 +77,6 @@ class Task extends \yii\db\ActiveRecord
             'status' => Module::t('module', 'TASK_STATUS'),
             'project_id' => Module::t('module', 'PROJECT'),
         ];
-    }
-
-    /**
-     * get status name
-     *
-     * @return mixed
-     */
-    public function getStatusName()
-    {
-        return ArrayHelper::getValue(self::getStatusesArray(), $this->status);
     }
 
     /**
@@ -122,45 +109,6 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * getting id tasks
-     *
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->getPrimaryKey();
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProject()
-    {
-        return $this->hasOne(Project::className(), ['id' => 'project_id']);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return TaskQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new TaskQuery(get_called_class());
-    }
-
-    /**
-     * Меняет статус задачи
-     *
-     * @param int $status
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
-     */
-    public function setStatus($status = self::STATUS_COMPLETE){
-        $this->status = $status;
-        $this->update();
-    }
-
-    /**
      * Возвращает все задачи пользователя
      *
      * Проверяет вышло ли время на выполнение этой задачи
@@ -188,6 +136,19 @@ class Task extends \yii\db\ActiveRecord
         return $user->getTasks()->where(['in', 'project_id', $ids])->all();
     }
 
+
+    /**
+     * Меняет статус задачи
+     *
+     * @param int $status
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function setStatus($status = self::STATUS_COMPLETE){
+        $this->status = $status;
+        $this->update();
+    }
+
     /**
      * Добавляет пользователя во все задачи проетов $projects
      *
@@ -202,8 +163,82 @@ class Task extends \yii\db\ActiveRecord
         // Связываем нового пользователя и задачи
         foreach ($tasks as $t)
             $t->link('users', $user);
-
     }
+    /**
+     * Открепляет задачи
+     *
+     * @param array $projects
+     * @param User $user
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function delUser(array $projects, User $user){
+        $tasks = Task::getTasksFromProjects($projects, $user);
+        foreach ($tasks as $t)
+            TaskUser::deleteAll(['task_id' => $t->id, 'user_id' => $user->id]);
+    }
+
+    /**
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        $task = Task::find()->where(['id' => $this->id])->one();
+
+        if($task->project_id != null) {
+            $userProjects = ProjectUser::find()->where(['project_id' => $task->project_id])->all();
+            $userIds = array();
+            foreach ($userProjects as $userProject) {
+                array_push($userIds, $userProject->user_id);
+            }
+            $users = User::find()->where(['in', 'id', $userIds])->all();
+            foreach ($users as $u)
+                $task->link('users', $u);
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**
+     * get status name
+     *
+     * @return mixed
+     */
+    public function getStatusName()
+    {
+        return ArrayHelper::getValue(self::getStatusesArray(), $this->status);
+    }
+
+
+
+    /**
+     * getting id tasks
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProject()
+    {
+        return $this->hasOne(Project::className(), ['id' => 'project_id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return TaskQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new TaskQuery(get_called_class());
+    }
+
+
+
 
     /**
      * connects many to many with users
@@ -216,29 +251,5 @@ class Task extends \yii\db\ActiveRecord
             ->viaTable('{{%user_task}}', ['task_id' => 'id']);
     }
 
-    public function delUser(array $projects, User $user){
-        $tasks = Task::getTasksFromProjects($projects, $user);
-        foreach ($tasks as $t)
-            TaskUser::deleteAll(['task_id' => $t->id, 'user_id' => $user->id]);
-    }
 
-    /*
-     * Сохраняет для всех пользователдей задачу, которые есть в данной категории!
-     */
-    public function afterSave($insert, $changedAttributes)
-    {
-            $task = Task::find()->where(['id' => $this->id])->one();
-
-            if($task->project_id != null) {
-                $userProjects = ProjectUser::find()->where(['project_id' => $task->project_id])->all();
-                $userIds = array();
-                foreach ($userProjects as $userProject) {
-                    array_push($userIds, $userProject->user_id);
-                }
-                $users = User::find()->where(['in', 'id', $userIds])->all();
-                foreach ($users as $u)
-                    $task->link('users', $u);
-            }
-        parent::afterSave($insert, $changedAttributes);
-    }
 }

@@ -7,6 +7,12 @@ use Yii;
 use yii\base\Widget;
 use app\modules\project\models\Project;
 
+/**
+ * Всплывающее окно для создания проекта
+ *
+ * Class CreateProjectWidget
+ * @package app\modules\project\components
+ */
 class CreateProjectWidget extends Widget
 {
     /**
