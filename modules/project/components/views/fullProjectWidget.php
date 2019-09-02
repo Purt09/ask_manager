@@ -1,9 +1,15 @@
 <?php
 
 use yii\helpers\Json;
+use app\modules\project\components\CreateProjectWidget;
 
 ?>
+
 <div id="project">
+    <div class="alert alert-success"
+         v-show="flash">
+        Задача поручена!
+    </div>
     <!--    Проекты-->
     <div class="col-sm-3">
         <div class="list-group">
@@ -12,8 +18,16 @@ use yii\helpers\Json;
                v-on:click="selectProject(project.id)"
                :class="{'active': selectProjectIndex === project.id}">
                 <span v-if="project.parent_id == null"><i class="glyphicon glyphicon-star"></i></span>
-                <span v-else><i class="glyphicon glyphicon-minus"></i>  </span>
+                <span v-else>
+                    <i class="glyphicon glyphicon-minus"></i>
+                </span>
                 {{ project.title }}
+                <span class="badge badge-primary badge-pill"
+                      v-if="(project.id >= 4) && (project.parent_id != null)"
+                      @click="deleteProject(project.id)">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </span>
+
             </a>
         </div>
     </div>
@@ -22,6 +36,11 @@ use yii\helpers\Json;
         <div class="p-3 mb-3 bg-info text-white row shadow ">
             Задачи: <b>({{project.title}})</b>
         </div>
+        {{ project.description }}
+        <h4>
+            <span class="label label-danger">{{ project.time_at }}</span>
+        </h4>
+
         <div id="tasks">
             <!--            Форма добавления задачи-->
             <div class="bg-light row shadow mb-4"
@@ -130,8 +149,7 @@ use yii\helpers\Json;
                     </button>
                 </div>
                 <div class="col-xs-8">
-                    <a class="text-dark"
-                       v-bind:href="'/task/user/' + task.id + '/update'">
+                    <a class="text-dark" v-bind:href="'/task/user/' + task.id + '/update'">
                         {{ task.title }}
                         <div v-if="(task.status == 2) && (task.user_id != null)">
                             Задача просрочена пользователем
@@ -163,51 +181,45 @@ use yii\helpers\Json;
                                         {{user.username}}
                                     </li>
                                 </strong>
+
                             </div>
-                            <!--                            Задача кому-то поручена-->
-                            <li>
-                                <a href="#" data-toggle="modal" data-target="#AddUserTask">
-                                    <span class="glyphicon glyphicon-user"></span>Поручить пользователю
+                            <li v-if="task.user_id != null">
+                                <a href="#"
+                                   @click="addPersonalTask(task.id, null)">
+                                    <span class="glyphicon glyphicon-remove-circle"></span>
+                                    Открепить
+                                </a>
+                                <hr>
+                            </li>
+
+                            <!--                            Поручить задачу-->
+                            <li role="presentation" class="dropdown-header">Поручить задачу пользователю:</li>
+                            <li v-for="user in users">
+                                <a href="#"
+                                   @click="addPersonalTask(task.id, user.id)">
+                                    {{user.username}}
+
                                 </a>
                             </li>
                         </ul>
                     </div>
+                    <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-search"></span><span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+
+                        <li role="presentation" class="dropdown-header">Задача создана пользователем:</li>
+                        <li role="presentation" class="dropdown-header text-center"
+                            v-for="user in users"
+                            v-if="user.id == task.context_id">
+                            {{user.username}}
+                        </li>
+                        <hr>
+                        <li role="presentation" class="dropdown-header">{{task.created_at}}</li>
+                    </ul>
+                    </ul>
                 </div>
                 <!--                    Конец кнопок справа-->
-
-                <div class="modal fade" id="AddUserTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                            aria-hidden="true">×</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Поручить задачу пользователю:</h4>
-                                <button @click="addPersonalTask(task.id, null)" type="button" class="btn btn-success"
-                                        data-dismiss="modal">Открепить
-                                </button>
-                            </div>
-                            <div class="alert alert-success"
-                                 v-show="flash">
-                                Задача поручена!
-                            </div>
-                            <ul class="list-group" @click="flash = true">
-                                <a @click="addPersonalTask(task.id, user.id)" v-for="user in users" href="#"
-                                   class="text-dark list-group-item">{{user.username}}</a>
-
-                            </ul>
-                            <div class="modal-footer text-secondary">
-                                Выберите пользователя, которму необходимо поручить задачу
-                                <strong>{{task.title}}</strong>
-                                <br>
-                                После поручения, задача станет для него личной.
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
         </div>
         <!--            Конец задачи-->
@@ -215,10 +227,10 @@ use yii\helpers\Json;
 </div>
 
 <?php
-$projects += array('0' => ['title' =>  'Все', 'id' =>  0]);
-$projects += array('1' => ['title' =>  'Выполненные', 'id' =>  1, 'parent_id' => 0]);
-$projects += array('2' => ['title' =>  'Просроченные', 'id' =>  2, 'parent_id' => 0]);
-$projects += array('3' => ['title' =>  'Личные', 'id' =>  3, 'parent_id' => 0]);
+$projects += array('0' => ['title' => 'Все', 'id' => 0]);
+$projects += array('1' => ['title' => 'Выполненные', 'id' => 1, 'parent_id' => 0]);
+$projects += array('2' => ['title' => 'Просроченные', 'id' => 2, 'parent_id' => 0]);
+$projects += array('3' => ['title' => 'Личные', 'id' => 3, 'parent_id' => 0]);
 
 Yii::$app->view->registerJs("var projects = " . Json::encode($projects)
     . ";", \yii\web\View::POS_END);
@@ -282,7 +294,7 @@ methods: {
          data: "id=" + id,
          success: function(){
            console.log( id + 'success push');
-           setTimeout(function(){ $('#del' + id).remove();}, 120);
+           $('#del' + id).remove();
          },
          error: function(){
          alert('Error!');
@@ -290,6 +302,7 @@ methods: {
          });
      },
      addTask(project_id, title, description, time) {
+          this.text_task = '';
           if (time != null) time += time_now;
           if(title == null) {
             title = 'Ошибка! Заголовок не может быть пустым';
@@ -313,21 +326,35 @@ methods: {
          alert('Error!');
          }
          });
-         return false;
     },
     addPersonalTask(task_id, user_id) {
+      this.flash = true;
          $.ajax({
-         url: '/task/user/add-personal-task',
+         url: '/task/user/add-personal-task-ajax',
          type: 'GET',
          data: "user_id=" + user_id + '&task_id=' + task_id,
          success: function(){
            console.log( user_id + ' success push ' + task_id);
+           this.flash = false;
          },
          error: function(){
          alert('Error!');
          }
          });
-         return false;
+    },
+    deleteProject(project_id){
+      $.ajax({
+         url: '/project/ajax/delete-project',
+         type: 'GET',
+         data: "project_id=" + project_id,
+         success: function(){
+           console.log( user_id + ' success push ' + task_id);
+           this.flash = false;
+         },
+         error: function(){
+         alert('Error!');
+         }
+         });
     },
 }
 
@@ -339,3 +366,4 @@ JS;
 $this->registerJs($js, \yii\web\View::POS_END);
 ?>
 
+</div>

@@ -192,19 +192,24 @@ class UserController extends Controller
      * @return array|mixed|\yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionAddPersonalTask( $user_id, $task_id){ // TODO AJAX
+    public function actionAddPersonalTaskAjax($user_id, $task_id){ // TODO AJAX
         if($user_id == 'null') $user_id = null;
         if(\Yii::$app->request->isAjax){
             $task = $this->findModel($task_id);
             $task->user_id = $user_id;
             $task->save();
 
-            $project = Project::findOne($task->project_id);
-            $user = User::findOne($user_id);
+            $project = $task->getProject()->one();
+            $chat = $project->getChat()->one();
+            if($user_id != null) {
+                $user = User::findOne($user_id);
+                $chat->addMessage('Задача: "' . $task->title . '" была поручена пользователю: "' . $user->username . '"');
+            }
+            else $chat->addMessage('Задача: "' . $task->title . '" была откреплена');
 
 
-            $chat = Chat::findOne($project->chat_id);
-            $chat->addMessage('Задача: "' . $task->title . '" была поручена пользователю: "' . $user->username . '"');
+
+
 
 
 

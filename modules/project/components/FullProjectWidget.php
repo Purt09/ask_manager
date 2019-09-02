@@ -44,6 +44,16 @@ class FullProjectWidget extends Widget
             if ($task['updated_at'] != null)
                 $task['updated_at'] = TimeSupport::createtime($task['updated_at']);
 
+        foreach ($this->tasks as $task)
+            if ($task['created_at'] != null)
+                $task['created_at'] = TimeSupport::getTimeleft($task['created_at']);
+
+            foreach ($this->projects as $p) {
+                if(!empty($p['time_at']))
+                    $p['time_at'] = TimeSupport::createtime($p['time_at']);
+            }
+
+
 
         return $this->render('fullProjectWidget', [
             'projects' => $this->projects,

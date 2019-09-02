@@ -70,6 +70,11 @@ class DefaultController extends \yii\web\Controller
     public function actionView($id)
     {
         $project = $this->findModel($id);
+
+        // Можно смотреть только родительский проект!
+        if($project->parent_id != NULL){
+            $this->redirect(['/project/' . $project->parent_id]);
+        }
         $user = User::findOne(Yii::$app->user->identity->id);
 
         $projects = $project->getSubprojectsByProject($project);
@@ -86,6 +91,26 @@ class DefaultController extends \yii\web\Controller
             'tasks' => $tasks,
             'projects' => $projects,
             'users' => $users,
+        ]);
+    }
+
+    /**
+     * Страница для редактирования проекта
+     *
+     * @param $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->update()) {
+            return $this->redirect(['/project/' . $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
         ]);
     }
 

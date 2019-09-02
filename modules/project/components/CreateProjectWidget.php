@@ -2,7 +2,7 @@
 
 namespace app\modules\project\components;
 
-use app\modules\admin\models\User;
+use app\modules\user\models\chat\Chat;
 use Yii;
 use yii\base\Widget;
 use app\modules\project\models\Project;
@@ -18,26 +18,35 @@ class CreateProjectWidget extends Widget
     /**
      * @var array Project Все проекты, для их дальнейшего вывода в форме заполнения
      */
-    public $projects;
+    public $projects = [];
 
     /**
-     * @var int родитель для удобства быстрого создания проета
+     * @var Project родитель для удобства быстрого создания проекта
      */
-    public $parent_id;
+    public $parent;
 
     public function run(){
         // Приводит в нормальный(нужный) вид пришедшие проеты
-        $this->projects = array_column($this->projects, 'title', 'id');
+        if (!empty($this->projects))
+            $this->projects = array_column($this->projects, 'title', 'id');
+        else $this->projects = array_column(['0' => $this->parent], 'title', 'id');
 
         $model = new Project();
-        $model->parent_id = $this->parent_id;
+        if(!empty($this->parent))
+            $model->parent_id = $this->parent->id;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->response->redirect(['/project/' . $this->parent_id]);
+
+            $chat = Chat::findOne($model->chat_id);
+            $chat->addMessage('Был создан подпроект: "' . $model->title . '"');
+
+            Yii::$app->response->redirect(['/project/' . $model->parent_id]);
         }
-        return $this->render('createProjectWidget', [
-            'model' => $model,
-            'projects' => $this->projects
-        ]);
+            return $this->render('createProjectWidget', [
+                'model' => $model,
+                'projects' => $this->projects
+            ]);
+
     }
 
 }

@@ -22,7 +22,6 @@ use app\modules\task\Module;
             </div>
             <div class="modal-body">
 
-                <!--    --><?// $form->field($model, 'created_at')->textInput() ?>
 
                 <?= $form->field($model, 'updated_at')->widget(\kartik\datecontrol\DateControl::className(),[
                     'type' => \kartik\datecontrol\DateControl::FORMAT_DATE

@@ -5,6 +5,7 @@ use app\modules\user\components\UsersListWidget;
 use app\modules\project\components\CreateProjectWidget;
 use app\modules\task\components\RandomTaskWidget;
 use app\modules\user\components\ChatWidget;
+use app\components\TimeSupport;
 
 
 /* @var $this yii\web\View */
@@ -20,20 +21,21 @@ $this->params['breadcrumbs'][] = $this->title;
 $hide = true;
 if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
 ?>
-    <div class="project-view">
-        <br>
-        <div class="container">
-            <div class="col-sm-9">
-                <h2><?= $model->title ?> </h2>
-                <div class="col-sm-12">
-                    <div class="row">
-                        <?= \app\modules\project\components\FullProjectWidget::widget([
-                            'project' => $model,
-                            'projects' => $projects,
-                            'tasks' => $tasks,
-                            'users' => $users,
-                        ]) ?>
-                    </div>
+<div class="project-view">
+    <br>
+    <div class="container">
+        <div class="col-sm-9">
+            <h2><?= $model->title ?> </h2>
+
+
+            <div class="col-sm-12">
+                <div class="row">
+                    <?= \app\modules\project\components\FullProjectWidget::widget([
+                        'project' => $model,
+                        'projects' => $projects,
+                        'tasks' => $tasks,
+                        'users' => $users,
+                    ]) ?>
                 </div>
                 <?php if ($model['chat_id'] != 0): ?>
                     <div class="col-sm-12">
@@ -75,12 +77,16 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                 </div>
             </div>
             <div class="col-sm-3 text-center">
-
                 <div class="col-sm-12 text-left">
                     <div class="p-3 mb-2 mt-4 bg-primary text-white ">
-                        Панель управления:
+                        Данные о проекте:
                     </div>
-                    <h2>Данные о проекте:</h2>
+                    <?php if (!empty($model->description)): ?>
+                        Описание:
+                        <div class="bg-light">
+                            <?= $model->description ?>
+                        </div>
+                    <?php endif; ?>
                     <hr>
                     <dl class="">
                         <dt>Участники: <?= count($users) ?></dt>
@@ -112,27 +118,31 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                     <?= RandomTaskWidget::widget(['tasks' => $tasks]); ?>
 
                     <?php if (Yii::$app->user->identity->id == $model['creator_id']): ?>
-                        <?= Html::a('Закрыть проект', ['default/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-block']) ?>
-                        <?php if ($model['chat_id'] == 0): ?>
-                            <?= Html::a('Создать чат', ['default/create-chat', 'id' => $model->id, 'title' => $model->title], ['class' => 'btn btn-success btn-block']) ?>
-                        <?php endif; ?>
-
+                        <br>
+                        <div class="p-3 mb-2 mt-4 bg-primary text-white ">
+                            Панель администратора:
+                        </div>
+                        <hr>
                         <?php if ($model['parent_id'] === null) : ?>
                             <?= Html::a('Добавить друга', ['default/friends', 'project_id' => $model->id], ['class' => 'btn btn-success btn-block']) ?>
                         <?php endif; ?>
+                        <?= CreateProjectWidget::widget([
+                        'parent' => $model,
+                        'projects' => $projects,
+                    ]) ?>
+                        <br>
+                        <?= Html::a('Редактировать проект', ['default/update', 'id' => $model->id], ['class' => 'btn btn-warning btn-block']) ?>
+                        <?php if ($model['chat_id'] == 0): ?>
+                            <?= Html::a('Создать чат', ['default/create-chat', 'id' => $model->id, 'title' => $model->title], ['class' => 'btn btn-success btn-block']) ?>
+                        <?php endif; ?>
                     <?php endif; ?>
+                    <?= Html::a('Закрыть проект', ['default/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-block']) ?>
+
+
                 </div>
             </div>
 
         </div>
-
-
     </div>
-    </div>
-
-<?= CreateProjectWidget::widget([
-    'parent_id' => $model->id,
-    'projects' => $projects,
-]);
 
 
