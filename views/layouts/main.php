@@ -56,10 +56,16 @@ AppAsset::register($this);
                     ]] :
                     false,
                 !Yii::$app->user->isGuest ?
+                ['label' => Yii::t('app', 'USERS_PROJECTS'), 'url' => ['/project/default']]
+                :
+                    false,
+                !Yii::$app->user->isGuest ?
+                ['label' => Yii::t('app', 'USERS_TASKS'), 'url' => ['/task/user']]
+                    :
+                    false,
+                !Yii::$app->user->isGuest ?
                     ['label' => Yii::t('app', 'NAV_PROFILE'), 'items' => [
                         ['label' => Yii::t('app', 'NAV_PROFILE'), 'url' => ['/user/profile/index', 'id' => Yii::$app->user->identity->id]],
-                        ['label' => Yii::t('app', 'USERS_TASKS'), 'url' => ['/task/user']],
-                        ['label' => Yii::t('app', 'USERS_PROJECTS'), 'url' => ['/project/default']],
                         ['label' => Yii::t('app', 'LOGOUT ({username})', ['username' => Yii::$app->user->identity->username]),
                             'url' => ['/user/default/logout'],
                             'linkOptions' => ['data-method' => 'post']]

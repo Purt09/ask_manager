@@ -23,7 +23,7 @@ use app\modules\project\components\CreateProjectWidget;
                 </span>
                 {{ project.title }}
                 <span class="badge badge-primary badge-pill"
-                      v-if="(project.id >= 4) && (project.parent_id != null)"
+                      v-if="(project.id >= 4) && (project.parent_id != null) && (project.creator_id == userAuth)"
                       @click="deleteProject(project.id)">
                     <i class="glyphicon glyphicon-remove"></i>
                 </span>

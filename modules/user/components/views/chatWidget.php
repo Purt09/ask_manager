@@ -3,7 +3,7 @@
 use yii\helpers\Json;
 
 ?>
-    <div class="panel panel-primary" id="chat">
+    <div class="panel panel-primary" id="chat" xmlns:v-bind="http://www.w3.org/1999/xhtml">
         <div class="panel-heading chat">
             <h3 class="panel-title">Чат:</h3>
         </div>
@@ -27,7 +27,13 @@ use yii\helpers\Json;
                         </div>
                         <p>
                             {{message.content}}
+                            <a href="">
+                                <small class="pull-right text-muted">
+                                    Удалить
+                                </small>
+                            </a>
                         </p>
+
                     </div>
                 </div>
                 <div class="text-center text-secondary"
@@ -49,29 +55,29 @@ use yii\helpers\Json;
                         <small class="pull-right text-muted">
                             <span class="glyphicon glyphicon-time"></span>только что
                         </small>
-                    </div>
-                    <p>
-                        {{add_message.content}}
-                    </p>
-                </div>
-            </div>
-            <!--    Конец добавленных сообщений        -->
 
-        </div>
-        <div class="panel-footer">
-            <div class="input-group">
-                <input id="btn-input" type="text" class="form-control input-sm"
-                       placeholder="Введите ссобщение"
-                       v-model="content"/>
-                <span class="input-group-btn">
+                        <p>
+                            {{add_message.content}}
+                        </p>
+                    </div>
+                </div>
+                <!--    Конец добавленных сообщений        -->
+
+            </div>
+            <div class="panel-footer">
+                <div class="input-group">
+                    <input id="btn-input" type="text" class="form-control input-sm"
+                           placeholder="Введите ссобщение"
+                           v-model="content"/>
+                    <span class="input-group-btn">
                     <button class="btn btn-warning btn-sm" id="btn-chat"
                             @click="AddMessage(content)">
                         Отправить:</button>
                                     </span>
+                </div>
             </div>
-        </div>
 
-    </div>
+        </div>
 
 <?php
 Yii::$app->view->registerJs("var messages = " . Json::encode($messages)
