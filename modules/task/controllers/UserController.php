@@ -155,7 +155,7 @@ class UserController extends Controller
 
     /**
      *
-     * Создает задачу из данных по Ajax
+     * Создает задачу из данных по AjaxController
      *
      * @param $title
      * @param $project_id

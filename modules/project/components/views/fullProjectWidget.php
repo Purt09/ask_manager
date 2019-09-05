@@ -117,7 +117,7 @@ use app\modules\project\components\CreateProjectWidget;
             <!--            Добавленые задачи-->
             <div class="bg-light  p-1 pb-0 shadow-sm mb-4 row"
                  v-for="(task_add, index) in tasks_add"
-                 v-bind:id="'del' + task_add.id">
+                 :id="'del' + task_add.id">
                 <div class="col-xs-1 pl-1 pt-2">
                     <button id="taskcomplete" type="button" class="btn btn-danger btn-sm">NEW</button>
                 </div>
@@ -149,7 +149,10 @@ use app\modules\project\components\CreateProjectWidget;
                     </button>
                 </div>
                 <div class="col-xs-8">
-                    <a class="text-dark" v-bind:href="'/task/user/' + task.id + '/update'">
+                    <div class="text-dark"
+                         :class="{ hidden : edit_task == task.id }"
+                         :id="'title_task' + task.id"
+                         @click="editTask(task.id)">
                         {{ task.title }}
                         <div v-if="(task.status == 2) && (task.user_id != null)">
                             Задача просрочена пользователем
@@ -157,7 +160,64 @@ use app\modules\project\components\CreateProjectWidget;
                         <div class="text-secondary">
                             {{ task. description }}
                         </div>
-                    </a>
+                    </div>
+                    <div class="input-group"
+                         :class="{ hidden : edit_task != task.id }"
+                         :id="'input_task' + task.id">
+                        <input type="text" class="form-control"
+                               v-model="task.title">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="button"
+                                    @click="saveTask(task.id, task.title)">
+                                <span class="glyphicon glyphicon-floppy-disk"></span>
+                            </button>
+                            <button class="btn btn-success" type="button"
+                                    @click="editTimeTask(task.id)">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </button>
+                        </span>
+                    </div><!-- /input-group -->
+                    <div class="p-2 pb-2"
+                         :class="{ hidden : edit_task_time != task.id }">
+                        <br>
+                        Добавить ограничение по времени: <strong> {{message_time}} </strong>
+
+                        <div class="btn-group center-block pb-5">
+                            <button @click="time = 28800; message_time='8 часов'" type="button" class="btn btn-default">
+                                8
+                                часов
+                            </button>
+                            <button @click="time = 43200; message_time='12 часов'" type="button"
+                                    class="btn btn-default">12
+                                часов
+                            </button>
+                            <button @click="time = 86400; message_time='Сутки'" type="button" class="btn btn-default">
+                                Сутки
+                            </button>
+                            <button @click="time = 259200; message_time='3 суток'" type="button"
+                                    class="btn btn-default">3
+                                суток
+                            </button>
+                            <button @click="time = 432000; message_time='5 дней'" type="button" class="btn btn-default">
+                                5
+                                дней
+                            </button>
+                            <button @click="time = 604800; message_time='Неделя'" type="button" class="btn btn-default">
+                                Неделя
+                            </button>
+                            <button @click="time = 2592000; message_time='Месяц'" type="button"
+                                    class="btn btn-default">
+                                Месяц
+                            </button>
+                            <button class="btn btn-success" type="button"
+                                    @click="saveTimeTask(task.id, time)">
+                                <span class="glyphicon glyphicon-ok"></span></button>
+                        </div>
+                    </div>
+                    <div class="label label-warning"
+                         :class="{ hidden : help_time_set != task.id }">
+                        Выберите ограничение по времени!
+                    </div>
                     <span class="label label-danger"
                           v-if="task.updated_at !=  null">
                         {{task.updated_at}}
@@ -220,6 +280,8 @@ use app\modules\project\components\CreateProjectWidget;
                     </ul>
                 </div>
                 <!--                    Конец кнопок справа-->
+
+
             </div>
         </div>
         <!--            Конец задачи-->
@@ -278,6 +340,10 @@ data:{
     flash: false,
     add_task_form: true,
     user_show: user_show,
+    // Изменить опред задачу
+    edit_task: 0,
+    edit_task_time: 0,
+    help_time_set: 0,
 },
 methods: {
     selectProject: function(index) {
@@ -356,6 +422,54 @@ methods: {
          }
          });
     },
+    editTask(id){
+      this.edit_task = id;
+      this.time = null;
+      this.edit_task_time = 0;
+      this.help_time_set = 0;
+    },
+    saveTask(id, title){
+      $.ajax({
+         url: '/task/ajax/save-task-title',
+         type: 'GET',
+         data: "title=" + title + "&id=" + id,
+         success: function(){
+           console.log( id + 'success push');
+           this.tasks[id].title = title;
+         },
+         error: function(){
+         alert('Error!');
+         }
+         });
+      this.edit_task = 0;
+      this.help_time_set = 0;
+      this.edit_task_time = 0;
+      this.time = null;
+      
+    },
+    editTimeTask(id){
+      this.edit_task_time = id;
+      this.time = null;
+      },
+      saveTimeTask(id, time){
+        this.help_time_set = 0;
+       if(time != null){
+         this.edit_task_time = 0;
+       $.ajax({
+         url: '/task/ajax/save-task-time',
+         type: 'GET',
+         data: "time=" + time + "&id=" + id,
+         success: function(){
+           console.log( id + 'success push');
+         },
+         error: function(){
+         alert('Error!');
+         }
+         });
+       } else {
+         this.help_time_set = id;
+       }
+      }
 }
 
 
