@@ -65,4 +65,8 @@ class ChatMessage extends \yii\db\ActiveRecord
         $mess->created_at = time();
         $mess->save();
     }
+    public function deleteMessage($id){
+        $message = self::findOne($id);
+        $message->delete();
+    }
 }

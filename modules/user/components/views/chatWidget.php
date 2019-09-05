@@ -9,8 +9,10 @@ use yii\helpers\Json;
         </div>
         <div class="panel-body">
             <!--       Сообщения загруженные     -->
-            <div class="pt-2"
-                 v-for="message in messages">
+            <div class="p-1 m-2"
+                 :class="{'alert alert-success': message.user_id != 0,' alert-info': message.user_id == userAuth.id }"
+                 v-for="message in messages"
+                 :id="'del' + message.id">
                 <div v-for="user in users"
                      v-if="user.id == message.user_id">
                     <span class="chat-img pull-left mr-2">
@@ -27,10 +29,10 @@ use yii\helpers\Json;
                         </div>
                         <p>
                             {{message.content}}
-                            <a href="">
-                                <small class="pull-right text-muted">
+                            <a
+                               class="pull-right text-muted small-link"
+                                @click="delMessage(message.id)">
                                     Удалить
-                                </small>
                             </a>
                         </p>
 
@@ -110,19 +112,32 @@ $('body').scrollspy({ target: '.chat' });
         this.add_messages.push({
           content: content,
           });
+        this.content = "";
         $.ajax({
-         url: '/user/chat/add-message-ajax',
+         url: '/user/chat-ajax/add-message',
          type: 'GET',
          data: "content=" + content + "&chat_id=" + chat.id + "&user_id=" + userAuth.id,
          success: function(){
            console.log( id + 'success push');
-           setTimeout(function(){ $('#del' + id).remove();}, 120);
          },
          error: function(){
          alert('Error!');
          }
          });
-         return false;
+      },
+      delMessage(id){
+        $('#del' + id).remove();
+        $.ajax({
+         url: '/user/chat-ajax/delete-message',
+         type: 'GET',
+         data: "id=" + id,
+         success: function(){
+           console.log( id + 'success push');
+         },
+         error: function(){
+         alert('Error!');
+         }
+         });
       }
       
     }}

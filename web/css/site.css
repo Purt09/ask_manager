@@ -144,6 +144,6 @@ hr {
     border: none;
     border-top: 2px dashed #ddd;
 }
-.small-link {
+.small-link a {
     font-size: 12px;
 }
