@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Json;
-use app\modules\project\components\CreateProjectWidget;
 
 ?>
 
@@ -117,7 +116,8 @@ use app\modules\project\components\CreateProjectWidget;
             <!--            Добавленые задачи-->
             <div class="bg-light  p-1 pb-0 shadow-sm mb-4 row"
                  v-for="(task_add, index) in tasks_add"
-                 :id="'del' + task_add.id">
+                 :id="'del' + task_add.id"
+                 v-if="task_add.project_id == project.id">
                 <div class="col-xs-1 pl-1 pt-2">
                     <button id="taskcomplete" type="button" class="btn btn-danger btn-sm">NEW</button>
                 </div>
@@ -154,9 +154,6 @@ use app\modules\project\components\CreateProjectWidget;
                          :id="'title_task' + task.id"
                          @click="editTask(task.id)">
                         {{ task.title }}
-                        <div v-if="(task.status == 2) && (task.user_id != null)">
-                            Задача просрочена пользователем
-                        </div>
                         <div class="text-secondary">
                             {{ task. description }}
                         </div>
@@ -355,7 +352,7 @@ methods: {
     },
     CompleteTask: function(id) {
           $.ajax({
-         url: '/task/user/complete',
+         url: '/task/ajax/complete-task',
          type: 'GET',
          data: "id=" + id,
          success: function(){
@@ -382,7 +379,7 @@ methods: {
           });
           if(title == 'Ошибка! Заголовк не может быть пустым') return false ;
            $.ajax({
-         url: '/task/user/create-task-ajax',
+         url: '/task/ajax/create-task',
          type: 'GET',
          data: "title=" + title + '&project_id=' + project_id + '&description=' + description + '&updated_at=' + time,
          success: function(){
@@ -409,6 +406,8 @@ methods: {
          });
     },
     deleteProject(project_id){
+      this.selectProjectIndex.id = 0;
+      projects[project_id].description = 'Подпроект был ЗАКРЫТ! Обновите страницу!'
       $.ajax({
          url: '/project/ajax/delete-project',
          type: 'GET',

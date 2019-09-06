@@ -4,24 +4,28 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use app\modules\project\components\TimeColorSignWidget;
 
-?>
-<div class="col-sm-<?= $csscol ?> ">
-    <div class="bg-light pb-2 border rounded-bottom shadow-sm rounded-lg mt-3">
-        <div class="p-3 mb-2 bg-info text-white text-center">
-            <a href="<?= Url::to(['view', 'id' => $project['id']]) ?>"
-               class="text-body pl-3"> <?= $project['title'] ?></a>
-        </div>
-        </a>
-        <hr>
 
-        <div class="text-center">
+?>
+<div class="col-sm-<?= $csscol ?>">
+    <div class="panel panel-primary ">
+        <div class="panel-heading text-center ">
+            <a href="<?= Url::to(['view', 'id' => $project['id']]) ?>"
+               class="text-white pl-3 col-xs-11"> <?= $project['title'] ?></a>
+            <?= Html::a('<span class="glyphicon glyphicon-remove text-warning"></span>', ['/project/default/delete', 'id' => $project['id']], ['class' => 'col-1']) ?>
+
+            </a>
+
+
+        </div>
+
+        <div class="panel-body">
             <?php foreach ($tasks as $task): ?>
                 <?php if (($task['project_id'] == $project['id']) && ($task['status'] != 0)): ?>
 
-                    <?= Html::a($task['title'],['/task/user/update', 'id' => $task['id']],['class' => 'text-body pl-3'])?>
-                    <?= Html::a('(выполнено) ', Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/default']), ['class' => ' text-secondary']) ?>
-                    <?= TimeColorSignWidget::widget(['seconds' => $task['updated_at']]); ?>
 
+                    <?= Html::a($task['title'], ['/task/user/update', 'id' => $task['id']], ['class' => 'text-body pl-3']) ?>
+                    <?= Html::a('<span class="glyphicon glyphicon-ok"></span>', ['/task/user/complete', 'id' => $task['id']], ['class' => 'pl-3']) ?>
+                    <?= TimeColorSignWidget::widget(['seconds' => $task['updated_at']]); ?>
                     <br>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -39,11 +43,11 @@ use app\modules\project\components\TimeColorSignWidget;
 
                         <?php foreach ($tasks as $task): ?>
                             <dd>
-                            <?php if (($task['project_id'] == $child['id'])): ?>
+                            <?php if (($task['project_id'] == $child['id']) && ($task['status'] != 0)): ?>
 
                                 <a href="<?= Url::to(['/task/user/update', 'id' => $task['id']]) ?>"
                                    class="text-body pl-3"> <?= $task['title'] ?> </a>
-                                <?= Html::a('(выполнено) ', Url::to(['/task/user/complete', 'id' => $task['id'], 'redirect' => '/project/default']), ['class' => ' text-secondary']) ?>
+                                <?= Html::a('<span class="glyphicon glyphicon-ok"></span>', ['/task/user/complete', 'id' => $task['id']], ['class' => 'pl-3']) ?>
                                 <?= TimeColorSignWidget::widget(['seconds' => $task['updated_at']]); ?>
 
                                 </dd>
@@ -52,7 +56,7 @@ use app\modules\project\components\TimeColorSignWidget;
                     </dl>
                 <?php endforeach; ?>
             <?php endif; ?>
-
         </div>
+        <div class="panel-footer"><?= $project['time_at'] ?></div>
     </div>
 </div>

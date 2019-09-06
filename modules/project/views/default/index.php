@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="text-center">
         <div class="col-sm-6">
             <div class="row">
-                <?= Html::button(Module::t('module', 'PROJECT_CREATE'), ['data-toggle' => 'modal', 'data-target' => '#CreateProject', 'class' => 'btn-success btn']) ?>
+                <?= CreateProjectWidget::widget(['projects' => $projects]) ?>
             </div>
         </div>
         <div class="col-sm-6">
@@ -35,4 +35,4 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<?= CreateProjectWidget::widget(['projects' => $projects]) ?>
+

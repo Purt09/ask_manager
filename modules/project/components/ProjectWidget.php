@@ -3,6 +3,7 @@
 namespace app\modules\project\components;
 
 use yii\base\Widget;
+use app\components\TimeSupport;
 
 /**
  * Виджет выводит проект и немного информации мз него
@@ -60,8 +61,16 @@ class ProjectWidget extends Widget
         $this->tpl .= '.php';
     }
 
+    /**
+     * @return string
+     */
     public function run()
     {
+
+        foreach ($this->projects as $p) {
+            if (!empty($p['time_at']))
+                $p['time_at'] = TimeSupport::createtime($p['time_at']);
+        }
 
         foreach ($this->projects as $project) {
             if ((!$this->parent) && ($project['parent_id'] === null))
@@ -122,7 +131,7 @@ class ProjectWidget extends Widget
     protected function catToTemplate($project, $tasks, $csscol)
     {
         ob_start();
-        include __DIR__ . '/project_tpl/' . $this->tpl;
+        include __DIR__ . '/views/' . $this->tpl;
         return ob_get_clean();
     }
 }

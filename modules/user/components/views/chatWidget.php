@@ -29,9 +29,9 @@ use yii\helpers\Json;
                         </div>
                         <p>
                             {{message.content}}
-                            <a
-                               class="pull-right text-muted small-link"
-                                @click="delMessage(message.id)">
+                            <a class="pull-right text-muted small-link"
+                               @click="delMessage(message.id)"
+                               v-if="(message.user_id == userAuth.id)" >
                                     Удалить
                             </a>
                         </p>

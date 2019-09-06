@@ -15,7 +15,7 @@ class AjaxController extends \yii\web\Controller
             return true;
         }
         else {
-            return $this->redirect('/project/ajax/index');
+            return $this->redirect('/project/default/index');
         }
         return parent::beforeAction($action);
     }
@@ -30,12 +30,18 @@ class AjaxController extends \yii\web\Controller
     }
 
     public function actionDeleteProject($project_id){
-        $project = Project::findOne($project_id);
+        if(\Yii::$app->request->isAjax) {
+            $project = Project::findOne($project_id);
 
-        $chat = Chat::findOne($project->chat_id);
-        $chat->addMessage('Проект "' . $project->title . '" был закрыт');
+            $chat = Chat::findOne($project->chat_id);
+            $chat->addMessage('Проект "' . $project->title . '" был закрыт');
 
-        $project->delete();
+            $project->delete();
+        }
+        else {
+            return $this->redirect('/project/default/index');
+        }
+
     }
 
 }

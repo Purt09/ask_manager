@@ -15,7 +15,8 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js',
-        'https://cdn.jsdelivr.net/npm/vue/dist/vue.js'
+        'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',
+        'https://unpkg.com/axios/dist/axios.min.js'
     ];
     public $depends = [
         'app\assets\IESupportAsset',

@@ -25,6 +25,11 @@ class CreateProjectWidget extends Widget
      */
     public $parent;
 
+    /**
+     * @var string текст кнопки.
+     */
+    public $title = 'Созддать проект';
+
     public function run(){
         // Приводит в нормальный(нужный) вид пришедшие проеты
         if (!empty($this->projects))
@@ -44,7 +49,8 @@ class CreateProjectWidget extends Widget
         }
             return $this->render('createProjectWidget', [
                 'model' => $model,
-                'projects' => $this->projects
+                'projects' => $this->projects,
+                'title' => $this->title,
             ]);
 
     }

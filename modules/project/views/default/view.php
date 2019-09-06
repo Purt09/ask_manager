@@ -130,6 +130,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                     <?= CreateProjectWidget::widget([
                     'parent' => $model,
                     'projects' => $projects,
+                    'title' => 'Добавить подпроект',
                 ]) ?>
                     <br>
                     <?= Html::a('Редактировать проект', ['default/update', 'id' => $model->id], ['class' => 'btn btn-warning btn-block']) ?>

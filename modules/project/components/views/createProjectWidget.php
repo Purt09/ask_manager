@@ -7,7 +7,7 @@ use app\modules\task\Module;
 ?>
 
     <button type="button"  class="btn-info btn btn-block" data-toggle="modal" data-target="#CreateProject">
-        Создать подпроект!
+        <?= $title ?>
     </button>
 
     <!-- Modal -->
