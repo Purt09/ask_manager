@@ -29,4 +29,22 @@ class DefaultController extends Controller
             'blocks' => $blocks,
         ]);
     }
+
+    /**
+     * Renders the index view for the module
+     * @return string
+     */
+    public function actionIndex($id)
+    {
+        $page = BuilderPage::findOne($id);
+
+        $blocks = $page->getBuilderBlocks()->indexBy('id')->orderBy('position')->all();
+        foreach ($blocks as $block)
+            if($block['builder_table'] == 'blok_html')
+                $block['builder_id'] = BuilderBlockHtml::find()->where(['id' => $block['builder_id']])->asArray()->one();
+        return $this->render('index', [
+            'page' => $page,
+            'blocks' => $blocks,
+        ]);
+    }
 }
