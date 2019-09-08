@@ -28,6 +28,9 @@ $config = [
         'project' => [
             'class' => 'app\modules\project\Module',
         ],
+        'testbuilder' => [
+            'class' => 'app\modules\testbuilder\Model',
+        ],
         'datecontrol' =>  [
             'class' => 'kartik\datecontrol\Module',
 
