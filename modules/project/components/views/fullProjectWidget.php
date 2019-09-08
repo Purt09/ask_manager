@@ -370,13 +370,6 @@ methods: {
           if(title == null) {
             title = 'Ошибка! Заголовок не может быть пустым';
           }
-          this.tasks_add.push({
-          id: 0,
-          title: title,
-          project_id: project_id,
-          description: description,
-          time: time
-          });
           if(title == 'Ошибка! Заголовк не может быть пустым') return false ;
            $.ajax({
          url: '/task/ajax/create-task',
@@ -384,9 +377,16 @@ methods: {
          data: "title=" + title + '&project_id=' + project_id + '&description=' + description + '&updated_at=' + time,
          success: function(){
            console.log( title + ' success push ' + project_id);
+           this.tasks_add.push({
+              id: 0,
+              title: title,
+              project_id: project_id,
+              description: description,
+              time: time
+              });
          },
          error: function(){
-         alert('Error!');
+            alert('Error!');
          }
          });
     },

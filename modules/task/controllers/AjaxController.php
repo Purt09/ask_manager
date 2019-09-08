@@ -76,8 +76,10 @@ class AjaxController extends Controller
 
             $project = Project::findOne($project_id);
 
+
             $chat = $project->getChat()->one();
             $chat->addMessage('Участник: "' . Yii::$app->user->identity->username . '" создал задачу: "' . $title . '"');
+
 
             $task->save();
         } else {

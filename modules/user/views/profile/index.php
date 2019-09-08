@@ -54,29 +54,6 @@ $hide = true;    //Только чтобы фильтровть данные в 
     </div>
     <?= UsersListWidget::widget([
         'users' => $users,
-        'limit' => 3,
-        'button' =>
-            [
-                '0' => [
-                    'text' => Module::t('module', 'DELETE_FRIEND'),
-                    'url' => 'default/delete-friend',
-                    'class' => 'btn btn-warning btn-sm',
-                    'redirect' => 'profile/index',
-                    'hide' => $hide,
-                ],
-                '1' => [
-                    'text' => Module::t('module', 'LOOK_PROFILE'),
-                    'url' => 'profile/index',
-                    'class' => 'btn btn-success mt-2 btn-sm'
-                ],
-
-            ],
-        'button_bottom' =>
-            [
-                'text' => 'Показать всех',
-                'url' => 'profile/friend',
-                'class' => 'btn btn-info btn-sm',
-            ],
-
+        'button_link_profile' => true,
     ]) ?>
 </div>

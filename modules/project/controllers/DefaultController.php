@@ -204,23 +204,7 @@ class DefaultController extends \yii\web\Controller
         return $this->redirect('/project/' . $project->id);
     }
 
-    /**
-     * Удаляет пользователя из проекта
-     *
-     * @param $id
-     * @param string $redirect
-     * @param $user_id
-     * @return \yii\web\Response
-     */
-    public function actionDelFriend($id, $redirect = 'index', $user_id) // TODO AJAX
-    {
-        $user = User::findOne($user_id);
-        $project = Project::findOne($id);
 
-        $project->delUser($user, $project);
-
-        return $this->redirect([$redirect]);
-    }
 
     /**
      * Добавляет нового лидера в проект и во всех СабПроектах меняет лидера
