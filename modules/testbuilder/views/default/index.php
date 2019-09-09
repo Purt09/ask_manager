@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ]);
 
 use yii\helpers\Json;
-vardump($blocks);
 ?>
 
 <div class="page" id="app">

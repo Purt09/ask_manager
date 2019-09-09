@@ -4,7 +4,7 @@ use yii\helpers\Json;
 
 ?>
 <div class="page" id="app">
-    
+
     <button type="button" class="btn btn-default"
             @click="page_cog = !page_cog">
         <span
