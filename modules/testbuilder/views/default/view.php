@@ -115,15 +115,16 @@ use yii\helpers\Json;
                 <!--                Если блок html то-->
                 <div class="panel-body"
                      v-if="block.builder_table == 'blok_html'">
-                    <div class="form-group">
-                        <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
-                                  placeholder="Введите свой код!"
+
+                    <div v-html="block.builder_id.code"
+                         v-if="prev_html != block.id"
+                         @click="prev_html = block.id"
+                         :class="{html_block_border: block.builder_id.border == 1}"
+                    ></div>
+                    <div class="form-group" v-else>
+                        <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4" placeholder="Введите свой код!"
                                   v-model="block.builder_id.code"></textarea>
                     </div>
-                    <div v-html="block.builder_id.code"
-                         v-if="prev_html == block.id"
-                         @click="prev_html = 0"></div>
-                    <div @click="prev_html = block.id" v-else>Показать превью!</div>
                     <div class="text-right">
                         <button type="button" class="btn btn-success"
                                 @click="save_block_html(block.id)"><span
@@ -169,9 +170,8 @@ use yii\helpers\Json;
                        v-model="add_block_class">
             </div><!-- /.col-lg-6 -->
         </div><!-- /.row -->
-        <div>
-            <div v-if="add_block_tag == 'h2'"
-                 :style="'color: #' + add_block_color">
+        <div :style="'color: #' + add_block_color">
+            <div v-if="add_block_tag == 'h2'">
                 <h2> {{add_block_title}} </h2>
             </div>
             <div v-if="add_block_tag == 'h3'">
@@ -189,6 +189,8 @@ use yii\helpers\Json;
             HTML
         </button>
     </div>
+
+<!--    Создание блока HTML-->
     <div class="bg-light mt-3 p-4"
          v-show="html_block_view">
         <div class="form-group">
@@ -243,7 +245,7 @@ methods: {
     $.ajax({
          url: '/testbuilder/ajax/update-page',
          type: 'GET',
-         data: 'id=' + page.id + '&title=' + page.title + '&desc=' + page.description + '&class=' + page.class + '&seo_t=' + page.seo_title + '&seo_d=' + page.seo_description + '&seo_k=' + page.seo_key + '&foot=' + page.footer_html + '&js=' +  page.js + '&style=' + page.style,
+         data: 'id=' + page.id + '&title=' + page.title + '&desc=' + page.description + '&class=' + page.class + '&seo_t=' + page.seo_title + '&seo_d=' + page.seo_desc + '&seo_k=' + page.seo_key + '&foot=' + page.footer_html + '&js=' +  page.js + '&style=' + page.style,
          success: function(){
            console.log( id + 'success push');
          },
@@ -267,7 +269,7 @@ methods: {
     $.ajax({
          url: '/testbuilder/ajax/add-block-html',
          type: 'GET',
-         data: 'page_id=' + this.page.id + '&title=' + this.add_block_title + '&title_head=' + this.add_block_tag + '&title_color=' + this.add_block_color + '&class=' + this.add_block_class + '&border=' + this.html_block_border + '&code=' + this.html_block_code,
+         data: 'page_id=' + this.page.id + '&title=' + this.add_block_title + '&title_head=' + this.add_block_tag + '&title_color=' + this.add_block_color + '&class=' + this.add_block_class + '&code=' + this.html_block_code + '&border=' + this.html_block_border ,
          success: function(){
            console.log( id + 'success push');
          },
@@ -277,7 +279,18 @@ methods: {
   },
   save_block_html(id) {
     this.save_block(id);
-  },
+    this.prev_html = 0;
+    $.ajax({
+         url: '/testbuilder/ajax/save-block-html',
+         type: 'GET',
+         data: 'id=' + this.blocks[id].builder_id.id + '&code=' + this.blocks[id].builder_id.code + '&border=' + this.blocks[id].builder_id.border,
+         success: function(){
+           console.log( id + 'success push');
+         },
+         error: function(){
+         }
+         });
+    },
   // Упраление БЛОКАМИ
   delete_block(id){
     blocks[id].id = 0;
@@ -305,6 +318,7 @@ methods: {
          });
     },
     save_block(id){
+    
       $.ajax({
          url: '/testbuilder/ajax/save-block',
          type: 'GET',
@@ -339,5 +353,10 @@ $this->registerJs($js, \yii\web\View::POS_END);
         background: #494f54;
         color: white;
         border-radius: 20px 20px;
+    }
+    .html_block_border {
+        padding: 45px 50px 20px;
+        border: 2px solid #f60;
+        margin-top: 2em;
     }
 </style>

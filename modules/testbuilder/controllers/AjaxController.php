@@ -12,10 +12,12 @@ class AjaxController extends Controller
     public function actionAddBlockHtml($page_id, $title, $title_head, $title_color, $class, $border, $code)
     {
         if (\Yii::$app->request->isAjax) {
-
             $block_html = new BuilderBlockHtml();
             $block_html->code = $code;
-            $block_html->border = $border;
+            if ($border == 'true')
+                $block_html->border = 1;
+            else
+                $block_html->border = 0;
             $block_html->save();
 
             $block = new BuilderBlocks();
@@ -30,6 +32,18 @@ class AjaxController extends Controller
 
             return $this->redirect('/testbuilder/default/view?id=' . $page_id);
 
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    public function actionSaveBlockHtml($id, $code, $border)
+    {
+        if (\Yii::$app->request->isAjax) {
+            $block = BuilderBlockHtml::findOne($id);
+            $block->code = $code;
+            $block->border = $border;
+            return $block->save();
         } else {
             return $this->redirect('/');
         }
@@ -56,12 +70,14 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionDeleteBlock($id){
+    public function actionDeleteBlock($id)
+    {
         $block = BuilderBlocks::findOne($id);
         $block->delete();
     }
 
-    public function actionDuplicateBlock($id){
+    public function actionDuplicateBlock($id)
+    {
         if (\Yii::$app->request->isAjax) {
             $block_old = BuilderBlocks::findOne($id);
 
@@ -72,7 +88,7 @@ class AjaxController extends Controller
             $block->title_color = $block_old->title_color;
             $block->class = $block_old->class;
 
-            if($block_old->builder_table == 'blok_html') {
+            if ($block_old->builder_table == 'blok_html') {
                 $block_html_old = BuilderBlockHtml::findOne($block_old->builder_id);
                 $block_html = new BuilderBlockHtml();
                 $block_html->code = $block_html_old->code;

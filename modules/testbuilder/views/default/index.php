@@ -2,7 +2,22 @@
 
 $this->title = Yii::t('app', 'PROJECTS');
 $this->params['breadcrumbs'][] = $this->title;
+
+\Yii::$app->view->registerMetaTag([
+    'name' => 'title',
+    'content' => $page->seo_title,
+]);
+\Yii::$app->view->registerMetaTag([
+    'name' => 'description',
+    'content' => $page->seo_desc,
+]);
+\Yii::$app->view->registerMetaTag([
+    'name' => 'keywords',
+    'content' => $page->seo_key,
+]);
+
 use yii\helpers\Json;
+vardump($blocks);
 ?>
 
 <div class="page" id="app">
@@ -18,10 +33,25 @@ use yii\helpers\Json;
             <div v-if="block.title_head == 'h4'">
                 <h4> {{block.title}}</h4>
             </div>
-            <div v-html="block.builder_id.code"></div>
+            <div v-html="block.builder_id.code"
+                 :class="{html_block_border: block.builder_id.border == 1}"></div>
         </div>
     </div>
 </div>
+<style>
+    <?= $page->style ?>
+</style>
+    <style>
+        .html_block_border {
+            padding: 45px 50px 20px;
+            border: 2px solid #f60;
+            margin-top: 2em;
+        }
+    </style>
+    <script>
+        <?= $page->js ?>
+
+    </script>
 
 <?php
 Yii::$app->view->registerJs("var page = " . Json::encode($page)

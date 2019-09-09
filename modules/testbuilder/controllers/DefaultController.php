@@ -3,9 +3,11 @@
 namespace app\modules\testbuilder\controllers;
 
 use app\modules\testbuilder\models\BuilderBlocks;
+use app\modules\user\models\User;
 use yii\web\Controller;
 use app\modules\testbuilder\models\BuilderPage;
 use app\modules\testbuilder\models\BuilderBlockHtml;
+use Yii;
 
 /**
  * Default controller for the `testbuilder` module
@@ -24,10 +26,18 @@ class DefaultController extends Controller
         foreach ($blocks as $block)
         if($block['builder_table'] == 'blok_html')
             $block['builder_id'] = BuilderBlockHtml::find()->where(['id' => $block['builder_id']])->asArray()->one();
-        return $this->render('view', [
+
+        if(Yii::$app->user->isGuest) {
+        return $this->render('index', [
             'page' => $page,
             'blocks' => $blocks,
         ]);
+        } else {
+            return $this->render('view', [
+                'page' => $page,
+                'blocks' => $blocks,
+            ]);
+        }
     }
 
     /**
