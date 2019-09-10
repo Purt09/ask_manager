@@ -48,7 +48,7 @@ class DefaultController extends Controller
     {
         $page = BuilderPage::findOne($id);
 
-        $blocks = $page->getBuilderBlocks()->indexBy('id')->orderBy('position')->all();
+        $blocks = $page->getBuilderBlocks()->orderBy('position')->all();
         foreach ($blocks as $block)
             if($block['builder_table'] == 'blok_html')
                 $block['builder_id'] = BuilderBlockHtml::find()->where(['id' => $block['builder_id']])->asArray()->one();
