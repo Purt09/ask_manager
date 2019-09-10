@@ -18,292 +18,383 @@ $this->params['breadcrumbs'][] = $this->title;
 
 use yii\helpers\Json;
 
+
 ?>
 
-    <div class="page" id="app">
+<div class="page" id="app">
+    <div class="container">
         <button type="button" class="btn btn-default"
                 @click="page_cog = !page_cog">
         <span
                 class="glyphicon glyphicon-cog" title="Настройки страницы"></span> Настройки страницы
         </button>
+    </div>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li v-for="block in blocks"
+                        v-if="block.isLink == 1">
+                        <a :href="'#' + block.id">{{block.link_title}}</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
 
 
-        <!--    Окно редакттрования страницы-->
-        <modal v-if="page_cog" @close="showModal = false">
-            <h3 slot="header">Настройки страницы</h3>
-            <div slot="body">
-                <div class="page_cog bg-light p-3"
-                     v-show="page_cog">
-                    <h3>Настройки страницы</h3>
-                    Заголовок
-                    <input type="text" class="form-control" placeholder="Заголовок"
-                           v-model="page.title">
-                    Описание
-                    <input type="text" class="form-control" placeholder="Описание"
-                           v-model="page.description">
-                    Нижняя часть страницы (footer)
-                    <input type="text" class="form-control" placeholder="Описание"
-                           v-model="page.footer_html">
-                    <h3>SEO:</h3>
-                    Title
-                    <input type="text" class="form-control" placeholder="Заголовок"
-                           v-model="page.seo_title">
-                    Description
-                    <input type="text" class="form-control" placeholder="Описание"
-                           v-model="page.seo_desc">
-                    Keywords
-                    <input type="text" class="form-control" placeholder="Описание"
-                           v-model="page.seo_key">
-                    <h3>Специальные настройки:</h3>
-                    class (Пользовательский класс)
-                    <input type="text" class="form-control" placeholder="class"
-                           v-model="page.class">
-                    JS
-                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="3"
-                              placeholder="Введите свой код!"
-                              v-model="page.js"></textarea>
-                    CSS
-                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="3"
-                              placeholder="Введите свой код!"
-                              v-model="page.style"></textarea>
-                    <button type="button" class="btn btn-success"
-                            @click="page_save()"><span
-                                class="glyphicon glyphicon-ok" title="Сохранить"></span> Сохранить страницу
-                    </button>
-
-                </div>
-            </div>
-            <div slot="footer">
-                <button class="btn btn-danger"
-                        @click="page_cog = false"> Закрыть
+    <!--    Окно редакттрования страницы-->
+    <modal v-if="page_cog" @close="showModal = false">
+        <h3 slot="header">Настройки страницы</h3>
+        <div slot="body">
+            <div class="page_cog bg-light p-3"
+                 v-show="page_cog">
+                <h3>Настройки страницы</h3>
+                Заголовок
+                <input type="text" class="form-control" placeholder="Заголовок"
+                       v-model="page.title">
+                Описание
+                <input type="text" class="form-control" placeholder="Описание"
+                       v-model="page.description">
+                Нижняя часть страницы (footer)
+                <input type="text" class="form-control" placeholder="Описание"
+                       v-model="page.footer_html">
+                <h3>SEO:</h3>
+                Title
+                <input type="text" class="form-control" placeholder="Заголовок"
+                       v-model="page.seo_title">
+                Description
+                <input type="text" class="form-control" placeholder="Описание"
+                       v-model="page.seo_desc">
+                Keywords
+                <input type="text" class="form-control" placeholder="Описание"
+                       v-model="page.seo_key">
+                <h3>Специальные настройки:</h3>
+                class (Пользовательский класс)
+                <input type="text" class="form-control" placeholder="class"
+                       v-model="page.class">
+                JS
+                <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="3"
+                          placeholder="Введите свой код!"
+                          v-model="page.js"></textarea>
+                CSS
+                <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="3"
+                          placeholder="Введите свой код!"
+                          v-model="page.style"></textarea>
+                <button type="button" class="btn btn-success"
+                        @click="page_save()"><span
+                            class="glyphicon glyphicon-ok" title="Сохранить"></span> Сохранить страницу
                 </button>
+
             </div>
-        </modal>
+        </div>
+        <div slot="footer">
+            <button class="btn btn-danger"
+                    @click="page_cog = false"> Закрыть
+            </button>
+        </div>
+    </modal>
 
 
-        <section v-for="block,index in blocks"
-                 :class="block.class">
-            <div>
-                <div class="title block"
-                     v-if="block_title_edit != index"
-                     @click="edit_block_title(index)"
-                     :style="'color: #' + block.title_color">
-                    <div v-if="block.title_head == 'h2'">
-                        <h2> {{block.title}}</h2>
-                    </div>
-                    <div v-if="block.title_head == 'h3'">
-                        <h3> {{block.title}} </h3>
-                    </div>
-                    <div v-if="block.title_head == 'h4'">
-                        <h4> {{block.title}}</h4>
-                    </div>
+    <section v-for="block,index in blocks"
+             :class="{container: !block.css_isContainer}">
+        <a :name="block.id"></a><br><br>
+        <div :class="block.class"
+             :style="'margin-top: ' + block.style_margin_top + 'px' + '; margin-bottom: ' + block.style_margin_bottom + 'px'">
+            <div class="title block"
+                 v-if="block_title_edit != index"
+                 @click="edit_block_title(index)"
+                 :style="'color: #' + block.title_color">
+                <div v-if="block.title_head == 'h2'">
+                    <h2> {{block.title}}</h2>
                 </div>
-                <div class="edit_title row"
-                     v-else>
-                    <div class="col-sm-4 block_no_hover" >
-                        <input type="text" class="form-control" placeholder="Заголовок"
-                               v-model="block.title">
-                    </div>
-                    <div class="col-sm-1">
-                        <input type="text" class="form-control" placeholder="Тег"
-                               v-model="block.title_head">
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="input-group">
+                <div v-if="block.title_head == 'h3'">
+                    <h3> {{block.title}} </h3>
+                </div>
+                <div v-if="block.title_head == 'h4'">
+                    <h4> {{block.title}}</h4>
+                </div>
+            </div>
+            <div class="edit_title row"
+                 v-else>
+                <div class="col-sm-4 block_no_hover">
+                    <input type="text" class="form-control" placeholder="Заголовок"
+                           v-model="block.title">
+                </div>
+                <div class="col-sm-1">
+                    <input type="text" class="form-control" placeholder="Тег"
+                           v-model="block.title_head">
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
                             <span class="input-group-addon"
                                   :style="'background: #' + block.title_color"></span>
-                            <input type="text" class="form-control" placeholder="Цвет"
-                                   v-model="block.title_color">
-                            <span class="input-group-btn">
+                        <input type="text" class="form-control" placeholder="Цвет"
+                               v-model="block.title_color">
+                        <span class="input-group-btn">
                                 <button class="btn btn-success" type="button"
                                         @click="save_block_title(index)">Сохранить!</button>
 
                              </span>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 text-right">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default"><span
-                                        class="glyphicon glyphicon-arrow-down" title="Вниз"></span></button>
-                            <button type="button" class="btn btn-default"><span
-                                        class="glyphicon glyphicon-arrow-up" title="Вверх"></span></button>
-                            <button type="button" class="btn btn-default"
-                                    @click="block_duplicate(index)"><span
-                                        class="glyphicon glyphicon-copy" title="Дублировать"></span></button>
-                            <button type="button" class="btn btn-default"
-                                    @click="block_edit(index)"><span
-                                        class="glyphicon glyphicon-pencil " title="Редактировать"></span></button>
-                            <button type="button" class="btn btn-danger"
-                                    @click="block_delete(index)"><span
-                                        class="glyphicon glyphicon-remove" title="Удалить"></span> Удалить!</button>
-                            <button class="btn btn-warning" type="button"
-                                    @click="block_title_edit = 999">Закрыть!</button>
-                        </div>
-
-                        <!--    Окно редактирования блока-->
-                        <modal v-if="(block_edit_modal == index) && (showModal)" @close="showModal = false" class="block_no_hover">
-                            <h3 slot="header">Изменить блок</h3>
-                            <div slot="body">
-                                <div class="add_block mt-2 bg-light shadow-sm p-2">
-                                    <div class="row">
-                                        <div class="col-lg-5">
-                                            <input type="text" class="form-control" placeholder="Заголовок"
-                                                   v-model="block.title">
-                                        </div><!-- /.col-lg-6 -->
-                                        <div class="col-lg-1">
-                                            <input type="text" class="form-control" placeholder="Тег(h2)"
-                                                   v-model="block.title_head">
-                                        </div><!-- /.col-lg-6 -->
-                                        <div class="col-lg-2">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Цвет"
-                                                       v-model="block.title_color">
-                                                <span class="input-group-addon"
-                                                      :style="'background: #' + block.title_color"></span>
-                                            </div>
-                                        </div><!-- /.col-lg-6 -->
-                                        <div class="col-lg-2">
-                                            <input type="text" class="form-control" placeholder="class"
-                                                   v-model="block.class">
-                                        </div><!-- /.col-lg-6 -->
-                                    </div><!-- /.row -->
-                                    <div :style="'color: #' + block.title_color">
-                                        <div v-if="block.title == 'h2'">
-                                            <h2> {{block.title}} </h2>
-                                        </div>
-                                        <div v-if="block.title == 'h3'">
-                                            <h3> {{block.title}} </h3>
-                                        </div>
-                                        <div v-if="block.title == 'h4'">
-                                            <h4> {{block.title}} </h4>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button class="btn btn-success m-2"
-                                        @click="block_save_data(index)">
-                                    Сохранить
-                                </button>
-                            </div>
-                            <div slot="footer">
-                                <button class="btn btn-danger"
-                                        @click="modal_close_add_block()"> Закрыть
-                                </button>
-                            </div>
-                        </modal>
                     </div>
                 </div>
+                <div class="col-sm-4 text-right">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default"><span
+                                    class="glyphicon glyphicon-arrow-down" title="Вниз"></span></button>
+                        <button type="button" class="btn btn-default"><span
+                                    class="glyphicon glyphicon-arrow-up" title="Вверх"></span></button>
+                        <button type="button" class="btn btn-default"
+                                @click="block_duplicate(index)"><span
+                                    class="glyphicon glyphicon-copy" title="Дублировать"></span></button>
+                        <button type="button" class="btn btn-default"
+                                @click="block_edit(index)"><span
+                                    class="glyphicon glyphicon-pencil " title="Редактировать"></span></button>
+                        <button type="button" class="btn btn-danger"
+                                @click="block_delete(index)"><span
+                                    class="glyphicon glyphicon-remove" title="Удалить"></span> Удалить!
+                        </button>
+                        <button class="btn btn-warning" type="button"
+                                @click="block_title_edit = 999">Закрыть!
+                        </button>
+                    </div>
+
+                    <!--    Окно редактирования блока-->
+                    <modal v-if="(block_edit_modal == index) && (showModal)" @close="showModal = false"
+                           class="block_no_hover">
+                        <h3 slot="header">Изменить блок</h3>
+                        <div slot="body">
+                            <div class="add_block mt-2 bg-light shadow-sm p-2">
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <input type="text" class="form-control" placeholder="Заголовок"
+                                               v-model="block.title">
+                                    </div><!-- /.col-lg-6 -->
+                                    <div class="col-lg-1">
+                                        <input type="text" class="form-control" placeholder="Тег(h2)"
+                                               v-model="block.title_head">
+                                    </div><!-- /.col-lg-6 -->
+                                    <div class="col-lg-2">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Цвет"
+                                                   v-model="block.title_color">
+                                            <span class="input-group-addon"
+                                                  :style="'background: #' + block.title_color"></span>
+                                        </div>
+                                    </div><!-- /.col-lg-6 -->
+                                    <div class="col-lg-2">
+                                        <input type="text" class="form-control" placeholder="class"
+                                               v-model="block.class">
+                                    </div><!-- /.col-lg-6 -->
+                                </div><!-- /.row -->
+                                <div :style="'color: #' + block.title_color">
+                                    <div v-if="block.title == 'h2'">
+                                        <h2> {{block.title}} </h2>
+                                    </div>
+                                    <div v-if="block.title == 'h3'">
+                                        <h3> {{block.title}} </h3>
+                                    </div>
+                                    <div v-if="block.title == 'h4'">
+                                        <h4> {{block.title}} </h4>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><strong>Отступы:</strong></span>
+                                    <input type="text" class="form-control" placeholder="сверху"
+                                           v-model="block.style_margin_top">
+                                    <span class="input-group-addon">сверху(px)</span>
+                                    <input type="text" class="form-control" placeholder="снизу"
+                                           v-model="block.style_margin_bottom">
+                                    <span class="input-group-addon">снизу(px)</span>
+                                    <span class="input-group-addon" style="background: #1d2124"></span>
+                                    <span class="input-group-addon"><strong>Видимость(больше будет скрываться):</strong></span>
+                                    <input type="text" class="form-control" placeholder="снизу"
+                                           v-model="block.style_media">
+                                    <span class="input-group-addon">px</span>
+                                    <span class="input-group-addon">
+                                        <input type="checkbox"
+                                               v-model="block.css_isContainer">
+                                        <strong>
+                                        Полная ширина экрана!
+                                            </strong>
+                                    </span>
+                                </div>
+                                <br>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input type="checkbox"
+                                               v-model="block.isLink">
+                                        <strong>
+                                        Ссылка в меню
+                                            </strong>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="Текст"
+                                           v-model="block.link_title"
+                                           v-show="block.isLink">
+                                </div>
+                            </div>
+
+                            <button class="btn btn-success m-2"
+                                    @click="block_save_data(index)">
+                                Сохранить
+                            </button>
+                        </div>
+                        <div slot="footer">
+                            <button class="btn btn-danger"
+                                    @click="modal_close_add_block()"> Закрыть
+                            </button>
+                        </div>
+                    </modal>
+                </div>
+            </div>
 
 
-                <!--                Если блок HTML!-->
-                <div v-if="block.builder_table == 'blok_html'"
-                    class="block">
-                    <div v-html="block.builder_id.code"
-                         v-if="prev_html != index"
-                         @click="prev_html = index"
-                         :class="{html_block_border: block.builder_id.border == 1}"
-                    ></div>
-                    <div class="form-group" v-else>
+            <!--                Если блок HTML!-->
+            <div v-if="block.builder_table == 'blok_html'"
+                 class="block">
+                <div v-html="block.builder_id.code"
+                     v-if="prev_html != index"
+                     @click="prev_html = index"
+                     :class="{html_block_border: block.builder_id.border == 1}"
+                ></div>
+                <div class="form-group" v-else>
                         <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
                                   placeholder="Введите свой код!"
                                   v-model="block.builder_id.code"></textarea>
-                        <button class="btn btn-default"
-                                @click="block.builder_id.border = 1"> Добавить рамку
-                        </button>
-                        <button class="btn btn-default"
-                                @click="block.builder_id.border = 0"> Удалить рамку
-                        </button>
-                        <button type="button" class="btn btn-success text-right"
-                                @click="block_html_save(index)"><span
-                                    class="glyphicon glyphicon-ok" title="Сохранить"></span> Сохранить блок
-                        </button>
-                    </div>
-
+                    <button class="btn btn-default"
+                            @click="block.builder_id.border = 1"> Добавить рамку
+                    </button>
+                    <button class="btn btn-default"
+                            @click="block.builder_id.border = 0"> Удалить рамку
+                    </button>
+                    <button type="button" class="btn btn-success text-right"
+                            @click="block_html_save(index)"><span
+                                class="glyphicon glyphicon-ok" title="Сохранить"></span> Сохранить блок
+                    </button>
                 </div>
-            </div>
-        </section>
 
-        <!--    Новый блок!-->
-        <div class="bg-light text-center p-3 bg_add_block"
-             @click="add_block()">
-            <span class="glyphicon glyphicon-plus"></span>
+            </div>
         </div>
+    </section>
+
+    <!--    Новый блок!-->
+    <div class="bg-light text-center p-3 bg_add_block container"
+         @click="add_block()">
+        <span class="glyphicon glyphicon-plus"></span>
+    </div>
 
 
-        <!--    Окно добавления нового блока-->
-        <modal v-if="(showModal) && (block_add_modal)" @close="showModal = false" class="block_no_hover">
-            <h3 slot="header">Добавить блок</h3>
-            <div slot="body">
-                <div class="add_block mt-2 bg-light shadow-sm p-2"
-                     v-show="block_add_view">
-                    <h3 class="text-center">
-                        Добавление блока!
-                    </h3>
-                    <div class="row">
-                        <div class="col-lg-5">
-                            <input type="text" class="form-control" placeholder="Заголовок"
-                                   v-model="block_add_title">
-                        </div><!-- /.col-lg-6 -->
-                        <div class="col-lg-1">
-                            <input type="text" class="form-control" placeholder="Тег(h2)"
-                                   v-model="block_add_tag">
-                        </div><!-- /.col-lg-6 -->
-                        <div class="col-lg-2">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Цвет"
-                                       v-model="block_add_color">
-                                <span class="input-group-addon"
-                                      :style="'background: #' + block_add_color"></span>
-                            </div>
-                        </div><!-- /.col-lg-6 -->
-                        <div class="col-lg-2">
-                            <input type="text" class="form-control" placeholder="class"
-                                   v-model="block_add_class">
-                        </div><!-- /.col-lg-6 -->
-                    </div><!-- /.row -->
-                    <div :style="'color: #' + block_add_color">
-                        <div v-if="block_add_tag == 'h2'">
-                            <h2> {{block_add_title}} </h2>
+    <!--    Окно добавления нового блока-->
+    <modal v-if="(showModal) && (block_add_modal)" @close="showModal = false" class="block_no_hover">
+        <h3 slot="header">Добавить блок</h3>
+        <div slot="body">
+            <div class="add_block mt-2 bg-light shadow-sm p-2"
+                 v-show="block_add_view">
+                <h3 class="text-center">
+                    Добавление блока!
+                </h3>
+                <div class="row">
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="Заголовок"
+                               v-model="block_add_title">
+                    </div><!-- /.col-lg-6 -->
+                    <div class="col-lg-1">
+                        <input type="text" class="form-control" placeholder="Тег(h2)"
+                               v-model="block_add_tag">
+                    </div><!-- /.col-lg-6 -->
+                    <div class="col-lg-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Цвет"
+                                   v-model="block_add_color">
+                            <span class="input-group-addon"
+                                  :style="'background: #' + block_add_color"></span>
                         </div>
-                        <div v-if="block_add_tag == 'h3'">
-                            <h3> {{block_add_title}} </h3>
-                        </div>
-                        <div v-if="block_add_tag == 'h4'">
-                            <h4> {{block_add_title}} </h4>
-                        </div>
+                    </div><!-- /.col-lg-6 -->
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control" placeholder="class"
+                               v-model="block_add_class">
+                    </div><!-- /.col-lg-6 -->
+                </div><!-- /.row -->
+                <div :style="'color: #' + block_add_color">
+                    <div v-if="block_add_tag == 'h2'">
+                        <h2> {{block_add_title}} </h2>
                     </div>
-                    <button class="btn btn-default m-2"
-                            @click="new_block_html()">
-                        HTML
-                    </button>
-                </div>
-
-                <!--    Создание блока HTML-->
-                <div class="bg-light mt-3 p-4"
-                     v-show="html_block_view">
-                    <div class="form-group">
-                        <label class="text-center" for="exampleFormControlTextarea1">Добавить html block! </label>
-                        <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="10"
-                                  placeholder="Введите свой код!"
-                                  v-model="html_block_create_code"></textarea>
+                    <div v-if="block_add_tag == 'h3'">
+                        <h3> {{block_add_title}} </h3>
                     </div>
-                    <input type="checkbox"
-                           v-model="html_block_create_border"> Добавить рамку? <br>
-                    <button class="btn btn-success"
-                            @click="block_html_create()">
-                        Добавить
-                    </button>
+                    <div v-if="block_add_tag == 'h4'">
+                        <h4> {{block_add_title}} </h4>
+                    </div>
                 </div>
-            </div>
-            <div slot="footer">
-                <button class="btn btn-danger"
-                        @click="modal_close_add_block()"> Закрыть
+                <button class="btn btn-default m-2"
+                        @click="new_block_html()">
+                    HTML
+                </button>
+                <button class="btn btn-default m-2"
+                        @click="new_block_command()">
+                    Команда
                 </button>
             </div>
-        </modal>
+
+            <!--    Создание блока HTML-->
+            <div class="bg-light mt-3 p-4"
+                 v-show="html_block_modal">
+                <div class="form-group">
+                    <label class="text-center" for="exampleFormControlTextarea1">Добавить html block! </label>
+                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="10"
+                              placeholder="Введите свой код!"
+                              v-model="html_block_create_code"></textarea>
+                </div>
+                <input type="checkbox"
+                       v-model="html_block_create_border"> Добавить рамку? <br>
+                <button class="btn btn-success"
+                        @click="block_html_create()">
+                    Добавить
+                </button>
+            </div>
+
+            <!--    Создание блока COMMANDS-->
+            <div class="bg-light mt-3 p-4"
+                 v-show="command_block_modal">
+                <div class="form-group">
+                    <h3>Настройки блока:</h3>
+                    <div class="form-group">
+                        <label for="sel1">Выберите дизайн:</label>
+                        <select class="form-control" id="sel1">
+                            <option>Вертикальный</option>
+                            <option>Гооризонтальный</option>
+                        </select>
+                    </div>
+                    <h3>Люди:</h3>
+                    <input type="text" class="form-control" placeholder="Имя">
+                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="10"
+                              placeholder="Текст"></textarea>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Путь к картинке">
+                        <input type="text" class="form-control" placeholder="Высота">
+                        <input type="text" class="form-control" placeholder="Ширина">
+                        <input type="text" class="form-control" placeholder="border">
+                    </div>
+                </div>
+                <input type="checkbox"
+                       v-model="html_block_create_border"> Добавить рамку? <br>
+                <button class="btn btn-success"
+                        @click="block_command_create()">
+                    Добавить
+                </button>
+            </div>
+        </div>
+        <div slot="footer">
+            <button class="btn btn-danger"
+                    @click="modal_close_add_block()"> Закрыть
+            </button>
+        </div>
+    </modal>
 
 
-    </div>
+</div>
 
 
 <?php
@@ -339,9 +430,12 @@ data:{
       
       //БЛОК HTML
       prev_html: 999,
-      html_block_view: false,
+      html_block_modal: false,
       html_block_create_code: '',
       html_block_create_border: 0,
+      
+      // блок команда
+      command_block_modal: false,
       
   showModal: false,
 },
@@ -410,13 +504,19 @@ methods: {
     $.ajax({
          url: '/testbuilder/ajax/save-block',
          type: 'GET',
-         data: 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id,
+         data: 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&media=' + this.blocks[index].style_media + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title,
          success: function(){
            console.log( id + 'success push');
          },
          error: function(){
          }
          });
+  },
+  
+  //команда
+  new_block_command(){
+      this.command_block_modal = true;
+      this.block_add_view = false;
   },
 
     // Дабваление блоков
@@ -427,7 +527,7 @@ methods: {
     },
     new_block_html(){
       this.block_add_view = false;
-      this.html_block_view = true;
+      this.html_block_modal = true;
     },
     
    
@@ -438,7 +538,7 @@ methods: {
       this.block_add_view = false;
     },
     block_html_create(){
-      this.html_block_view = false;
+      this.html_block_modal = false;
       this.showModal = false;
     $.ajax({
          url: '/testbuilder/ajax/block-html-add',
@@ -476,7 +576,6 @@ methods: {
 JS;
 $this->registerJs($js, \yii\web\View::POS_END);
 ?>
-
 
 
 <script type="text/x-template" id="modal-template">
@@ -518,9 +617,11 @@ $this->registerJs($js, \yii\web\View::POS_END);
     .block :hover {
         border: #494f54 1px dotted;
     }
+
     .block_no_hover :hover {
         border: 0px;
     }
+
     .bg_add_block {
         border: 5px solid;
         border-color: #999999;

@@ -52,27 +52,7 @@ if (Yii::$app->user->identity->id == $model['creator_id']) $hide = false;
                         <div class="p-3 mb-2 bg-primary text-white row shadow ">
                             Участники:
                         </div>
-                        <?= UsersListWidget::widget([
-                            'users' => $users,
-                            'button' => [
-                                '0' => [
-                                    'text' => 'Удалить из проекта',
-                                    'url' => '/project/default/del-friend',
-                                    'class' => 'btn btn-warning btn-sm',
-                                    'redirect' => '/project/' . $model->id,
-                                    'hide' => $hide,
-                                    'id' => $model->id,
-                                ],
-                                '1' => [
-                                    'text' => 'Назначить лидером',
-                                    'url' => '/project/default/new-leader',
-                                    'class' => 'btn btn-default btn-sm',
-                                    'redirect' => '/project/' . $model->id,
-                                    'hide' => $hide,
-                                    'id' => $model->id,
-                                ],
-                            ],
-                        ]) ?>
+
                     </div>
                 </div>
             </div>

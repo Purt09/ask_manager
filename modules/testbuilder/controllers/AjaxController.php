@@ -72,8 +72,9 @@ class AjaxController extends Controller
     {
         if (\Yii::$app->request->isAjax) {
         $block = BuilderBlocks::findOne($id);
+        $page_id = $block->page_id;
         $block->delete();
-        return $this->redirect('/testbuilder/default/index?id=' . $block_old->page_id);
+        return $this->redirect('/testbuilder/default/index?id=' . $page_id);
         } else {
             return $this->redirect('/');
         }
@@ -171,7 +172,7 @@ class AjaxController extends Controller
         }
     }
 
-    /**
+    /**'&mt=' + + '&mb=' + + '&media=' + + '&isCont=' + + '&isLink=' + + '&link_title='
      * @param $page_id
      * @param string $title
      * @param string $title_head
@@ -180,16 +181,23 @@ class AjaxController extends Controller
      * @param $id
      * @return bool|\yii\web\Response
      */
-    public function actionSaveBlock($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id)
+    public function actionSaveBlock($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt  = '', $mb  = '', $media = '', $isCont = '', $isLink = '', $link_title = '')
     {
         if (\Yii::$app->request->isAjax) {
 
             $block = BuilderBlocks::findOne($id);
             $block->title = $title;
+            $block->title = $title;
             $block->page_id = $page_id;
             $block->title_head = $title_head;
             $block->title_color = $title_color;
             $block->class = $class;
+            $block->style_margin_top = $mt;
+            $block->style_margin_bottom = $mb;
+            $block->style_media = $media;
+            ($isCont == 'true') ? $block->css_isContainer = 1 : $block->css_isContainer = 0;
+            ($isLink == 'true') ? $block->isLink = 1: $block->isLink = 0;
+            ($link_title == 'null') ? $block->link_title = ' ' : $block->link_title = $link_title;
             $block->save();
 
             return true;
