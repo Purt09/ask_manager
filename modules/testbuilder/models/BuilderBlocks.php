@@ -21,10 +21,13 @@ use Yii;
  * @property string $style
  * @property int $style_margin_top
  * @property int $style_margin_bottom
- * @property int $style_media
  * @property int $css_isContainer
  * @property int $isLink
  * @property string $link_title
+ * @property int $isHide
+ * @property int $isDesktop
+ * @property int $isTablet
+ * @property int $isMobile
  *
  * @property BuilderBlockHtml $builder
  * @property BuilderPage $page
@@ -36,7 +39,7 @@ class BuilderBlocks extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%builder_blocks}}';
+        return 'keys_builder_blocks';
     }
 
     /**
@@ -45,7 +48,7 @@ class BuilderBlocks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['position', 'page_id', 'builder_id', 'style_margin_top', 'style_margin_bottom', 'style_media', 'css_isContainer', 'isLink'], 'integer'],
+            [['position', 'page_id', 'builder_id', 'style_margin_top', 'style_margin_bottom', 'css_isContainer', 'isLink', 'isHide', 'isDesktop', 'isTablet', 'isMobile'], 'integer'],
             [['js', 'style'], 'string'],
             [['builder_table', 'title', 'description', 'class', 'link_title'], 'string', 'max' => 255],
             [['title_head', 'title_color'], 'string', 'max' => 10],
@@ -74,10 +77,13 @@ class BuilderBlocks extends \yii\db\ActiveRecord
             'style' => 'Style',
             'style_margin_top' => 'Style Margin Top',
             'style_margin_bottom' => 'Style Margin Bottom',
-            'style_media' => 'Style Media',
             'css_isContainer' => 'Css Is Container',
             'isLink' => 'Is Link',
             'link_title' => 'Link Title',
+            'isHide' => 'Is Hide',
+            'isDesktop' => 'Is Desktop',
+            'isTablet' => 'Is Tablet',
+            'isMobile' => 'Is Mobile',
         ];
     }
 

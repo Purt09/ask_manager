@@ -8,6 +8,9 @@ use Yii;
  * This is the model class for table "keys_builder_commands".
  *
  * @property int $id
+ * @property int $design
+ * @property int $col-sm
+ * @property int $peoples
  *
  * @property BuilderCommandPeople[] $builderCommandPeoples
  */
@@ -18,7 +21,7 @@ class BuilderCommands extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%builder_commands}}';
+        return 'keys_builder_commands';
     }
 
     /**
@@ -26,7 +29,9 @@ class BuilderCommands extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [];
+        return [
+            [['design', 'col-sm', 'peoples'], 'integer'],
+        ];
     }
 
     /**
@@ -36,6 +41,9 @@ class BuilderCommands extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'design' => 'Design',
+            'col-sm' => 'Col Sm',
+            'peoples' => 'Peoples',
         ];
     }
 

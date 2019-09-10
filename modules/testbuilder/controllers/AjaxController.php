@@ -108,7 +108,7 @@ class AjaxController extends Controller
      * @param $code
      * @return \yii\web\Response
      */
-    public function actionBlockHtmlAdd($page_id, $title, $title_head, $title_color, $class, $border, $code)
+    public function actionBlockHtmlAdd($page_id, $title = 'Заголовок', $title_head = 'h2', $title_color, $class ='', $border = 0, $code ='')
     {
         if (\Yii::$app->request->isAjax) {
             $block_html = new BuilderBlockHtml();
@@ -129,10 +129,11 @@ class AjaxController extends Controller
             $block->class = $class;
             $block->save();
 
+            $block->position = $block->id;
+            $block->save();
+
             return $this->redirect('/testbuilder/default/index?id=' . $page_id);
 
-        } else {
-            return $this->redirect('/');
         }
     }
 
@@ -172,7 +173,7 @@ class AjaxController extends Controller
         }
     }
 
-    /**'&mt=' + + '&mb=' + + '&media=' + + '&isCont=' + + '&isLink=' + + '&link_title='
+    /**
      * @param $page_id
      * @param string $title
      * @param string $title_head
@@ -181,7 +182,7 @@ class AjaxController extends Controller
      * @param $id
      * @return bool|\yii\web\Response
      */
-    public function actionSaveBlock($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt  = '', $mb  = '', $media = '', $isCont = '', $isLink = '', $link_title = '')
+    public function actionSaveBlock($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt  = '', $mb  = '', $isCont = '', $isLink = '', $link_title = '')
     {
         if (\Yii::$app->request->isAjax) {
 
@@ -194,7 +195,6 @@ class AjaxController extends Controller
             $block->class = $class;
             $block->style_margin_top = $mt;
             $block->style_margin_bottom = $mb;
-            $block->style_media = $media;
             ($isCont == 'true') ? $block->css_isContainer = 1 : $block->css_isContainer = 0;
             ($isLink == 'true') ? $block->isLink = 1: $block->isLink = 0;
             ($link_title == 'null') ? $block->link_title = ' ' : $block->link_title = $link_title;

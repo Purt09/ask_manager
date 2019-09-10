@@ -11,7 +11,6 @@ use Yii;
  * @property string $name
  * @property string $content
  * @property int $commands_id
- * @property int $design
  * @property string $image
  * @property int $image_h
  * @property int $image_w
@@ -26,7 +25,7 @@ class BuilderCommandPeople extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%builder_command_people}}';
+        return 'keys_builder_command_people';
     }
 
     /**
@@ -36,7 +35,7 @@ class BuilderCommandPeople extends \yii\db\ActiveRecord
     {
         return [
             [['content'], 'string'],
-            [['commands_id', 'design', 'image_h', 'image_w'], 'integer'],
+            [['commands_id', 'image_h', 'image_w'], 'integer'],
             [['name', 'image', 'image_border'], 'string', 'max' => 255],
             [['commands_id'], 'exist', 'skipOnError' => true, 'targetClass' => BuilderCommands::className(), 'targetAttribute' => ['commands_id' => 'id']],
         ];
@@ -52,7 +51,6 @@ class BuilderCommandPeople extends \yii\db\ActiveRecord
             'name' => 'Name',
             'content' => 'Content',
             'commands_id' => 'Commands ID',
-            'design' => 'Design',
             'image' => 'Image',
             'image_h' => 'Image H',
             'image_w' => 'Image W',

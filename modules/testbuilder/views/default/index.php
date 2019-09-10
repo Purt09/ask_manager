@@ -210,8 +210,7 @@ use yii\helpers\Json;
                                     <span class="input-group-addon">снизу(px)</span>
                                     <span class="input-group-addon" style="background: #1d2124"></span>
                                     <span class="input-group-addon"><strong>Видимость(больше будет скрываться):</strong></span>
-                                    <input type="text" class="form-control" placeholder="снизу"
-                                           v-model="block.style_media">
+                                    <input type="text" class="form-control" placeholder="снизу">
                                     <span class="input-group-addon">px</span>
                                     <span class="input-group-addon">
                                         <input type="checkbox"
@@ -504,7 +503,7 @@ methods: {
     $.ajax({
          url: '/testbuilder/ajax/save-block',
          type: 'GET',
-         data: 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&media=' + this.blocks[index].style_media + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title,
+         data: 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title,
          success: function(){
            console.log( id + 'success push');
          },
@@ -545,7 +544,7 @@ methods: {
          type: 'GET',
          data: 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + this.html_block_create_code + '&border=' + this.html_block_create_border,
          success: function(){
-           console.log( id + 'success push');
+           console.log( 'success push');
          },
          error: function(){
          }
