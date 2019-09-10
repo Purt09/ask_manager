@@ -36,7 +36,7 @@ class BuilderBlocks extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_builder_blocks';
+        return '{{%builder_blocks}}';
     }
 
     /**
