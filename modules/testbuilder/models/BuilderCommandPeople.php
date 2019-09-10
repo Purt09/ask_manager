@@ -26,7 +26,7 @@ class BuilderCommandPeople extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_builder_command_people';
+        return '{{%builder_command_people}}';
     }
 
     /**
