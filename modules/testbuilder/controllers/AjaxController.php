@@ -166,13 +166,13 @@ class AjaxController extends Controller
         if (\Yii::$app->request->isAjax) {
             $block_command = new BuilderCommands();
             $block_command->design = $command_design;
-            $block_command->col = $command_col;
+            $block_command->col = 12 / $command_col;
             $block_command->save();
 
             $people = new BuilderCommandPeople();
             $people->name = $people_name;
             if($p_image == '')
-                $p_image = 'https://pp.userapi.com/c636929/v636929461/79d3a/kOVLd_QRZHI.jpg?ava=' . $people_name;
+                $p_image = 'http://placehold.it/' . $p_image_h . '/DC1734/fff&text=' . $people_name;
             $people->image = $p_image;
             $people->image_h = $p_image_h;
             $people->image_w = $p_image_w;
@@ -200,6 +200,10 @@ class AjaxController extends Controller
             return $this->redirect('/');
         }
     }
+
+    public function actionAddPeopleInCommand($page_id, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $content){
+
+}
 
     /**
      * @param $id

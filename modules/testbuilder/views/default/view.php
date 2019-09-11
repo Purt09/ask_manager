@@ -12,10 +12,10 @@ use yii\helpers\Json;
                 <ul class="nav navbar-nav">
                     <li v-for="block in blocks">
                         <a :href="'#' + block.id"
-                            v-if="block.isLink">{{block.link_title}}</a></li>
+                           v-if="block.isLink">{{block.link_title}}</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluid -->
     </nav>
 
     <section v-for="block,index in blocks"
@@ -41,6 +41,41 @@ use yii\helpers\Json;
                  v-if="block.builder_table = 'html code'">
                 <div v-html="block.builder_id.code"
                      :class="{html_block_border: block.builder_id.border == 1}"></div>
+            </div>
+
+            <!--                Если блок COMMAND!-->
+            <div v-if="block.builder_table == 'blok_command'"
+                 class="block">
+                <div class="row">
+                    <div v-for="people in block.description">
+                        <div :class="'col-sm-' + block.builder_id.col">
+                            <!--                        Вертикальный дизайн-->
+                            <div class="text-center"
+                                 v-if="block.builder_id.design == 1">
+                                <img :src="people.image" :alt="people.name"
+                                     :style="'height: ' + people.image_h + 'px; width: ' + people.image_w + 'px; border-radius: ' + people.image_border">
+                                <br>
+                                <div class="people_name">
+                                    {{people.name}}
+                                </div>
+                                <div class="people_content">
+                                    {{people.content}}
+                                </div>
+                            </div>
+                            <!--                        Горизонтальный-->
+                            <div v-else>
+                                <div class="col-sm-4 people_name_img">
+                                    <img :src="people.image" :alt="people.name">
+                                    <br>
+                                    {{people.name}}
+                                </div>
+                                <div class="col-sm-8 people_content">
+                                    {{people.content}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -86,14 +121,16 @@ $this->registerJs($js, \yii\web\View::POS_END);
         }
     }
 
-    @media (min-width: 1025px){
+    @media (min-width: 1025px) {
         .desktop {
             display: none;
         }
     }
+
     .hideBlock {
         display: none;
     }
+
     .html_block_border {
         padding: 45px 50px 20px;
         border: 2px solid #f60;

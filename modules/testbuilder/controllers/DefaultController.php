@@ -3,6 +3,8 @@
 namespace app\modules\testbuilder\controllers;
 
 use app\modules\testbuilder\models\BuilderBlocks;
+use app\modules\testbuilder\models\BuilderCommandPeople;
+use app\modules\testbuilder\models\BuilderCommands;
 use app\modules\user\models\User;
 use yii\web\Controller;
 use app\modules\testbuilder\models\BuilderPage;
@@ -24,9 +26,14 @@ class DefaultController extends Controller
         $page = BuilderPage::findOne($id);
 
         $blocks = $page->getBuilderBlocks()->orderBy('position')->all();
-        foreach ($blocks as $block)
-            if($block['builder_table'] == 'blok_html')
+        foreach ($blocks as $block) {
+            if ($block['builder_table'] == 'blok_html')
                 $block['builder_id'] = BuilderBlockHtml::find()->where(['id' => $block['builder_id']])->asArray()->one();
+            if ($block['builder_table'] == 'blok_command') {
+                $block['builder_id'] = BuilderCommands::find()->where(['id' => $block['builder_id']])->asArray()->one();
+                $block['description']   = BuilderCommandPeople::find()->where(['commands_id' => $block['builder_id']['id']])->asArray()->all();
+            }
+        }
 
             if(Yii::$app->user->isGuest){
                 return $this->render('view', [

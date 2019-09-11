@@ -329,8 +329,111 @@ use yii\helpers\Json;
                 </div>
 
             </div>
+
+            <!--                Если блок COMMAND!-->
+            <div v-if="block.builder_table == 'blok_command'"
+                 class="block"
+                 @click="modal_command_people = true">
+                <div class="row">
+                    <div v-for="people in block.description">
+                        <div :class="'col-sm-' + block.builder_id.col">
+                            <!--                        Вертикальный дизайн-->
+                            <div class="text-center"
+                                 v-if="block.builder_id.design == 1">
+                                <img :src="people.image" :alt="people.name"
+                                     :style="'height: ' + people.image_h + 'px; width: ' + people.image_w + 'px; border-radius: ' + people.image_border">
+                                <br>
+                                <div class="people_name">
+                                    {{people.name}}
+                                </div>
+                                <div class="people_content">
+                                    {{people.content}}
+                                </div>
+                            </div>
+                            <!--                        Горизонтальный-->
+                            <div v-else>
+                                <div class="col-sm-4 people_name_img">
+                                    <img :src="people.image" :alt="people.name">
+                                    <br>
+                                    {{people.name}}
+                                </div>
+                                <div class="col-sm-8 people_content">
+                                    {{people.content}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--    Окно добавления COMMAND-->
+            <modal  v-if="modal_command_people"
+                    class="block_no_hover"
+                    @close="modal_command_people = false">
+                <h3 slot="header">Изменение команды и добавление участника</h3>
+                <div slot="body">
+                    <h3>Настройки команды:</h3>
+                    <div class="form-group">
+                        <label for="sel1">Выберите дизайн:</label>
+                        <select class="form-control" id="sel1">
+                            <option>Вертикальный</option>
+                            <option>Гооризонтальный</option>
+                        </select>
+                        <label for="sel1">Количество столбцов:</label>
+                        <select class="form-control" id="sel1"
+                                v-modal="block.builder_table.col">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>6</option>
+                        </select>
+                        <button class="btn btn-success m-2">
+                            Сохранить
+                        </button>
+                    <h3>Добавить человека:</h3>
+                    <div class="row bg-light p-3">
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" placeholder="Имя"
+                                   v-model="command_add_name"><br>
+                        </div>
+                        <div class="col-sm-6">
+                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
+                              placeholder="Текст"
+                              v-model="command_add_content"></textarea>
+                        </div>
+                        <br><br><br><br><br>
+
+                        <div class="input-group col-sm-12">
+                            <span class="input-group-addon"><strong>Картинка:</strong></span>
+                            <input type="text" class="form-control" placeholder="Путь к картинке"
+                                   v-model="command_add_image">
+                            <span class="input-group-addon">Высота:</span>
+                            <input type="text" class="form-control" placeholder="Высота"
+                                   v-model="command_add_image_h">
+                            <span class="input-group-addon">Ширина:</span>
+                            <input type="text" class="form-control" placeholder="Ширина"
+                                   v-model="command_add_image_w">
+                            <span class="input-group-addon">Округление:</span>
+                            <input type="text" class="form-control" placeholder="border"
+                                   v-model="command_add_image_border">
+                        </div>
+                        <button class="btn btn-success m-2"
+                                @click="add_people_in_command(block.builder_id.id)">
+                            Добавить
+                        </button>
+                    </div>
+                </div>
+                <div slot="footer">
+                    <button class="btn btn-danger"
+                            @click="modal_close_add_block()"> Закрыть
+                    </button>
+                </div>
+            </modal>
         </div>
     </section>
+
+
 
     <!--    Новый блок!-->
     <div class="bg-light text-center p-3 bg_add_block container"
@@ -526,6 +629,8 @@ data:{
       command_add_image_h: 50,
       command_add_image_w: 50,
       command_add_image_border: '0px 0px 0px 0px',
+      //Редактирование команды:
+      modal_command_people: false,
       
   showModal: false,
   
@@ -646,6 +751,21 @@ methods: {
          }
          });
   },
+  add_people_in_command(id){
+      this.command_add_name = '';
+      this.command_add_image = '';
+      this.command_add_content = '';
+      $.ajax({
+         url: '/testbuilder/ajax/add-people-in-command',
+         type: 'GET',
+         data: 'page_id=' + this.page.id + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&content=' + this.command_add_content + '&command_id=' + id,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+         });
+  },
     // Дабваление блоков
     add_block(){
       this.block_add_view = true;
@@ -665,6 +785,7 @@ methods: {
       this.block_add_view = false;
       this.command_block_modal = false;
       this.html_block_modal = false;
+      this.modal_command_people = false;
     },
     block_html_create(){
       this.html_block_modal = false;
@@ -750,6 +871,12 @@ $this->registerJs($js, \yii\web\View::POS_END);
     <?= $page->style ?>
 </style>
 <style>
+    .people_name {
+        color: #191919;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
     .html_block_border {
         padding: 45px 50px 20px;
         border: 2px solid #f60;
