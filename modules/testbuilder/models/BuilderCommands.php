@@ -21,7 +21,7 @@ class BuilderCommands extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_builder_commands';
+        return '{{%builder_commands}}';
     }
 
     /**
