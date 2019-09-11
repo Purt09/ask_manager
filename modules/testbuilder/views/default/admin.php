@@ -34,9 +34,30 @@ use yii\helpers\Json;
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li v-for="block in blocks"
+                    <li v-for="block,index in blocks"
                         v-if="block.isLink == 1">
-                        <a :href="'#' + block.id">{{block.link_title}}</a>
+                            <a :href="'#' + block.id"
+                               v-if="menu_title_edit != index">{{block.link_title}}</a>
+                            <span class="glyphicon glyphicon-pencil text-center" title="Сохранить"
+                                  @click="menu_title_edit = index"
+                                  v-if="menu_title_edit != index"></span>
+                        <div class="input-group col-sm-2 input-group-sm"
+                             v-if="menu_title_edit == index">
+                             <span class="input-group-btn">
+                            <button class="btn btn-success"
+                                    @click="menu_title_edit = 999">
+                                <span class="glyphicon glyphicon-ok " title="Сохранить"></span>
+                            </button>
+                             </span>
+                            <input type="text" v-model="block.title" class="form-control">
+                            <span class="input-group-btn">
+                            <button class="btn btn-danger"
+                                    @click="menu_title_edit = 999">
+                                <span class="glyphicon glyphicon-remove " title="Удалить"></span>
+                            </button>
+                            </span>
+                        </div>
+
                     </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -142,14 +163,16 @@ use yii\helpers\Json;
                 <div class="col-sm-4 text-right">
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-default"
-                                @click="block_position_down(index)"><span
+                                @click="block_position_down(index)"
+                                v-if="index != blocks.length - 1"><span
                                     class="glyphicon glyphicon-arrow-down" title="Вниз"></span></button>
                         <button type="button" class="btn btn-default"
-                                @click="block_position_up(index)"><span
+                                @click="block_position_up(index)"
+                                v-if="index != 0"><span
                                     class="glyphicon glyphicon-arrow-up" title="Вверх"></span></button>
                         <button type="button" class="btn btn-default"
                                 @click="block_duplicate(index)"><span
-                                    class="glyphicon glyphicon-copy" title="Дублировать"></span></button>
+                                    class="glyphicon glyphicon-file" title="Дублировать"></span></button>
                         <button type="button" class="btn btn-default"
                                 @click="block_edit(index)"><span
                                     class="glyphicon glyphicon-pencil " title="Редактировать"></span></button>
@@ -438,6 +461,9 @@ data:{
       command_block_modal: false,
       
   showModal: false,
+  
+  //menu
+  menu_title_edit: 999,
 },
 methods: {
     edit_block_title(index){
