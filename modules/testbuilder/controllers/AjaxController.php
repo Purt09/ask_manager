@@ -171,7 +171,7 @@ class AjaxController extends Controller
 
             $people = new BuilderCommandPeople();
             $people->name = $people_name;
-            if($p_image == '')
+            if ($p_image == '')
                 $p_image = 'http://placehold.it/' . $p_image_h . '/DC1734/fff&text=' . $people_name;
             $people->image = $p_image;
             $people->image_h = $p_image_h;
@@ -201,9 +201,38 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionAddPeopleInCommand($page_id, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $content){
+    public function actionAddPeopleInCommand($page_id, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $content, $command_id)
+    {
+        if (\Yii::$app->request->isAjax) {
+            $people = new BuilderCommandPeople();
+            $people->name = $people_name;
+            if ($p_image == '')
+                $p_image = 'http://placehold.it/' . $p_image_h . '/DC1734/fff&text=' . $people_name;
+            $people->content = $content;
+            $people->image = $p_image;
+            $people->image_h = $p_image_h;
+            $people->image_w = $p_image_w;
+            $people->image_border = $p_image_b;
+            $people->commands_id = $command_id;
+            $people->save();
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
 
-}
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    public function actionBlockCommandSave($col, $design, $id){
+        if (\Yii::$app->request->isAjax) {
+            $command = BuilderCommands::findOne($id);
+            $command->col = 12 / $col;
+            $command->design = $design;
+            return  $command->save();
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
 
     /**
      * @param $id

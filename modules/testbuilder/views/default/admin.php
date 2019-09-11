@@ -37,10 +37,10 @@ use yii\helpers\Json;
                     <li v-for="block,index in blocks"
                         v-if="block.isLink == 1">
                         <a :href="'#' + block.id"
-                           v-if="menu_title_edit != index">{{block.link_title}}</a>
-                        <span class="glyphicon glyphicon-pencil text-center" title="Изменить"
-                              @click="menu_title_edit = index"
-                              v-if="menu_title_edit != index"></span>
+                           v-if="menu_title_edit != index"
+                           @click="menu_title_edit = index">
+                            {{block.link_title}}
+                        </a>
                         <div class="input-group col-sm-2 input-group-sm"
                              v-if="menu_title_edit == index">
                             <span class="input-group-btn">
@@ -333,7 +333,7 @@ use yii\helpers\Json;
             <!--                Если блок COMMAND!-->
             <div v-if="block.builder_table == 'blok_command'"
                  class="block"
-                 @click="modal_command_people = true">
+                 @click="modal_command_people = index">
                 <div class="row">
                     <div v-for="people in block.description">
                         <div :class="'col-sm-' + block.builder_id.col">
@@ -367,30 +367,55 @@ use yii\helpers\Json;
             </div>
 
             <!--    Окно добавления COMMAND-->
-            <modal  v-if="modal_command_people"
+            <modal  v-if="modal_command_people == index"
                     class="block_no_hover"
                     @close="modal_command_people = false">
                 <h3 slot="header">Изменение команды и добавление участника</h3>
                 <div slot="body">
                     <h3>Настройки команды:</h3>
                     <div class="form-group">
-                        <label for="sel1">Выберите дизайн:</label>
-                        <select class="form-control" id="sel1">
-                            <option>Вертикальный</option>
-                            <option>Гооризонтальный</option>
-                        </select>
-                        <label for="sel1">Количество столбцов:</label>
-                        <select class="form-control" id="sel1"
-                                v-modal="block.builder_table.col">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>6</option>
-                        </select>
-                        <button class="btn btn-success m-2">
+                        <label for="sel1">Выберите дизайн:  (1 - вуртиикальный, 0 - горизонтальный)</label>
+                        <input type="text" class="form-control"
+                               v-model="block.builder_id.design">
+                        <label for="sel1">Количество столбцов: (1,2,3,4,6,12):</label>
+                        <input type="text" class="form-control"
+                               v-model="12 / block.builder_id.col">
+                        <button class="btn btn-success m-2"
+                                @click="command_save_setting(index)">
                             Сохранить
                         </button>
+                        <h3>Редактирование:</h3>
+                        <div class="row bg-light p-3"
+                             v-for="people,index in block.description">
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" placeholder="Имя"
+                                       v-model="people.name"><br>
+                            </div>
+                            <div class="col-sm-6">
+                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
+                              placeholder="Текст"
+                              v-model="people.content"></textarea>
+                            </div>
+                            <br><br><br><br><br>
+                            <div class="input-group col-sm-12">
+                                <span class="input-group-addon"><strong>Картинка:</strong></span>
+                                <input type="text" class="form-control" placeholder="Путь к картинке"
+                                       v-model="people.image">
+                                <span class="input-group-addon">Высота:</span>
+                                <input type="text" class="form-control" placeholder="Высота"
+                                       v-model="people.image_h">
+                                <span class="input-group-addon">Ширина:</span>
+                                <input type="text" class="form-control" placeholder="Ширина"
+                                       v-model="people.image_w">
+                                <span class="input-group-addon">Округление:</span>
+                                <input type="text" class="form-control" placeholder="border"
+                                       v-model="people.image_w">
+                            </div>
+                            <button class="btn btn-success m-2"
+                                  @click="save_people(people.id)">  <!--  TODO: прописать функцию! -->
+                                Сохранить!
+                            </button>
+                        </div>
                     <h3>Добавить человека:</h3>
                     <div class="row bg-light p-3">
                         <div class="col-sm-6">
@@ -491,6 +516,10 @@ use yii\helpers\Json;
                 <button class="btn btn-default m-2"
                         @click="new_block_command()">
                     Команда
+                </button>
+                <button class="btn btn-default m-2"
+                        @click="new_block_list()">
+                    Список
                 </button>
             </div>
 
@@ -630,7 +659,7 @@ data:{
       command_add_image_w: 50,
       command_add_image_border: '0px 0px 0px 0px',
       //Редактирование команды:
-      modal_command_people: false,
+      modal_command_people: 999,
       
   showModal: false,
   
@@ -752,13 +781,25 @@ methods: {
          });
   },
   add_people_in_command(id){
-      this.command_add_name = '';
-      this.command_add_image = '';
-      this.command_add_content = '';
       $.ajax({
          url: '/testbuilder/ajax/add-people-in-command',
          type: 'GET',
          data: 'page_id=' + this.page.id + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&content=' + this.command_add_content + '&command_id=' + id,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+         });
+      this.command_add_name = '';
+      this.command_add_image = '';
+      this.command_add_content = '';
+  },
+  command_save_setting(index){
+      $.ajax({
+         url: '/testbuilder/ajax/block-command-save',
+         type: 'GET',
+         data: 'col=' + this.blocks[index].builder_id.col + '&design=' + this.blocks[index].builder_id.design + '&id=' + this.blocks[index].builder_id.id,
          success: function(){
            console.log('success push');
          },
@@ -785,7 +826,7 @@ methods: {
       this.block_add_view = false;
       this.command_block_modal = false;
       this.html_block_modal = false;
-      this.modal_command_people = false;
+      this.modal_command_people = 999;
     },
     block_html_create(){
       this.html_block_modal = false;
