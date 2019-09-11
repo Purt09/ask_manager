@@ -2,6 +2,8 @@
 
 namespace app\modules\testbuilder\controllers;
 
+use app\modules\testbuilder\models\BuilderCommandPeople;
+use app\modules\testbuilder\models\BuilderCommands;
 use yii\web\Controller;
 use app\modules\testbuilder\models\BuilderPage;
 use app\modules\testbuilder\models\BuilderBlocks;
@@ -159,6 +161,46 @@ class AjaxController extends Controller
         }
     }
 
+    public function actionBlockCommandsAdd($page_id, $command_design = 0, $command_col = 1, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '')
+    {
+        if (\Yii::$app->request->isAjax) {
+            $block_command = new BuilderCommands();
+            $block_command->design = $command_design;
+            $block_command->col = $command_col;
+            $block_command->save();
+
+            $people = new BuilderCommandPeople();
+            $people->name = $people_name;
+            if($p_image == '')
+                $p_image = 'https://pp.userapi.com/c636929/v636929461/79d3a/kOVLd_QRZHI.jpg?ava=' . $people_name;
+            $people->image = $p_image;
+            $people->image_h = $p_image_h;
+            $people->image_w = $p_image_w;
+            $people->image_border = $p_image_b;
+            $people->commands_id = $block_command->id;
+            $people->save();
+
+
+            $block = new BuilderBlocks();
+            $block->title = $title;
+            $block->page_id = $page_id;
+            $block->title_head = $title_head;
+            $block->title_color = $title_color;
+            $block->builder_table = 'blok_command';
+            $block->builder_id = $block_command->id;
+            $block->class = $class;
+            $block->save();
+
+            $block->position = $block->id;
+            $block->save();
+
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
     /**
      * @param $id
      * @param $title
@@ -204,7 +246,7 @@ class AjaxController extends Controller
      * @param $id
      * @return bool|\yii\web\Response
      */
-    public function actionSaveBlock($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt = '', $mb = '', $isCont = '', $isLink = '', $link_title = '', $isH = 0, $isD = 1, $isT = 1, $isM = 1 )
+    public function actionSaveBlock($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt = '', $mb = '', $isCont = '', $isLink = '', $link_title = '', $isH = 0, $isD = 1, $isT = 1, $isM = 1)
     {
         if (\Yii::$app->request->isAjax) {
 

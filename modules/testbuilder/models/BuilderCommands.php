@@ -9,8 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property int $design
- * @property int $col-sm
  * @property int $peoples
+ * @property int $col
  *
  * @property BuilderCommandPeople[] $builderCommandPeoples
  */
@@ -30,7 +30,7 @@ class BuilderCommands extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['design', 'col-sm', 'peoples'], 'integer'],
+            [['design', 'peoples', 'col'], 'integer'],
         ];
     }
 
@@ -42,8 +42,8 @@ class BuilderCommands extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'design' => 'Design',
-            'col-sm' => 'Col Sm',
             'peoples' => 'Peoples',
+            'col' => 'Col',
         ];
     }
 

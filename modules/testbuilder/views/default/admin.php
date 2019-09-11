@@ -185,11 +185,11 @@ use yii\helpers\Json;
                                     class="glyphicon glyphicon-pencil " title="Редактировать"></span></button>
                         <button type="button" class="btn btn-danger"
                                 @click="block_delete(index)"><span
-                                    class="glyphicon glyphicon-remove" title="Удалить"></span> Удалить!
+                                    class="glyphicon glyphicon-remove" title="Удалить"></span>
                         </button>
                         <button class="btn btn-success" type="button"
                                 @click="save_block_title(index)"><span class="glyphicon glyphicon-ok"
-                                                                       title="Сохранить"></span>
+                                                                       title="Сохранить"></span> Сохранить
                         </button>
                         <button class="btn btn-warning" type="button"
                                 @click="block_title_edit = 999"><span
@@ -412,27 +412,56 @@ use yii\helpers\Json;
             <div class="bg-light mt-3 p-4"
                  v-show="command_block_modal">
                 <div class="form-group">
-                    <h3>Настройки блока:</h3>
+                    <h3>Настройки команды:</h3>
                     <div class="form-group">
                         <label for="sel1">Выберите дизайн:</label>
-                        <select class="form-control" id="sel1">
+                        <select class="form-control" id="sel1"
+                                v-model="command_add_design">
                             <option>Вертикальный</option>
                             <option>Гооризонтальный</option>
                         </select>
+                        <label for="sel1">Количество столбцов:</label>
+                        <select class="form-control" id="sel1"
+                                v-modal="command_add_col-sm">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>6</option>
+                        </select>
                     </div>
-                    <h3>Люди:</h3>
-                    <input type="text" class="form-control" placeholder="Имя">
-                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="10"
-                              placeholder="Текст"></textarea>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Путь к картинке">
-                        <input type="text" class="form-control" placeholder="Высота">
-                        <input type="text" class="form-control" placeholder="Ширина">
-                        <input type="text" class="form-control" placeholder="border">
+                    <h3>Добавить человека:</h3>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" placeholder="Имя"
+                                   v-model="command_add_name"><br>
+                        </div>
+                        <div class="col-sm-6">
+                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
+                              placeholder="Текст"
+                              v-model="command_add_content"></textarea>
+
+                        </div>
+                        <br>
+
+                        <div class="input-group col-sm-12">
+                            <span class="input-group-addon"><strong>Картинка:</strong></span>
+                            <input type="text" class="form-control" placeholder="Путь к картинке"
+                                   v-model="command_add_image">
+                            <span class="input-group-addon">Высота:</span>
+                            <input type="text" class="form-control" placeholder="Высота"
+                                   v-model="command_add_image_h">
+                            <span class="input-group-addon">Ширина:</span>
+                            <input type="text" class="form-control" placeholder="Ширина"
+                                   v-model="command_add_image_w">
+                            <span class="input-group-addon">Округление:</span>
+                            <input type="text" class="form-control" placeholder="border"
+                                   v-model="command_add_image_border">
+                        </div>
+
+
                     </div>
                 </div>
-                <input type="checkbox"
-                       v-model="html_block_create_border"> Добавить рамку? <br>
                 <button class="btn btn-success"
                         @click="block_command_create()">
                     Добавить
@@ -488,6 +517,15 @@ data:{
       
       // блок команда
       command_block_modal: false,
+      //добавление блока команда:
+      command_add_design: 'Вертикальный',
+      command_add_col: 1,
+      command_add_name: '',
+      command_add_content: '',
+      command_add_image: '',
+      command_add_image_h: 50,
+      command_add_image_w: 50,
+      command_add_image_border: '0px 0px 0px 0px',
       
   showModal: false,
   
@@ -595,7 +633,19 @@ methods: {
       this.command_block_modal = true;
       this.block_add_view = false;
   },
-
+  block_command_create(){
+      (this.command_add_design == 'Вертикальный') ? this.command_add_design = 1 : this.command_add_design = 0;
+      $.ajax({
+         url: '/testbuilder/ajax/block-commands-add',
+         type: 'GET',
+         data: 'page_id=' + this.page.id + '&command_design=' + this.command_add_design + '&command_col=' + this.command_add_col + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+         });
+  },
     // Дабваление блоков
     add_block(){
       this.block_add_view = true;
@@ -613,6 +663,8 @@ methods: {
       this.showModal = false;
       this.block_add_modal = false;
       this.block_add_view = false;
+      this.command_block_modal = false;
+      this.html_block_modal = false;
     },
     block_html_create(){
       this.html_block_modal = false;
