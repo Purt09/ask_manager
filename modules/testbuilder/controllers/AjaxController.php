@@ -134,6 +134,26 @@ class AjaxController extends Controller
 
             return $this->redirect('/testbuilder/default/index?id=' . $page_id);
 
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    public function actionBlockChangePos($pos1, $pos2){
+        if (\Yii::$app->request->isAjax) {
+
+            $block1 = BuilderBlocks::findOne($pos1);
+            $block2 = BuilderBlocks::findOne($pos2);
+
+            $pos = $block1->position;
+            $block1->position = $block2->position;
+            $block2->position= $pos;
+            $block1->save();
+            $block2->save();
+            return $this->redirect('/testbuilder/default/index?id=' . $block1->page_id);
+
+        } else {
+            return $this->redirect('/');
         }
     }
 

@@ -141,9 +141,11 @@ use yii\helpers\Json;
                 </div>
                 <div class="col-sm-4 text-right">
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default"><span
+                        <button type="button" class="btn btn-default"
+                                @click="block_position_down(index)"><span
                                     class="glyphicon glyphicon-arrow-down" title="Вниз"></span></button>
-                        <button type="button" class="btn btn-default"><span
+                        <button type="button" class="btn btn-default"
+                                @click="block_position_up(index)"><span
                                     class="glyphicon glyphicon-arrow-up" title="Вверх"></span></button>
                         <button type="button" class="btn btn-default"
                                 @click="block_duplicate(index)"><span
@@ -392,7 +394,6 @@ use yii\helpers\Json;
         </div>
     </modal>
 
-
 </div>
 
 
@@ -479,7 +480,29 @@ methods: {
          }
          });
     },
-    //
+    block_position_up(index){
+      var pos1 = blocks[index].position;
+      var pos2 = blocks[index - 1].position;
+      this.block_change_pos(pos1, pos2);
+    },
+    block_position_down(index){
+      var pos1 = blocks[index].position;
+      var pos2 = blocks[index + 1].position;
+      this.block_change_pos(pos1, pos2);
+    },
+    block_change_pos(pos1, pos2){
+      $.ajax({
+         url: '/testbuilder/ajax/block-change-pos',
+         type: 'GET',
+         data: 'pos1=' + pos1 + '&pos2=' + pos2,
+         success: function(){
+           console.log( pos1 + ' success push ' + pos2 );
+         },
+         error: function(){
+         }
+         });
+    },
+    // HTML
     block_html_save(index){
       this.prev_html = 999;
     $.ajax({
