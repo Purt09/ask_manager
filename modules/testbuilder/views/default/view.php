@@ -19,7 +19,7 @@ use yii\helpers\Json;
     </nav>
 
     <section v-for="block,index in blocks"
-             :class="{container: !block.css_isContainer}">
+             :class="{container: !block.css_isContainer,hideBlock: block.isHide, mobile: !block.isMobile, tablet: !block.isTablet, desktop: !block.isDesktop}">
         <a :name="block.id"></a><br><br>
         <div :class="block.class"
              :style="'margin-top: ' + block.style_margin_top + 'px' + '; margin-bottom: ' + block.style_margin_bottom + 'px'">
@@ -74,6 +74,26 @@ $this->registerJs($js, \yii\web\View::POS_END);
     <?= $page->style ?>
 </style>
 <style>
+    @media (max-width: 480px) {
+        .mobile {
+            display: none;
+        }
+    }
+
+    @media (min-width: 481px) and (max-width: 1024px) {
+        .tablet {
+            display: none;
+        }
+    }
+
+    @media (min-width: 1025px){
+        .desktop {
+            display: none;
+        }
+    }
+    .hideBlock {
+        display: none;
+    }
     .html_block_border {
         padding: 45px 50px 20px;
         border: 2px solid #f60;

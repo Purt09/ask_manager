@@ -36,25 +36,25 @@ use yii\helpers\Json;
                 <ul class="nav navbar-nav">
                     <li v-for="block,index in blocks"
                         v-if="block.isLink == 1">
-                            <a :href="'#' + block.id"
-                               v-if="menu_title_edit != index">{{block.link_title}}</a>
-                            <span class="glyphicon glyphicon-pencil text-center" title="Сохранить"
-                                  @click="menu_title_edit = index"
-                                  v-if="menu_title_edit != index"></span>
+                        <a :href="'#' + block.id"
+                           v-if="menu_title_edit != index">{{block.link_title}}</a>
+                        <span class="glyphicon glyphicon-pencil text-center" title="Изменить"
+                              @click="menu_title_edit = index"
+                              v-if="menu_title_edit != index"></span>
                         <div class="input-group col-sm-2 input-group-sm"
                              v-if="menu_title_edit == index">
-                             <span class="input-group-btn">
-                            <button class="btn btn-success"
-                                    @click="menu_title_edit = 999">
-                                <span class="glyphicon glyphicon-ok " title="Сохранить"></span>
-                            </button>
-                             </span>
-                            <input type="text" v-model="block.title" class="form-control">
                             <span class="input-group-btn">
-                            <button class="btn btn-danger"
-                                    @click="menu_title_edit = 999">
-                                <span class="glyphicon glyphicon-remove " title="Удалить"></span>
-                            </button>
+                                <button class="btn btn-success"
+                                        @click="menu_link_title_edit(index)">
+                                    <span class="glyphicon glyphicon-ok " title="Сохранить"></span>
+                                </button>
+                             </span>
+                            <input type="text" v-model="block.link_title" class="form-control">
+                            <span class="input-group-btn">
+                                <button class="btn btn-danger"
+                                        @click="menu_title_edit = 999">
+                                    <span class="glyphicon glyphicon-remove " title="Удалить"></span>
+                                </button>
                             </span>
                         </div>
 
@@ -119,7 +119,7 @@ use yii\helpers\Json;
 
 
     <section v-for="block,index in blocks"
-             :class="{container: !block.css_isContainer}">
+             :class="{container: !block.css_isContainer,hideBlock: block.isHide}">
         <a :name="block.id"></a><br><br>
         <div :class="block.class"
              :style="'margin-top: ' + block.style_margin_top + 'px' + '; margin-bottom: ' + block.style_margin_bottom + 'px'">
@@ -139,7 +139,7 @@ use yii\helpers\Json;
             </div>
             <div class="edit_title row"
                  v-else>
-                <div class="col-sm-4 block_no_hover">
+                <div class="col-sm-3 block_no_hover">
                     <input type="text" class="form-control" placeholder="Заголовок"
                            v-model="block.title">
                 </div>
@@ -153,14 +153,21 @@ use yii\helpers\Json;
                                   :style="'background: #' + block.title_color"></span>
                         <input type="text" class="form-control" placeholder="Цвет"
                                v-model="block.title_color">
-                        <span class="input-group-btn">
-                                <button class="btn btn-success" type="button"
-                                        @click="save_block_title(index)">Сохранить!</button>
-
-                             </span>
+                        <span class="input-group-addon"
+                              v-show="block.isMobile">
+                                <span class="glyphicon glyphicon-earphone" title="Мобильный"></span>
+                            </span>
+                        <span class="input-group-addon"
+                              v-show="block.isTablet">
+                                <span class="glyphicon glyphicon-phone" title="Вверх"></span>
+                            </span>
+                        <span class="input-group-addon"
+                              v-show="block.isDesktop">
+                                <span class="glyphicon glyphicon-hdd" title="Вверх"></span>
+                            </span>
                     </div>
                 </div>
-                <div class="col-sm-4 text-right">
+                <div class="col-sm-5 text-right">
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-default"
                                 @click="block_position_down(index)"
@@ -180,8 +187,13 @@ use yii\helpers\Json;
                                 @click="block_delete(index)"><span
                                     class="glyphicon glyphicon-remove" title="Удалить"></span> Удалить!
                         </button>
+                        <button class="btn btn-success" type="button"
+                                @click="save_block_title(index)"><span class="glyphicon glyphicon-ok"
+                                                                       title="Сохранить"></span>
+                        </button>
                         <button class="btn btn-warning" type="button"
-                                @click="block_title_edit = 999">Закрыть!
+                                @click="block_title_edit = 999"><span
+                                    class="glyphicon glyphicon-remove" title="Закрыть"></span> Закрыть
                         </button>
                     </div>
 
@@ -234,9 +246,26 @@ use yii\helpers\Json;
                                            v-model="block.style_margin_bottom">
                                     <span class="input-group-addon">снизу(px)</span>
                                     <span class="input-group-addon" style="background: #1d2124"></span>
-                                    <span class="input-group-addon"><strong>Видимость(больше будет скрываться):</strong></span>
-                                    <input type="text" class="form-control" placeholder="снизу">
-                                    <span class="input-group-addon">px</span>
+                                    <span class="input-group-addon">
+                                        <input type="checkbox"
+                                               v-model="block.isHide">
+                                        Спрятать блок
+                                    </span>
+                                    <span class="input-group-addon">
+                                        <input type="checkbox"
+                                               v-model="block.isDesktop">
+                                        Компьюторы
+                                    </span>
+                                    <span class="input-group-addon">
+                                        <input type="checkbox"
+                                               v-model="block.isTablet">
+                                        Планшеты
+                                    </span>
+                                    <span class="input-group-addon">
+                                        <input type="checkbox"
+                                               v-model="block.isMobile">
+                                        Смартфоны
+                                    </span>
                                     <span class="input-group-addon">
                                         <input type="checkbox"
                                                v-model="block.css_isContainer">
@@ -552,7 +581,7 @@ methods: {
     $.ajax({
          url: '/testbuilder/ajax/save-block',
          type: 'GET',
-         data: 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title,
+         data: 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title + '&isH=' + this.blocks[index].isHide + '&isD=' + this.blocks[index].isDesktop + '&isT=' + this.blocks[index].isTablet + '&isM=' + this.blocks[index].isMobile,
          success: function(){
            console.log( id + 'success push');
          },
@@ -614,6 +643,19 @@ methods: {
          }
          });
   },
+  menu_link_title_edit(index){
+      this.menu_title_edit = 999;
+      $.ajax({
+         url: '/testbuilder/ajax/menu-edit-link',
+         type: 'GET',
+         data: 'id=' + blocks[index].id + '&link=' + blocks[index].link_title,
+         success: function(){
+           console.log( id + 'success push');
+         },
+         error: function(){
+         }
+         });
+  },
     
 }
     
@@ -660,6 +702,10 @@ $this->registerJs($js, \yii\web\View::POS_END);
         padding: 45px 50px 20px;
         border: 2px solid #f60;
         margin-top: 2em;
+    }
+
+    .hideBlock {
+        opacity: 0.5;
     }
 
     .block :hover {

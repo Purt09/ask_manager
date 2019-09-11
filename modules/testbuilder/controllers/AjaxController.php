@@ -17,7 +17,8 @@ class AjaxController extends Controller
      * @param $title_color
      * @return bool|\yii\web\Response
      */
-    public function actionBlockSaveTitle($id, $title, $title_h, $title_color){
+    public function actionBlockSaveTitle($id, $title, $title_h, $title_color)
+    {
         if (\Yii::$app->request->isAjax) {
             $block = BuilderBlocks::findOne($id);
             $block->title = $title;
@@ -71,10 +72,10 @@ class AjaxController extends Controller
     public function actionBlockDelete($id)
     {
         if (\Yii::$app->request->isAjax) {
-        $block = BuilderBlocks::findOne($id);
-        $page_id = $block->page_id;
-        $block->delete();
-        return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+            $block = BuilderBlocks::findOne($id);
+            $page_id = $block->page_id;
+            $block->delete();
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
         } else {
             return $this->redirect('/');
         }
@@ -108,7 +109,7 @@ class AjaxController extends Controller
      * @param $code
      * @return \yii\web\Response
      */
-    public function actionBlockHtmlAdd($page_id, $title = 'Заголовок', $title_head = 'h2', $title_color, $class ='', $border = 0, $code ='')
+    public function actionBlockHtmlAdd($page_id, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $border = 0, $code = '')
     {
         if (\Yii::$app->request->isAjax) {
             $block_html = new BuilderBlockHtml();
@@ -139,7 +140,8 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionBlockChangePos($pos1, $pos2){
+    public function actionBlockChangePos($pos1, $pos2)
+    {
         if (\Yii::$app->request->isAjax) {
 
             $block1 = BuilderBlocks::findOne($pos1);
@@ -147,7 +149,7 @@ class AjaxController extends Controller
 
             $pos = $block1->position;
             $block1->position = $block2->position;
-            $block2->position= $pos;
+            $block2->position = $pos;
             $block1->save();
             $block2->save();
             return $this->redirect('/testbuilder/default/index?id=' . $block1->page_id);
@@ -202,7 +204,7 @@ class AjaxController extends Controller
      * @param $id
      * @return bool|\yii\web\Response
      */
-    public function actionSaveBlock($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt  = '', $mb  = '', $isCont = '', $isLink = '', $link_title = '')
+    public function actionSaveBlock($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt = '', $mb = '', $isCont = '', $isLink = '', $link_title = '', $isH = 0, $isD = 1, $isT = 1, $isM = 1 )
     {
         if (\Yii::$app->request->isAjax) {
 
@@ -216,8 +218,31 @@ class AjaxController extends Controller
             $block->style_margin_top = $mt;
             $block->style_margin_bottom = $mb;
             ($isCont == 'true') ? $block->css_isContainer = 1 : $block->css_isContainer = 0;
-            ($isLink == 'true') ? $block->isLink = 1: $block->isLink = 0;
+            ($isLink == 'true') ? $block->isLink = 1 : $block->isLink = 0;
             ($link_title == 'null') ? $block->link_title = ' ' : $block->link_title = $link_title;
+            ($isH == 'true') ? $block->isHide = 1 : $block->isHide = 0;
+            ($isD == 'true') ? $block->isDesktop = 1 : $block->isDesktop = 0;
+            ($isT == 'true') ? $block->isTablet = 1 : $block->isTablet = 0;
+            ($isM == 'true') ? $block->isMobile = 1 : $block->isMobile = 0;
+            $block->save();
+
+            return true;
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    /**
+     * @param $id
+     * @param $link
+     * @return bool|\yii\web\Response
+     */
+    public function actionMenuEditLink($id, $link)
+    {
+        if (\Yii::$app->request->isAjax) {
+            $block = BuilderBlocks::findOne($id);
+            $block->link_title = $link;
             $block->save();
 
             return true;
