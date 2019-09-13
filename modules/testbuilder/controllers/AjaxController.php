@@ -12,27 +12,70 @@ use app\modules\testbuilder\models\BuilderBlockHtml;
 class AjaxController extends Controller
 {
     // БЛОКИ
-    /**
+    /** Сохранение блока при быстром редактирование
      * @param $id
      * @param $title
      * @param $title_h
      * @param $title_color
      * @return bool|\yii\web\Response
      */
-    public function actionBlockSaveTitle($id, $title, $title_h, $title_color)
+    public function actionBlockSaveTitle($id, $title, $title_h, $title_color, $isH = 0, $isD = 1, $isT = 1, $isM = 1)
     {
         if (\Yii::$app->request->isAjax) {
             $block = BuilderBlocks::findOne($id);
             $block->title = $title;
             $block->title_head = $title_h;
             $block->title_color = $title_color;
+            ($isH == 'true') ? $block->isHide = 1 : $block->isHide = 0;
+            ($isD == 'true') ? $block->isDesktop = 1 : $block->isDesktop = 0;
+            ($isT == 'true') ? $block->isTablet = 1 : $block->isTablet = 0;
+            ($isM == 'true') ? $block->isMobile = 1 : $block->isMobile = 0;
             return $block->save();
         } else {
             return $this->redirect('/');
         }
     }
 
-    /**
+    /**Сохранение всех данных блока при редактирование
+     * @param $page_id
+     * @param string $title
+     * @param string $title_head
+     * @param string $title_color
+     * @param string $class
+     * @param $id
+     * @return bool|\yii\web\Response
+     */
+    public function actionBlockSaveData($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt = '', $mb = '', $isCont = '', $isLink = '', $link_title = '', $isH = 0, $isD = 1, $isT = 1, $isM = 1, $css_background = 'FFFFFF')
+    {
+        if (\Yii::$app->request->isAjax) {
+
+            $block = BuilderBlocks::findOne($id);
+            $block->title = $title;
+            $block->page_id = $page_id;
+            $block->title_head = $title_head;
+            $block->title_color = $title_color;
+            $block->class = $class;
+            $block->style_margin_top = $mt;
+            $block->style_margin_bottom = $mb;
+            ($isCont == 'true') ? $block->css_isContainer = 1 : $block->css_isContainer = 0;
+            ($isLink == 'true') ? $block->isLink = 1 : $block->isLink = 0;
+            ($link_title == 'null') ? $block->link_title = ' ' : $block->link_title = $link_title;
+            ($isH == 'true') ? $block->isHide = 1 : $block->isHide = 0;
+            ($isD == 'true') ? $block->isDesktop = 1 : $block->isDesktop = 0;
+            ($isT == 'true') ? $block->isTablet = 1 : $block->isTablet = 0;
+            ($isM == 'true') ? $block->isMobile = 1 : $block->isMobile = 0;
+            $block->css_background = $css_background;
+            $block->save();
+
+            return true;
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    /** Дублирование блока
+     * Необходим прописывать каждый блок!
      * @param $id
      * @return \yii\web\Response
      */
@@ -58,6 +101,16 @@ class AjaxController extends Controller
                 $block->builder_id = $block_html->id;
                 $block->builder_table = 'blok_html';
             }
+            if ($block_old->builder_table == 'block_command') {
+                $block_command_old = BuilderCommands::findOne($block_old->builder_id);
+                $block_command = new BuilderCommands();
+                $block_command->col = $block_command_old->col;
+                $block_command->design = $block_command_old->design;
+                $block_command->save();
+
+                $block->builder_id = $block_command->id;
+                $block->builder_table = 'block_command';
+            }
             $block->save();
             return $this->redirect('/testbuilder/default/index?id=' . $block_old->page_id);
         } else {
@@ -65,7 +118,7 @@ class AjaxController extends Controller
         }
     }
 
-    /**
+    /** Удаление блока
      * @param $id
      * @return \yii\web\Response
      * @throws \Throwable
@@ -75,7 +128,14 @@ class AjaxController extends Controller
     {
         if (\Yii::$app->request->isAjax) {
             $block = BuilderBlocks::findOne($id);
-            $page_id = $block->page_id;
+            if ($block->builder_table == 'blok_html') {
+                $block_html = BuilderBlockHtml::findOne($block->builder_id);
+                $block_html->delete();
+            }
+            if ($block->builder_table == 'block_command') {
+                $block_command = BuilderCommands::findOne($block->builder_id);
+                $block_command->delete();
+            }
             $block->delete();
             return $this->redirect('/testbuilder/default/index?id=' . $page_id);
         } else {
@@ -83,7 +143,7 @@ class AjaxController extends Controller
         }
     }
 
-    /**
+    /** Сохранение настроек html блока
      * @param $id
      * @param $code
      * @param $border
@@ -101,7 +161,7 @@ class AjaxController extends Controller
         }
     }
 
-    /**
+    /** Добавление html блока
      * @param $page_id
      * @param $title
      * @param $title_head
@@ -142,7 +202,12 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionBlockChangePos($pos1, $pos2)
+    /** Сохранение позици 2=ух блоков после перемещений их
+     * @param $pos1
+     * @param $pos2
+     * @return \yii\web\Response
+     */
+    public function actionBlockSavePos($pos1, $pos2)
     {
         if (\Yii::$app->request->isAjax) {
 
@@ -161,6 +226,21 @@ class AjaxController extends Controller
         }
     }
 
+    /** Создание блока Команда
+     * @param $page_id
+     * @param int $command_design
+     * @param int $command_col
+     * @param string $people_name
+     * @param string $p_image
+     * @param $p_image_h
+     * @param $p_image_w
+     * @param $p_image_b
+     * @param string $title
+     * @param string $title_head
+     * @param $title_color
+     * @param string $class
+     * @return \yii\web\Response
+     */
     public function actionBlockCommandsAdd($page_id, $command_design = 0, $command_col = 1, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '')
     {
         if (\Yii::$app->request->isAjax) {
@@ -186,7 +266,7 @@ class AjaxController extends Controller
             $block->page_id = $page_id;
             $block->title_head = $title_head;
             $block->title_color = $title_color;
-            $block->builder_table = 'blok_command';
+            $block->builder_table = 'block_command';
             $block->builder_id = $block_command->id;
             $block->class = $class;
             $block->save();
@@ -201,7 +281,18 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionAddPeopleInCommand($page_id, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $content, $command_id)
+    /** Добавление селовека в блок КОМАНДА
+     * @param $page_id
+     * @param string $people_name
+     * @param string $p_image
+     * @param $p_image_h
+     * @param $p_image_w
+     * @param $p_image_b
+     * @param $content
+     * @param $command_id
+     * @return \yii\web\Response
+     */
+    public function actionBlockPeopleAddInCommand($page_id, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $content, $command_id)
     {
         if (\Yii::$app->request->isAjax) {
             $people = new BuilderCommandPeople();
@@ -222,6 +313,12 @@ class AjaxController extends Controller
         }
     }
 
+    /** Сохранение настроек команды
+     * @param $col
+     * @param $design
+     * @param $id
+     * @return bool|\yii\web\Response
+     */
     public function actionBlockCommandSave($col, $design, $id){
         if (\Yii::$app->request->isAjax) {
             $command = BuilderCommands::findOne($id);
@@ -234,7 +331,7 @@ class AjaxController extends Controller
         }
     }
 
-    /**
+    /** Обновление настроек страницы
      * @param $id
      * @param $title
      * @param $desc
@@ -270,45 +367,9 @@ class AjaxController extends Controller
         }
     }
 
-    /**
-     * @param $page_id
-     * @param string $title
-     * @param string $title_head
-     * @param string $title_color
-     * @param string $class
-     * @param $id
-     * @return bool|\yii\web\Response
-     */
-    public function actionSaveBlock($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt = '', $mb = '', $isCont = '', $isLink = '', $link_title = '', $isH = 0, $isD = 1, $isT = 1, $isM = 1)
-    {
-        if (\Yii::$app->request->isAjax) {
 
-            $block = BuilderBlocks::findOne($id);
-            $block->title = $title;
-            $block->title = $title;
-            $block->page_id = $page_id;
-            $block->title_head = $title_head;
-            $block->title_color = $title_color;
-            $block->class = $class;
-            $block->style_margin_top = $mt;
-            $block->style_margin_bottom = $mb;
-            ($isCont == 'true') ? $block->css_isContainer = 1 : $block->css_isContainer = 0;
-            ($isLink == 'true') ? $block->isLink = 1 : $block->isLink = 0;
-            ($link_title == 'null') ? $block->link_title = ' ' : $block->link_title = $link_title;
-            ($isH == 'true') ? $block->isHide = 1 : $block->isHide = 0;
-            ($isD == 'true') ? $block->isDesktop = 1 : $block->isDesktop = 0;
-            ($isT == 'true') ? $block->isTablet = 1 : $block->isTablet = 0;
-            ($isM == 'true') ? $block->isMobile = 1 : $block->isMobile = 0;
-            $block->save();
 
-            return true;
-
-        } else {
-            return $this->redirect('/');
-        }
-    }
-
-    /**
+    /** Изменение заголовка ссылки!
      * @param $id
      * @param $link
      * @return bool|\yii\web\Response

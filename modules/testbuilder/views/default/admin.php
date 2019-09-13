@@ -119,13 +119,14 @@ use yii\helpers\Json;
 
 
     <section v-for="block,index in blocks"
-             :class="{container: !block.css_isContainer,hideBlock: block.isHide}">
+             :class="{container: !block.css_isContainer,hideBlock: block.isHide}"
+            :style="'background-color: #' + block.css_background">
         <a :name="block.id"></a><br><br>
         <div :class="block.class"
              :style="'margin-top: ' + block.style_margin_top + 'px' + '; margin-bottom: ' + block.style_margin_bottom + 'px'">
             <div class="title block"
                  v-if="block_title_edit != index"
-                 @click="edit_block_title(index)"
+                 @click="block_block_block_edit_title(index)"
                  :style="'color: #' + block.title_color">
                 <div v-if="block.title_head == 'h2'">
                     <h2> {{block.title}}</h2>
@@ -139,7 +140,7 @@ use yii\helpers\Json;
             </div>
             <div class="edit_title row"
                  v-else>
-                <div class="col-sm-3 block_no_hover">
+                <div class="col-sm-2 block_no_hover">
                     <input type="text" class="form-control" placeholder="Заголовок"
                            v-model="block.title">
                 </div>
@@ -147,23 +148,27 @@ use yii\helpers\Json;
                     <input type="text" class="form-control" placeholder="Тег"
                            v-model="block.title_head">
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="input-group">
                             <span class="input-group-addon"
                                   :style="'background: #' + block.title_color"></span>
                         <input type="text" class="form-control" placeholder="Цвет"
                                v-model="block.title_color">
-                        <span class="input-group-addon"
-                              v-show="block.isMobile">
+                        <span class="input-group-addon">
+                                <input type="checkbox" v-model="block.isMobile">
                                 <span class="glyphicon glyphicon-earphone" title="Мобильный"></span>
                             </span>
-                        <span class="input-group-addon"
-                              v-show="block.isTablet">
-                                <span class="glyphicon glyphicon-phone" title="Вверх"></span>
+                        <span class="input-group-addon">
+                                <input type="checkbox" v-model="block.isTablet">
+                                <span class="glyphicon glyphicon-phone" title="Планшет"></span>
                             </span>
-                        <span class="input-group-addon"
-                              v-show="block.isDesktop">
-                                <span class="glyphicon glyphicon-hdd" title="Вверх"></span>
+                        <span class="input-group-addon">
+                                <input type="checkbox" v-model="block.isDesktop">
+                                <span class="glyphicon glyphicon-hdd" title="Компьютер"></span>
+                            </span>
+                        <span class="input-group-addon">
+                                <input type="checkbox" v-model="block.isHide">
+                                <span class="glyphicon glyphicon-search" title="Спрятать блок?"></span>
                             </span>
                     </div>
                 </div>
@@ -178,17 +183,17 @@ use yii\helpers\Json;
                                 v-if="index != 0"><span
                                     class="glyphicon glyphicon-arrow-up" title="Вверх"></span></button>
                         <button type="button" class="btn btn-default"
-                                @click="block_duplicate(index)"><span
+                                @click="block_block_duplicate(index)"><span
                                     class="glyphicon glyphicon-file" title="Дублировать"></span></button>
                         <button type="button" class="btn btn-default"
-                                @click="block_edit(index)"><span
+                                @click="block_block_edit(index)"><span
                                     class="glyphicon glyphicon-pencil " title="Редактировать"></span></button>
                         <button type="button" class="btn btn-danger"
-                                @click="block_delete(index)"><span
+                                @click="block_block_delete(index)"><span
                                     class="glyphicon glyphicon-remove" title="Удалить"></span>
                         </button>
                         <button class="btn btn-success" type="button"
-                                @click="save_block_title(index)"><span class="glyphicon glyphicon-ok"
+                                @click="block_block_save_title(index)"><span class="glyphicon glyphicon-ok"
                                                                        title="Сохранить"></span> Сохранить
                         </button>
                         <button class="btn btn-warning" type="button"
@@ -198,11 +203,11 @@ use yii\helpers\Json;
                     </div>
 
                     <!--    Окно редактирования блока-->
-                    <modal v-if="(block_edit_modal == index) && (showModal)" @close="showModal = false"
+                    <modal v-if="(block_block_edit_modal == index) && (showModal)" @close="showModal = false"
                            class="block_no_hover">
                         <h3 slot="header">Изменить блок</h3>
                         <div slot="body">
-                            <div class="add_block mt-2 bg-light shadow-sm p-2">
+                            <div class="block_new_add mt-2 bg-light shadow-sm p-2">
                                 <div class="row">
                                     <div class="col-lg-5">
                                         <input type="text" class="form-control" placeholder="Заголовок"
@@ -276,6 +281,13 @@ use yii\helpers\Json;
                                 </div>
                                 <br>
                                 <div class="input-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"> Цвет фона:</span>
+                                        <input type="text" class="form-control" placeholder="Цвет фона"
+                                               v-model="block.css_background">
+                                        <span class="input-group-addon"
+                                              :style="'background: #' + block.css_background"></span>
+                                    </div>
                                     <span class="input-group-addon">
                                         <input type="checkbox"
                                                v-model="block.isLink">
@@ -290,13 +302,13 @@ use yii\helpers\Json;
                             </div>
 
                             <button class="btn btn-success m-2"
-                                    @click="block_save_data(index)">
+                                    @click="block_block_save_data(index)">
                                 Сохранить
                             </button>
                         </div>
                         <div slot="footer">
                             <button class="btn btn-danger"
-                                    @click="modal_close_add_block()"> Закрыть
+                                    @click="modal_close_block_new_add()"> Закрыть
                             </button>
                         </div>
                     </modal>
@@ -391,7 +403,7 @@ use yii\helpers\Json;
                                 <option>6</option>
                             </select>
                             <button class="btn btn-success m-2"
-                                    @click="command_save_setting(index)">
+                                    @click="block_command_data_save(index)">
                                 Сохранить
                             </button>
                         </div>
@@ -483,7 +495,7 @@ use yii\helpers\Json;
                                                v-model="command_add_image_border">
                                     </div>
                                     <button class="btn btn-success m-2"
-                                            @click="add_people_in_command(block.builder_id.id)">
+                                            @click="block_people_add_in_command(block.builder_id.id)">
                                         Добавить
                                     </button>
                                 </div>
@@ -493,7 +505,7 @@ use yii\helpers\Json;
                 </div>
                 <div slot="footer">
                     <button class="btn btn-danger"
-                            @click="modal_close_add_block()"> Закрыть
+                            @click="modal_close_block_new_add()"> Закрыть
                     </button>
                 </div>
             </modal>
@@ -502,8 +514,8 @@ use yii\helpers\Json;
 
 
     <!--    Новый блок!-->
-    <div class="bg-light text-center p-3 bg_add_block container"
-         @click="add_block()">
+    <div class="bg-light text-center p-3 bg_block_new_add container"
+         @click="block_new_add()">
         <span class="glyphicon glyphicon-plus"></span>
     </div>
 
@@ -512,7 +524,7 @@ use yii\helpers\Json;
     <modal v-if="(showModal) && (block_add_modal)" @close="showModal = false" class="block_no_hover">
         <h3 slot="header">Добавить блок</h3>
         <div slot="body">
-            <div class="add_block mt-2 bg-light shadow-sm p-2"
+            <div class="block_new_add mt-2 bg-light shadow-sm p-2"
                  v-show="block_add_view">
                 <h3 class="text-center">
                     Добавление блока!
@@ -551,11 +563,11 @@ use yii\helpers\Json;
                     </div>
                 </div>
                 <button class="btn btn-default m-2"
-                        @click="new_block_html()">
+                        @click="block_html_add()">
                     HTML
                 </button>
                 <button class="btn btn-default m-2"
-                        @click="new_block_command()">
+                        @click="block_command_add()">
                     Команда
                 </button>
                 <button class="btn btn-default m-2"
@@ -636,14 +648,14 @@ use yii\helpers\Json;
                     </div>
                 </div>
                 <button class="btn btn-success"
-                        @click="block_command_create()">
+                        @click="block_command_save()">
                     Добавить
                 </button>
             </div>
         </div>
         <div slot="footer">
             <button class="btn btn-danger"
-                    @click="modal_close_add_block()"> Закрыть
+                    @click="modal_close_block_new_add()"> Закрыть
             </button>
         </div>
     </modal>
@@ -672,7 +684,7 @@ data:{
   //блоки
   blocks: blocks,
   block_title_edit: 999,
-  block_edit_modal: 999,
+  block_block_edit_modal: 999,
       // добавление блока
       block_add_color: '7faf24',
       block_add_view: false,
@@ -708,15 +720,15 @@ data:{
   menu_title_edit: 999,
 },
 methods: {
-    edit_block_title(index){
+    block_block_block_edit_title(index){
       this.block_title_edit = index;
     },
-    save_block_title(index) {
+    block_block_save_title(index) {
       this.block_title_edit = 999;
       $.ajax({
          url: '/testbuilder/ajax/block-save-title',
          type: 'GET',
-         data: 'id=' + blocks[index].id + '&title=' + blocks[index].title + '&title_h=' + blocks[index].title_head + '&title_color=' + blocks[index].title_color,
+         data: 'id=' + blocks[index].id + '&title=' + blocks[index].title + '&title_h=' + blocks[index].title_head + '&title_color=' + blocks[index].title_color + '&isH=' + this.blocks[index].isHide + '&isD=' + this.blocks[index].isDesktop + '&isT=' + this.blocks[index].isTablet + '&isM=' + this.blocks[index].isMobile,
          success: function(){
            console.log( blocks[index].id + 'success push');
          },
@@ -724,7 +736,7 @@ methods: {
          }
          });
     },
-    block_duplicate(index){
+    block_block_duplicate(index){
       $.ajax({
          url: '/testbuilder/ajax/block-duplicate',
          type: 'GET',
@@ -736,7 +748,7 @@ methods: {
          }
          });
     },
-    block_delete(index){
+    block_block_delete(index){
       $.ajax({
          url: '/testbuilder/ajax/block-delete',
          type: 'GET',
@@ -751,16 +763,16 @@ methods: {
     block_position_up(index){
       var pos1 = blocks[index].position;
       var pos2 = blocks[index - 1].position;
-      this.block_change_pos(pos1, pos2);
+      this.block_save_pos(pos1, pos2);
     },
     block_position_down(index){
       var pos1 = blocks[index].position;
       var pos2 = blocks[index + 1].position;
-      this.block_change_pos(pos1, pos2);
+      this.block_save_pos(pos1, pos2);
     },
-    block_change_pos(pos1, pos2){
+    block_save_pos(pos1, pos2){
       $.ajax({
-         url: '/testbuilder/ajax/block-change-pos',
+         url: '/testbuilder/ajax/block-save-pos',
          type: 'GET',
          data: 'pos1=' + pos1 + '&pos2=' + pos2,
          success: function(){
@@ -770,6 +782,26 @@ methods: {
          }
          });
     },
+     block_block_edit(index){
+      this.showModal = true;
+      this.block_block_edit_modal = index;
+    },
+    block_block_save_data(index){
+      this.block_title_edit = 999;
+      this.modal_close_block_new_add();
+    $.ajax({
+         url: '/testbuilder/ajax/block-save-data',
+         type: 'GET',
+         data: 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title + '&isH=' + this.blocks[index].isHide + '&isD=' + this.blocks[index].isDesktop + '&isT=' + this.blocks[index].isTablet + '&isM=' + this.blocks[index].isMobile + '&css_background=' + this.blocks[index].css_background,
+         success: function(){
+           console.log( id + 'success push');
+         },
+         error: function(){
+         }
+         });
+  },
+  
+  
     // HTML
     block_html_save(index){
       this.prev_html = 999;
@@ -784,31 +816,28 @@ methods: {
          }
          });
     },
-    block_edit(index){
-      this.showModal = true;
-      this.block_edit_modal = index;
-    },
-    block_save_data(index){
-      this.block_title_edit = 999;
-      this.modal_close_add_block();
+    block_html_create(){
+      this.html_block_modal = false;
+      this.showModal = false;
     $.ajax({
-         url: '/testbuilder/ajax/save-block',
+         url: '/testbuilder/ajax/block-html-add',
          type: 'GET',
-         data: 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title + '&isH=' + this.blocks[index].isHide + '&isD=' + this.blocks[index].isDesktop + '&isT=' + this.blocks[index].isTablet + '&isM=' + this.blocks[index].isMobile,
+         data: 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + this.html_block_create_code + '&border=' + this.html_block_create_border,
          success: function(){
-           console.log( id + 'success push');
+           console.log( 'success push');
          },
          error: function(){
          }
          });
   },
+   
   
   //команда
-  new_block_command(){
+  block_command_add(){
       this.command_block_modal = true;
       this.block_add_view = false;
   },
-  block_command_create(){
+  block_command_save(){
       (this.command_add_design == 'Вертикальный') ? this.command_add_design = 1 : this.command_add_design = 0;
       $.ajax({
          url: '/testbuilder/ajax/block-commands-add',
@@ -829,9 +858,9 @@ methods: {
         this.block_command_edit_design = 'Горизонтальный';
       }
   },
-  add_people_in_command(id){
+  block_people_add_in_command(id){
       $.ajax({
-         url: '/testbuilder/ajax/add-people-in-command',
+         url: '/testbuilder/ajax/block-people-add-in-command',
          type: 'GET',
          data: 'page_id=' + this.page.id + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&content=' + this.command_add_content + '&command_id=' + id,
          success: function(){
@@ -844,7 +873,7 @@ methods: {
       this.command_add_image = '';
       this.command_add_content = '';
   },
-  command_save_setting(index){
+  block_command_data_save(index){
       if (block_command_edit_design == 'Вертикальный'){
         this.blocks[index].builder_id.design = 1;
       } else {
@@ -866,20 +895,11 @@ methods: {
          }
          });
   },
-    // Дабваление блоков
-    add_block(){
-      this.block_add_view = true;
-      this.showModal = true;
-      this.block_add_modal = true;
-    },
-    new_block_html(){
-      this.block_add_view = false;
-      this.html_block_modal = true;
-    },
+  
     
    
     // МОДАЛЬНОЕ ОКНО
-    modal_close_add_block(){
+    modal_close_block_new_add(){
       this.showModal = false;
       this.block_add_modal = false;
       this.block_add_view = false;
@@ -887,20 +907,7 @@ methods: {
       this.html_block_modal = false;
       this.modal_command_people = 999;
     },
-    block_html_create(){
-      this.html_block_modal = false;
-      this.showModal = false;
-    $.ajax({
-         url: '/testbuilder/ajax/block-html-add',
-         type: 'GET',
-         data: 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + this.html_block_create_code + '&border=' + this.html_block_create_border,
-         success: function(){
-           console.log( 'success push');
-         },
-         error: function(){
-         }
-         });
-  },
+   
   
   // СТРАНИЦА
   page_save(){
@@ -929,6 +936,17 @@ methods: {
          }
          });
   },
+  
+   // Дабваление блоков
+    block_new_add(){
+      this.block_add_view = true;
+      this.showModal = true;
+      this.block_add_modal = true;
+    },
+    block_html_add(){
+      this.block_add_view = false;
+      this.html_block_modal = true;
+    },
     
 }
     
@@ -995,13 +1013,13 @@ $this->registerJs($js, \yii\web\View::POS_END);
         border: 0px;
     }
 
-    .bg_add_block {
+    .bg_block_new_add {
         border: 5px solid;
         border-color: #999999;
         border-radius: 20px 20px;
     }
 
-    .bg_add_block :hover {
+    .bg_block_new_add :hover {
         border: 5px solid;
         background: #494f54;
         color: white;

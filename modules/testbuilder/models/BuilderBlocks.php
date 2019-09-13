@@ -28,7 +28,7 @@ use Yii;
  * @property int $isDesktop
  * @property int $isTablet
  * @property int $isMobile
- *
+ * @property string css_background
  * @property BuilderBlockHtml $builder
  * @property BuilderPage $page
  */
@@ -50,7 +50,7 @@ class BuilderBlocks extends \yii\db\ActiveRecord
         return [
             [['position', 'page_id', 'builder_id', 'style_margin_top', 'style_margin_bottom', 'css_isContainer', 'isLink', 'isHide', 'isDesktop', 'isTablet', 'isMobile'], 'integer'],
             [['js', 'style'], 'string'],
-            [['builder_table', 'title', 'description', 'class', 'link_title'], 'string', 'max' => 255],
+            [['builder_table', 'title', 'description', 'class', 'link_title', 'css_background'], 'string', 'max' => 255],
             [['title_head', 'title_color'], 'string', 'max' => 10],
             [['builder_id'], 'exist', 'skipOnError' => true, 'targetClass' => BuilderBlockHtml::className(), 'targetAttribute' => ['builder_id' => 'id']],
             [['page_id'], 'exist', 'skipOnError' => true, 'targetClass' => BuilderPage::className(), 'targetAttribute' => ['page_id' => 'id']],
@@ -84,6 +84,7 @@ class BuilderBlocks extends \yii\db\ActiveRecord
             'isDesktop' => 'Is Desktop',
             'isTablet' => 'Is Tablet',
             'isMobile' => 'Is Mobile',
+            'css_background' => 'background'
         ];
     }
 

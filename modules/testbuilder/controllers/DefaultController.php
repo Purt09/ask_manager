@@ -29,7 +29,7 @@ class DefaultController extends Controller
         foreach ($blocks as $block) {
             if ($block['builder_table'] == 'blok_html')
                 $block['builder_id'] = BuilderBlockHtml::find()->where(['id' => $block['builder_id']])->asArray()->one();
-            if ($block['builder_table'] == 'blok_command') {
+            if ($block['builder_table'] == 'block_command') {
                 $block['builder_id'] = BuilderCommands::find()->where(['id' => $block['builder_id']])->asArray()->one();
                 $block['description']   = BuilderCommandPeople::find()->where(['commands_id' => $block['builder_id']['id']])->asArray()->all();
             }
