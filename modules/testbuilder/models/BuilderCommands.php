@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "keys_builder_commands".
  *
  * @property int $id
- * @property int $design
+ * @property string $design
  * @property int $peoples
  * @property int $col
  *
@@ -30,7 +30,8 @@ class BuilderCommands extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['design', 'peoples', 'col'], 'integer'],
+            [['peoples', 'col'], 'integer'],
+            [['design'], 'string', 'max' => 255],
         ];
     }
 

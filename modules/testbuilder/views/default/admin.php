@@ -333,10 +333,10 @@ use yii\helpers\Json;
             <!--                Если блок COMMAND!-->
             <div v-if="block.builder_table == 'blok_command'"
                  class="block"
-                 @click="modal_command_people = index">
+                 @click="block_command_edit(index)">
                 <div class="row">
                     <div v-for="people in block.description">
-                        <div :class="'col-sm-' + block.builder_id.col">
+                        <div :class="'col-sm-' + 12 / block.builder_id.col">
                             <!--                        Вертикальный дизайн-->
                             <div class="text-center"
                                  v-if="block.builder_id.design == 1">
@@ -367,86 +367,128 @@ use yii\helpers\Json;
             </div>
 
             <!--    Окно добавления COMMAND-->
-            <modal  v-if="modal_command_people == index"
-                    class="block_no_hover"
-                    @close="modal_command_people = false">
+            <modal v-if="modal_command_people == index"
+                   class="block_no_hover"
+                   @close="modal_command_people = false">
                 <h3 slot="header">Изменение команды и добавление участника</h3>
                 <div slot="body">
-                    <h3>Настройки команды:</h3>
-                    <div class="form-group">
-                        <label for="sel1">Выберите дизайн:  (1 - вуртиикальный, 0 - горизонтальный)</label>
-                        <input type="text" class="form-control"
-                               v-model="block.builder_id.design">
-                        <label for="sel1">Количество столбцов: (1,2,3,4,6,12):</label>
-                        <input type="text" class="form-control"
-                               v-model="12 / block.builder_id.col">
-                        <button class="btn btn-success m-2"
-                                @click="command_save_setting(index)">
-                            Сохранить
-                        </button>
-                        <h3>Редактирование:</h3>
-                        <div class="row bg-light p-3"
-                             v-for="people,index in block.description">
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" placeholder="Имя"
-                                       v-model="people.name"><br>
-                            </div>
-                            <div class="col-sm-6">
-                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
-                              placeholder="Текст"
-                              v-model="people.content"></textarea>
-                            </div>
-                            <br><br><br><br><br>
-                            <div class="input-group col-sm-12">
-                                <span class="input-group-addon"><strong>Картинка:</strong></span>
-                                <input type="text" class="form-control" placeholder="Путь к картинке"
-                                       v-model="people.image">
-                                <span class="input-group-addon">Высота:</span>
-                                <input type="text" class="form-control" placeholder="Высота"
-                                       v-model="people.image_h">
-                                <span class="input-group-addon">Ширина:</span>
-                                <input type="text" class="form-control" placeholder="Ширина"
-                                       v-model="people.image_w">
-                                <span class="input-group-addon">Округление:</span>
-                                <input type="text" class="form-control" placeholder="border"
-                                       v-model="people.image_w">
-                            </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Настройки команды:</div>
+                        <div class="panel-body">
+                            <label for="sel1">Выберите дизайн: </label>
+                            <select class="form-control"
+                                    v-model="block_command_edit_design">
+                                <option>Вертикальный</option>
+                                <option>Горизонтальный</option>
+                            </select>
+                            <label for="sel1">Количество столбцов: </label>
+                            <select class="form-control"
+                                    v-model="block.builder_id.col">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>6</option>
+                            </select>
                             <button class="btn btn-success m-2"
-                                  @click="save_people(people.id)">  <!--  TODO: прописать функцию! -->
-                                Сохранить!
+                                    @click="command_save_setting(index)">
+                                Сохранить
                             </button>
                         </div>
-                    <h3>Добавить человека:</h3>
-                    <div class="row bg-light p-3">
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" placeholder="Имя"
-                                   v-model="command_add_name"><br>
-                        </div>
-                        <div class="col-sm-6">
-                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
-                              placeholder="Текст"
-                              v-model="command_add_content"></textarea>
-                        </div>
-                        <br><br><br><br><br>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Редактирование:</div>
+                        <div class="panel-body">
+                            <div class="panel panel-default"
+                                 v-for="people,index in block.description">
+                                <div class="panel-heading">
+                                    <div class="row p-1">
+                                        <div class="col-sm-11">
+                                            {{people.name}}:
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <div class="text-right">
+                                                <button class="btn btn-success btn-xs">
+                                                    <span class="glyphicon glyphicon-plus " title="Сохранить"></span>
+                                                </button>
+                                                <button class="btn btn-danger btn-xs">
+                                                    <span class="glyphicon glyphicon-remove " title="Удалить"></span>
+                                                </button>
+                                            </div>
+                                        </div>
 
-                        <div class="input-group col-sm-12">
-                            <span class="input-group-addon"><strong>Картинка:</strong></span>
-                            <input type="text" class="form-control" placeholder="Путь к картинке"
-                                   v-model="command_add_image">
-                            <span class="input-group-addon">Высота:</span>
-                            <input type="text" class="form-control" placeholder="Высота"
-                                   v-model="command_add_image_h">
-                            <span class="input-group-addon">Ширина:</span>
-                            <input type="text" class="form-control" placeholder="Ширина"
-                                   v-model="command_add_image_w">
-                            <span class="input-group-addon">Округление:</span>
-                            <input type="text" class="form-control" placeholder="border"
-                                   v-model="command_add_image_border">
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Имя"
+                                               v-model="people.name"><br>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
+                                                  placeholder="Текст"
+                                                  v-model="people.content">
+                                        </textarea>
+                                    </div>
+                                    <div class="input-group col-sm-12 p-2">
+                                        <span class="input-group-addon"><strong>Картинка:</strong></span>
+                                        <input type="text" class="form-control" placeholder="Путь к картинке"
+                                               v-model="people.image">
+                                        <span class="input-group-addon">Высота:</span>
+                                        <input type="text" class="form-control" placeholder="Высота"
+                                               v-model="people.image_h">
+                                        <span class="input-group-addon">Ширина:</span>
+                                        <input type="text" class="form-control" placeholder="Ширина"
+                                               v-model="people.image_w">
+                                        <span class="input-group-addon">Округление:</span>
+                                        <input type="text" class="form-control" placeholder="border"
+                                               v-model="people.image_border">
+                                    </div>
+                                    <button class="btn btn-success m-2"
+                                            @click="save_people(people.id)">  <!--  TODO: прописать функцию! -->
+                                        Сохранить!
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <button class="btn btn-success m-2"
-                                @click="add_people_in_command(block.builder_id.id)">
-                            Добавить
-                        </button>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Добавить пользователя:</div>
+                        <div class="panel-body">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Имя"
+                                               v-model="command_add_name"><br>
+                                    </div>
+                                    <div class="col-sm-6">
+                                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
+                                              placeholder="Текст"
+                                              v-model="command_add_content">
+                                    </textarea>
+                                    </div>
+                                    <div class="input-group col-sm-12">
+                                        <span class="input-group-addon"><strong>Картинка:</strong></span>
+                                        <input type="text" class="form-control" placeholder="Путь к картинке"
+                                               v-model="command_add_image">
+                                        <span class="input-group-addon">Высота:</span>
+                                        <input type="text" class="form-control" placeholder="Высота"
+                                               v-model="command_add_image_h">
+                                        <span class="input-group-addon">Ширина:</span>
+                                        <input type="text" class="form-control" placeholder="Ширина"
+                                               v-model="command_add_image_w">
+                                        <span class="input-group-addon">Округление:</span>
+                                        <input type="text" class="form-control" placeholder="border"
+                                               v-model="command_add_image_border">
+                                    </div>
+                                    <button class="btn btn-success m-2"
+                                            @click="add_people_in_command(block.builder_id.id)">
+                                        Добавить
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div slot="footer">
@@ -457,7 +499,6 @@ use yii\helpers\Json;
             </modal>
         </div>
     </section>
-
 
 
     <!--    Новый блок!-->
@@ -780,6 +821,14 @@ methods: {
          }
          });
   },
+  block_command_edit(index){
+      this.modal_command_people = index;
+      if (blocks[index].builder_id.design == 1){
+        this.block_command_edit_design = 'Вертикальный';
+      } else {
+        this.block_command_edit_design = 'Горизонтальный';
+      }
+  },
   add_people_in_command(id){
       $.ajax({
          url: '/testbuilder/ajax/add-people-in-command',
@@ -796,10 +845,20 @@ methods: {
       this.command_add_content = '';
   },
   command_save_setting(index){
+      if (block_command_edit_design == 'Вертикальный'){
+        this.blocks[index].builder_id.design = 1;
+      } else {
+        this.blocks[index].builder_id.design = 0;
+      }
+      if (blocks[index].builder_id.col == 3) 
+        comand_save_col = 4;
+      if (blocks[index].builder_id.col == 4)
+        comand_save_col = 3;
+      
       $.ajax({
          url: '/testbuilder/ajax/block-command-save',
          type: 'GET',
-         data: 'col=' + this.blocks[index].builder_id.col + '&design=' + this.blocks[index].builder_id.design + '&id=' + this.blocks[index].builder_id.id,
+         data: 'col=' + comand_save_col + '&design=' + this.blocks[index].builder_id.design + '&id=' + this.blocks[index].builder_id.id,
          success: function(){
            console.log('success push');
          },
@@ -974,8 +1033,8 @@ $this->registerJs($js, \yii\web\View::POS_END);
 
     .modal-container {
         overflow: scroll;
-        width: 80%;
-        height: 400px;
+        width: 90%;
+        height: 90%;
         margin: 0px auto;
         padding: 20px 30px;
         background-color: #fff;

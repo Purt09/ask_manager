@@ -15,6 +15,7 @@ use Yii;
  * @property int $image_h
  * @property int $image_w
  * @property string $image_border
+ * @property string $job
  *
  * @property BuilderCommands $commands
  */
@@ -36,7 +37,7 @@ class BuilderCommandPeople extends \yii\db\ActiveRecord
         return [
             [['content'], 'string'],
             [['commands_id', 'image_h', 'image_w'], 'integer'],
-            [['name', 'image', 'image_border'], 'string', 'max' => 255],
+            [['name', 'image', 'image_border', 'job'], 'string', 'max' => 255],
             [['commands_id'], 'exist', 'skipOnError' => true, 'targetClass' => BuilderCommands::className(), 'targetAttribute' => ['commands_id' => 'id']],
         ];
     }
@@ -55,6 +56,7 @@ class BuilderCommandPeople extends \yii\db\ActiveRecord
             'image_h' => 'Image H',
             'image_w' => 'Image W',
             'image_border' => 'Image Border',
+            'job' => 'Job',
         ];
     }
 

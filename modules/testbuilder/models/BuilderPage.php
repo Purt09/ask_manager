@@ -17,6 +17,7 @@ use Yii;
  * @property string $footer_html
  * @property string $js
  * @property string $style
+ * @property string $css_background
  *
  * @property BuilderBlocks[] $builderBlocks
  */
@@ -37,7 +38,7 @@ class BuilderPage extends \yii\db\ActiveRecord
     {
         return [
             [['footer_html'], 'string'],
-            [['title', 'description', 'class', 'seo_title', 'seo_desc', 'seo_key', 'js', 'style'], 'string', 'max' => 255],
+            [['title', 'description', 'class', 'seo_title', 'seo_desc', 'seo_key', 'js', 'style', 'css_background'], 'string', 'max' => 255],
         ];
     }
 
@@ -57,6 +58,7 @@ class BuilderPage extends \yii\db\ActiveRecord
             'footer_html' => 'Footer Html',
             'js' => 'Js',
             'style' => 'Style',
+            'css_background' => 'Css Background',
         ];
     }
 
