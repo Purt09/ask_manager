@@ -11,6 +11,8 @@ use Yii;
  * @property string $design
  * @property int $peoples
  * @property int $col
+ * @property int $gor_col_image
+ * @property int $gor_col_content
  *
  * @property BuilderCommandPeople[] $builderCommandPeoples
  */
@@ -30,7 +32,7 @@ class BuilderCommands extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['peoples', 'col'], 'integer'],
+            [['peoples', 'col', 'gor_col_image', 'gor_col_content'], 'integer'],
             [['design'], 'string', 'max' => 255],
         ];
     }

@@ -241,12 +241,14 @@ class AjaxController extends Controller
      * @param string $class
      * @return \yii\web\Response
      */
-    public function actionBlockCommandsAdd($page_id, $command_design = 0, $command_col = 1, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '')
+    public function actionBlockCommandsAdd($page_id, $command_design = 'Вертикальный', $command_col = 1, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $col_image, $col_content)
     {
         if (\Yii::$app->request->isAjax) {
             $block_command = new BuilderCommands();
             $block_command->design = $command_design;
             $block_command->col = 12 / $command_col;
+            $block_command->gor_col_content = $col_content;
+            $block_command->gor_col_image = $col_image;
             $block_command->save();
 
             $people = new BuilderCommandPeople();
@@ -313,17 +315,71 @@ class AjaxController extends Controller
         }
     }
 
+
+    /**
+     * @param $id
+     * @return false|int|\yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionBlockCommandPeopleDelete($id){
+        if (\Yii::$app->request->isAjax) {
+
+            $people = BuilderCommandPeople::findOne($id);
+            return $people->delete();
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+
+    /**
+     * @param $id
+     * @param $content
+     * @param $commands_id
+     * @param $image
+     * @param $image_h
+     * @param $image_w
+     * @param $image_border
+     * @param $job
+     * @return false|int|\yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function actionBlockCommandPeopleSave($id, $name, $content, $image, $image_h, $image_w, $image_border, $job){
+        if (\Yii::$app->request->isAjax) {
+
+            $people = BuilderCommandPeople::findOne($id);
+            $people->name = $name;
+            $people->content = $content;
+            if ($image == '')
+                $image = 'http://placehold.it/' . $image_h . '/DC1734/fff&text=' . $name;
+            $people->image = $image;
+            $people->image_h = $image_h;
+            $people->image_w = $image_w;
+            $people->image_border = $image_border;
+            $people->job = $job;
+            return $people->save();
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
     /** Сохранение настроек команды
      * @param $col
      * @param $design
      * @param $id
      * @return bool|\yii\web\Response
      */
-    public function actionBlockCommandSave($col, $design, $id){
+    public function actionBlockCommandSave($col, $design, $id, $col_image, $col_content){
         if (\Yii::$app->request->isAjax) {
             $command = BuilderCommands::findOne($id);
             $command->col = 12 / $col;
             $command->design = $design;
+            $command->gor_col_content = $col_content;
+            $command->gor_col_image = $col_image;
             return  $command->save();
 
         } else {
