@@ -322,7 +322,8 @@ class AjaxController extends Controller
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function actionBlockCommandPeopleDelete($id){
+    public function actionBlockCommandPeopleDelete($id)
+    {
         if (\Yii::$app->request->isAjax) {
 
             $people = BuilderCommandPeople::findOne($id);
@@ -347,7 +348,8 @@ class AjaxController extends Controller
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function actionBlockCommandPeopleSave($id, $name, $content, $image, $image_h, $image_w, $image_border, $job){
+    public function actionBlockCommandPeopleSave($id, $name, $content, $image, $image_h, $image_w, $image_border, $job)
+    {
         if (\Yii::$app->request->isAjax) {
 
             $people = BuilderCommandPeople::findOne($id);
@@ -373,15 +375,36 @@ class AjaxController extends Controller
      * @param $id
      * @return bool|\yii\web\Response
      */
-    public function actionBlockCommandSave($col, $design, $id, $col_image, $col_content){
+    public function actionBlockCommandSave($col, $design, $id, $col_image, $col_content)
+    {
         if (\Yii::$app->request->isAjax) {
             $command = BuilderCommands::findOne($id);
             $command->col = 12 / $col;
             $command->design = $design;
             $command->gor_col_content = $col_content;
             $command->gor_col_image = $col_image;
-            return  $command->save();
+            return $command->save();
 
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    /**
+     * @param $page
+     */
+    public function actionBlockHrAdd($page_id)
+    {
+        if (\Yii::$app->request->isAjax) {
+            $block = new BuilderBlocks();
+            $block->page_id = $page_id;
+            $block->builder_table = 'hr';
+            $block->style_margin_bottom = 27;
+            $block->style_margin_top = 27;
+            $block->save();
+
+            $block->position = $block->id;
+            return $block->save();
         } else {
             return $this->redirect('/');
         }
@@ -422,7 +445,6 @@ class AjaxController extends Controller
             return $this->redirect('/');
         }
     }
-
 
 
     /** Изменение заголовка ссылки!

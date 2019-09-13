@@ -66,7 +66,8 @@ use yii\helpers\Json;
 
 
     <!--    Окно редакттрования страницы-->
-    <modal v-if="page_cog" @close="showModal = false">
+    <modal class="modal"
+            v-if="page_cog" @close="showModal = false">
         <h3 slot="header">Настройки страницы</h3>
         <div slot="body">
             <div class="page_cog bg-light p-3"
@@ -204,7 +205,7 @@ use yii\helpers\Json;
 
                     <!--    Окно редактирования блока-->
                     <modal v-if="(block_block_edit_modal == index) && (showModal)" @close="showModal = false"
-                           class="block_no_hover">
+                           class="modal">
                         <h3 slot="header">Изменить блок</h3>
                         <div slot="body">
                             <div class="block_new_add mt-2 bg-light shadow-sm p-2">
@@ -359,8 +360,7 @@ use yii\helpers\Json;
                                 <div class="people_name text-center">
                                     {{people.name}}
                                 </div>
-                                <div class="people_content">
-                                    {{people.content}}
+                                <div class="people_content" v-html="people.content">
                                 </div>
                             </div>
                             <!--                        Горизонтальный-->
@@ -375,8 +375,8 @@ use yii\helpers\Json;
                                     </div>
                                 </div>
                                 <div class=" people_content"
-                                     :class="'col-sm-' + block.builder_id.gor_col_content">
-                                    {{people.content}}
+                                     :class="'col-sm-' + block.builder_id.gor_col_content"
+                                     v-html="people.content">
                                 </div>
                             </div>
                         </div>
@@ -386,7 +386,7 @@ use yii\helpers\Json;
 
             <!--    Окно редактирования COMMAND-->
             <modal v-if="modal_command_people == index"
-                   class="block_no_hover"
+                   class="modal"
                    @close="modal_command_people = false">
                 <h3 slot="header">Изменение команды и добавление участника</h3>
                 <div slot="body">
@@ -524,6 +524,11 @@ use yii\helpers\Json;
                     </button>
                 </div>
             </modal>
+
+            <div v-if="block.builder_table == 'hr'"
+                 class="block">
+                <hr>
+            </div>
         </div>
     </section>
 
@@ -536,7 +541,8 @@ use yii\helpers\Json;
 
 
     <!--    Окно добавления нового блока-->
-    <modal v-if="(showModal) && (block_add_modal)" @close="showModal = false" class="block_no_hover">
+    <modal class="modal"
+           v-if="(showModal) && (block_add_modal)" @close="showModal = false" >
         <h3 slot="header">Добавить блок</h3>
         <div slot="body">
             <div class="block_new_add mt-2 bg-light shadow-sm p-2"
@@ -588,6 +594,10 @@ use yii\helpers\Json;
                 <button class="btn btn-default m-2"
                         @click="new_block_list()">
                     Список
+                </button>
+                <button class="btn btn-default m-2"
+                        @click="block_hr_add()">
+                    Полоска
                 </button>
             </div>
 
@@ -985,6 +995,19 @@ methods: {
       this.html_block_modal = true;
     },
     
+    block_hr_add()
+    {
+      $.ajax({
+         url: '/testbuilder/ajax/block-hr-add',
+         type: 'GET',
+         data: 'page_id=' + this.page.id,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+         });
+    }
 }
     
 
@@ -1042,12 +1065,12 @@ $this->registerJs($js, \yii\web\View::POS_END);
         opacity: 0.5;
     }
 
-    .block :hover {
+    .block:not(.modal) :hover {
         border: #494f54 1px dotted;
     }
 
     .block_no_hover :hover {
-        border: 0px;
+        pointer-events:none;
     }
 
     .bg_block_new_add {
