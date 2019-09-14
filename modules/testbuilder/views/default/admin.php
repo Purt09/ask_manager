@@ -18,7 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 use yii\helpers\Json;
 
-
 ?>
 
 <div class="page" id="app">
@@ -67,7 +66,7 @@ use yii\helpers\Json;
 
     <!--    Окно редакттрования страницы-->
     <modal class="modal"
-            v-if="page_cog" @close="showModal = false">
+           v-if="page_cog" @close="showModal = false">
         <h3 slot="header">Настройки страницы</h3>
         <div slot="body">
             <div class="page_cog bg-light p-3"
@@ -121,10 +120,15 @@ use yii\helpers\Json;
 
     <section v-for="block,index in blocks"
              :class="{container: !block.css_isContainer,hideBlock: block.isHide}"
-            :style="'background-color: #' + block.css_background">
+             :style="'background-color: #' + block.css_background">
         <a :name="block.id"></a><br><br>
         <div :class="block.class"
              :style="'margin-top: ' + block.style_margin_top + 'px' + '; margin-bottom: ' + block.style_margin_bottom + 'px'">
+            <button class="btn btn-default btn-xs"
+                    @click="block_title_edit = index"
+                    v-if="block.title == ''">
+                Настроить заголовк
+            </button>
             <div class="title block"
                  v-if="block_title_edit != index"
                  @click="block_block_block_edit_title(index)"
@@ -140,7 +144,7 @@ use yii\helpers\Json;
                 </div>
             </div>
             <div class="edit_title row"
-                 v-else>
+                 v-if="block_title_edit == index">
                 <div class="col-sm-2 block_no_hover">
                     <input type="text" class="form-control" placeholder="Заголовок"
                            v-model="block.title">
@@ -195,7 +199,7 @@ use yii\helpers\Json;
                         </button>
                         <button class="btn btn-success" type="button"
                                 @click="block_block_save_title(index)"><span class="glyphicon glyphicon-ok"
-                                                                       title="Сохранить"></span> Сохранить
+                                                                             title="Сохранить"></span> Сохранить
                         </button>
                         <button class="btn btn-warning" type="button"
                                 @click="block_title_edit = 999"><span
@@ -309,7 +313,7 @@ use yii\helpers\Json;
                         </div>
                         <div slot="footer">
                             <button class="btn btn-danger"
-                                    @click="modal_close_block_new_add()"> Закрыть
+                                    @click="modal_close()"> Закрыть
                             </button>
                         </div>
                     </modal>
@@ -325,7 +329,12 @@ use yii\helpers\Json;
                      @click="prev_html = index"
                      :class="{html_block_border: block.builder_id.border == 1}"
                 ></div>
-                <div class="form-group" v-else>
+                <button class="btn btn-default btn-xs"
+                        @click="prev_html = index"
+                        v-show="prev_html != index">
+                    Редактировать html блок
+                </button>
+                <div class="form-group" v-if="prev_html == index">
                         <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
                                   placeholder="Введите свой код!"
                                   v-model="block.builder_id.code"></textarea>
@@ -344,6 +353,11 @@ use yii\helpers\Json;
             </div>
 
             <!--                Если блок COMMAND!-->
+            <button class="btn btn-default btn-xs"
+                    @click="block_command_edit(index)"
+                    v-show="((block.builder_table == 'block_command') && (block.description == ''))">
+                Редактировать команду блок
+            </button>
             <div v-if="block.builder_table == 'block_command'"
                  class="block"
                  @click="block_command_edit(index)">
@@ -368,10 +382,10 @@ use yii\helpers\Json;
                                 <div class="people_name_img text-center"
                                      :class="'col-sm-' + block.builder_id.gor_col_image">
                                     <div class="people_name">
-                                    <img :src="people.image" :alt="people.name"
-                                         :style="'height: ' + people.image_h + 'px; width: ' + people.image_w + 'px; border-radius: ' + people.image_border">
-                                    <br>
-                                    {{people.name}}
+                                        <img :src="people.image" :alt="people.name"
+                                             :style="'height: ' + people.image_h + 'px; width: ' + people.image_w + 'px; border-radius: ' + people.image_border">
+                                        <br>
+                                        {{people.name}}
                                     </div>
                                 </div>
                                 <div class=" people_content"
@@ -382,6 +396,16 @@ use yii\helpers\Json;
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!--Если hr-->
+            <div v-if="block.builder_table == 'hr'"
+                 class="block">
+                <button class="btn btn-default btn-xs"
+                        @click="block_title_edit = index">
+                    Настроить заголовк
+                </button>
+                <hr>
             </div>
 
             <!--    Окно редактирования COMMAND-->
@@ -429,7 +453,7 @@ use yii\helpers\Json;
                         <div class="panel-body">
                             <div class="panel panel-default"
                                  v-for="people,indexP in block.description"
-                                v-show="people.commands_id == block.builder_id.id">
+                                 v-show="people.commands_id == block.builder_id.id">
                                 <div class="panel-heading">
                                     <div class="row p-1">
                                         <div class="col-sm-11">
@@ -452,7 +476,8 @@ use yii\helpers\Json;
                                                v-model="people.name"><br>
                                     </div>
                                     <div class="col-sm-6">
-                                        <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
+                                        <textarea class="form-control rounded-0" id="exampleFormControlTextarea1"
+                                                  rows="4"
                                                   placeholder="Текст"
                                                   v-model="people.content">
                                         </textarea>
@@ -520,15 +545,166 @@ use yii\helpers\Json;
                 </div>
                 <div slot="footer">
                     <button class="btn btn-danger"
-                            @click="modal_close_block_new_add()"> Закрыть
+                            @click="modal_close()"> Закрыть
                     </button>
                 </div>
             </modal>
 
-            <div v-if="block.builder_table == 'hr'"
-                 class="block">
-                <hr>
+            <!--            Если СПИСОК-->
+            <div v-if="block.builder_table == 'block_list'"
+                 class="block"
+                 @click="block_command_edit(index)">
+                <div class="row">
+                    <div v-if="block.builder_id.design == 'С нумерацией'"
+                         @click="modal_list = index">
+                        <ol :class="{list: block.builder_id.col == 2}">
+                            <li v-for="item in block.description">
+                                <label for="list"> {{item.title}}</label><br v-show="item.title != ''">
+                                <span v-html="item.content"></span>
+                            </li>
+                        </ol>
+                    </div>
+                    <div v-if="block.builder_id.design == 'С точками'"
+                         @click="modal_list = index">
+                        <ul :class="{list: block.builder_id.col == 2}">
+                            <li v-for="item in block.description" v-html="item.content"></li>
+                        </ul>
+                    </div>
+                    <div v-if="block.builder_id.design == 'С картинкой'"
+                         @click="modal_list = index">
+                        <ul class="section-4__list ul-reset"
+                            :class="{list: block.builder_id.col == 2}">
+                            <li class="list__item"
+                                v-for="item,indexI in block.description">
+                                <div class="list__img-wrap"><img class="list__img" :src="item.image" :alt="item.title"
+                                                                 loading="lazy"></div>
+                                <span class="list__text" v-html="item.content"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-default btn-xs"
+                            @click="modal_list = index"
+                            v-if="block.description == ''">
+                        Добавить пункт
+                    </button>
+                </div>
             </div>
+            <!--            Окно редакттирования списка-->
+            <modal v-if="modal_list == index"
+                   class="modal"
+                   @close="modal_list != index">
+                <h3 slot="header">Изменение списка и добавление пунктов</h3>
+                <div slot="body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Настройки списка:</div>
+                        <div class="panel-body">
+                            <label for="sel1">Выберите тип: </label>
+                            <select class="form-control"
+                                    v-model="block.builder_id.design">
+                                <option>С нумерацией</option>
+                                <option>С точками</option>
+                                <option>С картинкой</option>
+                            </select>
+                            <label for="sel1">Количество столбцов: </label>
+                            <select class="form-control"
+                                    v-model="block.builder_id.col">
+                                <option>1</option>
+                                <option>2</option>
+                            </select>
+                            <button class="btn btn-success m-2"
+                                    @click="block_list_save(index)">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Редактирование:</div>
+                        <div class="panel-body">
+                            <div class="panel panel-default"
+                                 v-for="item,indexI in block.description"
+                                 v-show="item.list_id == block.builder_id.id">
+                                <div class="panel-heading">
+                                    <div class="row p-1">
+                                        <div class="col-sm-11">
+                                            {{item.id}}:
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <div class="text-right">
+                                                <button class="btn btn-danger btn-xs"
+                                                        @click="block_list_item_delete(indexI, index)">
+                                                    <span class="glyphicon glyphicon-remove " title="Удалить"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-sm-6">
+                                        <textarea class="form-control rounded-0"
+                                                  id="exampleFormControlTextarea1"
+                                                  rows="4"
+                                                  placeholder="Текст"
+                                                  v-model="item.content">
+                                        </textarea>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Имя"
+                                               v-show="block.builder_id.design == 'С нумерацией'"
+                                               v-model="item.title"><br>
+                                        <div class="input-group p-2"
+                                             v-show="block.builder_id.design == 'С картинкой'">
+                                            <span class="input-group-addon"><strong>Картинка:</strong></span>
+                                            <input type="text" class="form-control" placeholder="Путь к картинке"
+                                                   v-model="item.image">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success m-2"
+                                            @click="block_list_item_save(indexI,index)">
+                                        Сохранить!
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Добавить пункт:</div>
+                        <div class="panel-body">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="col-sm-6">
+                                    <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
+                                              placeholder="Текст"
+                                              v-model="list_add_item_content">
+                                    </textarea>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Жирный шрифт в начале"
+                                               v-model="list_add_item_title"
+                                               v-show="block.builder_id.design == 'С нумерацией'"><br>
+                                        <div class="input-group"
+                                             v-show="block.builder_id.design == 'С картинкой'">
+                                            <span class="input-group-addon"><strong>Картинка:</strong></span>
+                                            <input type="text" class="form-control" placeholder="Путь к картинке"
+                                                   v-model="list_add_item_image">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success m-2"
+                                            @click="block_list_item_add_in_list(block.builder_id.id)">
+                                        Добавить
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div slot="footer">
+                    <button class="btn btn-danger"
+                            @click="modal_close()"> Закрыть
+                    </button>
+                </div>
+            </modal>
+
         </div>
     </section>
 
@@ -542,7 +718,7 @@ use yii\helpers\Json;
 
     <!--    Окно добавления нового блока-->
     <modal class="modal"
-           v-if="(showModal) && (block_add_modal)" @close="showModal = false" >
+           v-if="(showModal) && (block_add_modal)" @close="showModal = false">
         <h3 slot="header">Добавить блок</h3>
         <div slot="body">
             <div class="block_new_add mt-2 bg-light shadow-sm p-2"
@@ -588,16 +764,24 @@ use yii\helpers\Json;
                     HTML
                 </button>
                 <button class="btn btn-default m-2"
+                        @click="block_text_add()">
+                    Текст (он в принципе не нужен, в html можно писать текст, там теги можно не использовать)
+                </button>
+                <button class="btn btn-default m-2"
                         @click="block_command_add()">
                     Команда
                 </button>
                 <button class="btn btn-default m-2"
-                        @click="new_block_list()">
+                        @click="block_list_view()">
                     Список
                 </button>
                 <button class="btn btn-default m-2"
                         @click="block_hr_add()">
                     Полоска
+                </button>
+                <button class="btn btn-default m-2"
+                        @click="prem()">
+                    Преимущества
                 </button>
             </div>
 
@@ -686,10 +870,34 @@ use yii\helpers\Json;
                     Добавить
                 </button>
             </div>
+
+            <!--    Добавление блока СПИСОК-->
+            <div class="bg-light mt-3 p-4"
+                 v-show="modal_add_list">
+                Вид списка: <br>
+                <select class="form-control" id="type"
+                        v-model="block_list_design">
+                    <option>С нумерацией</option>
+                    <option>С точками</option>
+                    <option>С картинкой</option>
+                </select>
+                <br>
+                Количество столбцов: <br>
+                <select class="form-control" id="pillar"
+                        v-model="block_list_pillar">
+                    <option>1</option>
+                    <option>2</option>
+                </select> <br>
+                <button class="btn btn-default"
+                        @click="block_list_add()">
+                    Создать
+                </button>
+
+            </div>
         </div>
         <div slot="footer">
             <button class="btn btn-danger"
-                    @click="modal_close_block_new_add()"> Закрыть
+                    @click="modal_close()"> Закрыть
             </button>
         </div>
     </modal>
@@ -750,6 +958,17 @@ data:{
       //Редактирование команды:
       modal_command_people: 999,
       
+      // блок список
+      modal_add_list: false,
+      block_list_design: 'С нумерацией',
+      block_list_pillar: 1,
+      // Добавление пункта!
+      list_add_item_title: '',
+      list_add_item_content: '',
+      list_add_item_image: '',
+      //Модальное окно редактироания
+      modal_list: 999,
+      
   showModal: false,
   
   //menu
@@ -788,7 +1007,7 @@ methods: {
       $.ajax({
          url: '/testbuilder/ajax/block-delete',
          type: 'GET',
-         data: 'id=' + blocks[index].id,
+         data: 'id=' + blocks[index].id + '&page_id=' + this.page.id,
          success: function(){
            console.log( blocks[index].id + 'success push');
          },
@@ -824,7 +1043,7 @@ methods: {
     },
     block_block_save_data(index){
       this.block_title_edit = 999;
-      this.modal_close_block_new_add();
+      this.modal_close();
     $.ajax({
          url: '/testbuilder/ajax/block-save-data',
          type: 'GET',
@@ -943,16 +1162,86 @@ methods: {
          });
   },
   
+  // СПИСОК
+  block_list_view(){
+      this.modal_add_list = true;
+      this.block_add_view = false;
+  },
+  block_list_add(){
+      $.ajax({
+         url: '/testbuilder/ajax/block-list-add',
+         type: 'GET',
+         data: 'type=' + this.block_list_design + '&pillar=' + this.block_list_pillar + '&page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+         });
+  },
+  block_list_save(index){
+      $.ajax({
+         url: '/testbuilder/ajax/block-list-save',
+         type: 'GET',
+         data: 'id=' + blocks[index].builder_id.id + '&col=' + blocks[index].builder_id.col + '&design=' + blocks[index].builder_id.design + '&page_id=' + this.page.id ,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+         });
+  },
+  block_list_item_add_in_list(list_id){
+      $.ajax({
+         url: '/testbuilder/ajax/block-list-item-add',
+         type: 'GET',
+         data: 'list_id=' + list_id + '&title=' + this.list_add_item_title + '&content=' + this.list_add_item_content + '&page_id=' + this.page.id + '&image=' + this.list_add_item_image ,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+         });
+  },
+  block_list_item_delete(indexI, index){
+      blocks[index].description[indexI].list_id = 0;
+      id = blocks[index].description[indexI].id;
+      $.ajax({
+         url: '/testbuilder/ajax/block-list-item-delete',
+         type: 'GET',
+         data: 'id=' + id,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+      });
+  },
+  block_list_item_save(indexI, index){
+      $.ajax({
+         url: '/testbuilder/ajax/block-command-people-save',
+         type: 'GET',
+         data: 'id=' + blocks[index].description[indexP].id + '&name=' + blocks[index].description[indexP].name + '&content=' + blocks[index].description[indexP].content + '&image=' + blocks[index].description[indexP].image + '&image_h=' + blocks[index].description[indexP].image_h + '&image_w=' + blocks[index].description[indexP].image_w + '&image_border=' + blocks[index].description[indexP].image_border + '&job=' + blocks[index].description[indexP].job,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+      });
+  },
+  
     
    
     // МОДАЛЬНОЕ ОКНО
-    modal_close_block_new_add(){
+    modal_close(){
       this.showModal = false;
       this.block_add_modal = false;
       this.block_add_view = false;
       this.command_block_modal = false;
       this.html_block_modal = false;
       this.modal_command_people = 999;
+      this.modal_add_list = false;
+      this.modal_list = 999;
     },
    
   
@@ -1070,7 +1359,7 @@ $this->registerJs($js, \yii\web\View::POS_END);
     }
 
     .block_no_hover :hover {
-        pointer-events:none;
+        pointer-events: none;
     }
 
     .bg_block_new_add {
@@ -1156,6 +1445,61 @@ $this->registerJs($js, \yii\web\View::POS_END);
     .modal-leave-active .modal-container {
         -webkit-transform: scale(1.1);
         transform: scale(1.1);
+    }
+
+    /*Эти классы удалить!*/
+    .ul-reset {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .section-5__list {
+        margin-top: 2em;
+    }
+
+    .list__item {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        margin-bottom: 2em;
+    }
+
+    .list__img-wrap {
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        width: 70px;
+        margin-right: 15px;
+        text-align: right;
+    }
+
+    .list {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+        -webkit-column-gap: 30px;
+        -moz-column-gap: 30px;
+        column-gap: 30px;
+    }
+
+    ol li {
+        padding-left: 40px;
+        position: relative;
+        margin-bottom: .75em;
+    }
+    }
+    ul:not(.ul-reset) li::before {
+        content: "";
+        position: absolute;
+        left: 15px;
+        top: 10px;
+        width: 7px;
+        height: 7px;
+        background-color: #f60;
+        border-radius: 50%;
     }
 </style>
 <script>

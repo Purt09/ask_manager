@@ -5,6 +5,8 @@ namespace app\modules\testbuilder\controllers;
 use app\modules\testbuilder\models\BuilderBlocks;
 use app\modules\testbuilder\models\BuilderCommandPeople;
 use app\modules\testbuilder\models\BuilderCommands;
+use app\modules\testbuilder\models\BuilderList;
+use app\modules\testbuilder\models\BuilderListItem;
 use app\modules\user\models\User;
 use yii\web\Controller;
 use app\modules\testbuilder\models\BuilderPage;
@@ -42,6 +44,10 @@ class DefaultController extends Controller
                 if ($block['builder_id']['col'] == 6)
                     $block['builder_id']['col'] = 2;
                 $block['description']   = BuilderCommandPeople::find()->where(['commands_id' => $block['builder_id']['id']])->asArray()->all();
+            }
+            if ($block['builder_table'] == 'block_list') {
+                $block['builder_id'] = BuilderList::find()->where(['id' => $block['builder_id']])->asArray()->one();
+                $block['description'] = BuilderListItem::find()->where(['list_id' => $block['builder_id']['id']])->asArray()->all();
             }
         }
 

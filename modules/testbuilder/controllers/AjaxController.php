@@ -4,6 +4,8 @@ namespace app\modules\testbuilder\controllers;
 
 use app\modules\testbuilder\models\BuilderCommandPeople;
 use app\modules\testbuilder\models\BuilderCommands;
+use app\modules\testbuilder\models\BuilderList;
+use app\modules\testbuilder\models\BuilderListItem;
 use yii\web\Controller;
 use app\modules\testbuilder\models\BuilderPage;
 use app\modules\testbuilder\models\BuilderBlocks;
@@ -124,7 +126,7 @@ class AjaxController extends Controller
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function actionBlockDelete($id)
+    public function actionBlockDelete($id, $page_id)
     {
         if (\Yii::$app->request->isAjax) {
             $block = BuilderBlocks::findOne($id);
@@ -405,6 +407,81 @@ class AjaxController extends Controller
 
             $block->position = $block->id;
             return $block->save();
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    public function actionBlockListAdd($type = 'С нумерацией', $pillar = 1, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $page_id){
+        if (\Yii::$app->request->isAjax) {
+
+            $block_list = new BuilderList();
+            $block_list->design = $type;
+            $block_list->col = $pillar;
+            $block_list->save();
+
+
+            $block = new BuilderBlocks();
+            $block->title = $title;
+            $block->page_id = $page_id;
+            $block->title_head = $title_head;
+            $block->title_color = $title_color;
+            $block->builder_table = 'block_list';
+            $block->builder_id = $block_list->id;
+            $block->class = $class;
+            $block->save();
+
+            $block->position = $block->id;
+            $block->save();
+
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    public function actionBlockListItemAdd($content = '', $title = '', $list_id, $page_id, $image = ''){
+        if (\Yii::$app->request->isAjax) {
+            $list = BuilderList::findOne($list_id);
+
+            $list_item = new BuilderListItem();
+            if (($image == '') && ($title != ''))
+                $image = 'http://placehold.it/50/DC1734/fff&text=' . $title;
+            $list_item->image = $image;
+            $list_item->content = $content;
+            $list_item->title = $title;
+            $list_item->list_id = $list->id;
+            $list_item->save();
+
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    public function actionBlockListSave($design = 'С нумерацией', $col = 1, $id, $page_id){
+        if (\Yii::$app->request->isAjax) {
+
+            $block_list = BuilderList::findOne($id);
+            $block_list->design = $design;
+            $block_list->col = $col;
+            $block_list->save();
+
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    public function actionBlockListItemDelete($id){
+        if (\Yii::$app->request->isAjax) {
+
+            $item = BuilderListItem::findOne($id);
+            return $item->delete();
+
         } else {
             return $this->redirect('/');
         }
