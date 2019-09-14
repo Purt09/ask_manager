@@ -331,7 +331,7 @@ use yii\helpers\Json;
                 ></div>
                 <button class="btn btn-default btn-xs"
                         @click="prev_html = index"
-                        v-show="prev_html != index">
+                        v-show="block.builder_id.code == ''">
                     Редактировать html блок
                 </button>
                 <div class="form-group" v-if="prev_html == index">
