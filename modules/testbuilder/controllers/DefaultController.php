@@ -49,6 +49,8 @@ class DefaultController extends Controller
                 $block['builder_id'] = BuilderList::find()->where(['id' => $block['builder_id']])->asArray()->one();
                 $block['description'] = BuilderListItem::find()->where(['list_id' => $block['builder_id']['id']])->asArray()->all();
             }
+            if ($block['builder_table'] == 'block_text')
+                $block['builder_id'] = BuilderBlockHtml::find()->where(['id' => $block['builder_id']])->asArray()->one();
         }
 
             if(Yii::$app->user->isGuest){

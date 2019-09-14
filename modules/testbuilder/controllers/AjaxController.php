@@ -204,6 +204,37 @@ class AjaxController extends Controller
         }
     }
 
+    public function actionBlockTextAdd($page_id, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $border = 0, $code = '')
+    {
+        if (\Yii::$app->request->isAjax) {
+            $block_html = new BuilderBlockHtml();
+            $block_html->code = $code;
+            if ($border == 'true')
+                $block_html->border = 1;
+            else
+                $block_html->border = 0;
+            $block_html->save();
+
+            $block = new BuilderBlocks();
+            $block->title = $title;
+            $block->page_id = $page_id;
+            $block->title_head = $title_head;
+            $block->title_color = $title_color;
+            $block->builder_table = 'block_text';
+            $block->builder_id = $block_html->id;
+            $block->class = $class;
+            $block->save();
+
+            $block->position = $block->id;
+            $block->save();
+
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
     /** Сохранение позици 2=ух блоков после перемещений их
      * @param $pos1
      * @param $pos2
@@ -412,7 +443,8 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionBlockListAdd($type = 'С нумерацией', $pillar = 1, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $page_id){
+    public function actionBlockListAdd($type = 'С нумерацией', $pillar = 1, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $page_id)
+    {
         if (\Yii::$app->request->isAjax) {
 
             $block_list = new BuilderList();
@@ -441,7 +473,8 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionBlockListItemAdd($content = '', $title = '', $list_id, $page_id, $image = ''){
+    public function actionBlockListItemAdd($content = '', $title = '', $list_id, $page_id, $image = '')
+    {
         if (\Yii::$app->request->isAjax) {
             $list = BuilderList::findOne($list_id);
 
@@ -461,7 +494,8 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionBlockListSave($design = 'С нумерацией', $col = 1, $id, $page_id){
+    public function actionBlockListSave($design = 'С нумерацией', $col = 1, $id, $page_id)
+    {
         if (\Yii::$app->request->isAjax) {
 
             $block_list = BuilderList::findOne($id);
@@ -476,7 +510,8 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionBlockListItemDelete($id){
+    public function actionBlockListItemDelete($id)
+    {
         if (\Yii::$app->request->isAjax) {
 
             $item = BuilderListItem::findOne($id);

@@ -117,7 +117,6 @@ use yii\helpers\Json;
         </div>
     </modal>
 
-
     <section v-for="block,index in blocks"
              :class="{container: !block.css_isContainer,hideBlock: block.isHide}"
              :style="'background-color: #' + block.css_background">
@@ -349,7 +348,35 @@ use yii\helpers\Json;
                                 class="glyphicon glyphicon-ok" title="Сохранить"></span> Сохранить блок
                     </button>
                 </div>
-
+            </div>
+            <!--                Если блок ТЕКСТ!-->
+            <div v-if="block.builder_table == 'block_text'"
+                 class="block">
+                <div v-if="prev_html != index"
+                     @click="prev_html = index"
+                     :class="{html_block_border: block.builder_id.border == 1}">
+                    {{block.builder_id.code}}
+                </div>
+                <button class="btn btn-default btn-xs"
+                        @click="prev_html = index"
+                        v-show="block.builder_id.code == ''">
+                    Редактировать текстовый блок
+                </button>
+                <div class="form-group" v-if="prev_html == index">
+                        <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
+                                  placeholder="Введите свой код!"
+                                  v-model="block.builder_id.code"></textarea>
+                    <button class="btn btn-default"
+                            @click="block.builder_id.border = 1"> Добавить рамку
+                    </button>
+                    <button class="btn btn-default"
+                            @click="block.builder_id.border = 0"> Удалить рамку
+                    </button>
+                    <button type="button" class="btn btn-success text-right"
+                            @click="block_html_save(index)"><span
+                                class="glyphicon glyphicon-ok" title="Сохранить"></span> Сохранить блок
+                    </button>
+                </div>
             </div>
 
             <!--                Если блок COMMAND!-->
@@ -765,7 +792,7 @@ use yii\helpers\Json;
                 </button>
                 <button class="btn btn-default m-2"
                         @click="block_text_add()">
-                    Текст (он в принципе не нужен, в html можно писать текст, там теги можно не использовать)
+                    Текст
                 </button>
                 <button class="btn btn-default m-2"
                         @click="block_command_add()">
@@ -1072,8 +1099,7 @@ methods: {
          });
     },
     block_html_create(){
-      this.html_block_modal = false;
-      this.showModal = false;
+      this.modal_close();
     $.ajax({
          url: '/testbuilder/ajax/block-html-add',
          type: 'GET',
@@ -1085,6 +1111,20 @@ methods: {
          }
          });
   },
+  block_text_add(){
+      this.modal_close();
+      $.ajax({
+         url: '/testbuilder/ajax/block-text-add',
+         type: 'GET',
+         data: 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + 'Новый текстовый блок' + '&border=' + this.html_block_create_border,
+         success: function(){
+           console.log( 'success push');
+         },
+         error: function(){
+         }
+         });
+  },
+  
    
   
   //команда
@@ -1500,6 +1540,9 @@ $this->registerJs($js, \yii\web\View::POS_END);
         height: 7px;
         background-color: #f60;
         border-radius: 50%;
+    }
+    .section--light-bg {
+        background-color: #fcfcfc;
     }
 </style>
 <script>
