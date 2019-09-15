@@ -308,7 +308,7 @@ class AjaxController extends Controller
             $block->save();
 
             $block->position = $block->id;
-            $block->save();
+            $block->save(); 
 
             return $this->redirect('/testbuilder/default/index?id=' . $page_id);
 
