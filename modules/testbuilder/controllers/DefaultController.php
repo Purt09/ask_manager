@@ -7,6 +7,7 @@ use app\modules\testbuilder\models\BuilderCommandPeople;
 use app\modules\testbuilder\models\BuilderCommands;
 use app\modules\testbuilder\models\BuilderList;
 use app\modules\testbuilder\models\BuilderListItem;
+use app\modules\testbuilder\models\BuilderListTable;
 use app\modules\user\models\User;
 use yii\web\Controller;
 use app\modules\testbuilder\models\BuilderPage;
@@ -51,6 +52,8 @@ class DefaultController extends Controller
             }
             if ($block['builder_table'] == 'block_text')
                 $block['builder_id'] = BuilderBlockHtml::find()->where(['id' => $block['builder_id']])->asArray()->one();
+            if ($block['builder_table'] == 'block_list_table')
+                $block['builder_id'] = BuilderListTable::find()->where(['id' => $block['builder_id']])->asArray()->one();
         }
 
             if(Yii::$app->user->isGuest){

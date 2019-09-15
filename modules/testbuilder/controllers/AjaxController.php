@@ -6,6 +6,7 @@ use app\modules\testbuilder\models\BuilderCommandPeople;
 use app\modules\testbuilder\models\BuilderCommands;
 use app\modules\testbuilder\models\BuilderList;
 use app\modules\testbuilder\models\BuilderListItem;
+use app\modules\testbuilder\models\BuilderListTable;
 use yii\web\Controller;
 use app\modules\testbuilder\models\BuilderPage;
 use app\modules\testbuilder\models\BuilderBlocks;
@@ -517,6 +518,77 @@ class AjaxController extends Controller
             $item = BuilderListItem::findOne($id);
             return $item->delete();
 
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    public function actionBlockAdvantagesAdd($page_id, $design,$image1, $text1, $image2, $text2, $image3, $text3, $image4 = '', $text4 = '', $image5 = '', $text5 = '', $image6 = '', $text6 = '', $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $desc1 = '', $desc2 = '', $desc3 = '', $desc4 = '', $desc5 = '', $desc6 = ''){
+        if (\Yii::$app->request->isAjax) {
+            $block_list = new BuilderListTable();
+            $block_list->design = $design;
+            $block_list->image1 = $image1;
+            $block_list->image2 = $image2;
+            $block_list->image3 = $image3;
+            $block_list->image4 = $image4;
+            $block_list->image5 = $image5;
+            $block_list->image6 = $image6;
+            $block_list->text1 = $text1;
+            $block_list->text2 = $text2;
+            $block_list->text3 = $text3;
+            $block_list->text4 = $text4;
+            $block_list->text5 = $text5;
+            $block_list->text6 = $text6;
+            $block_list->desc1 = $desc1;
+            $block_list->desc2 = $desc2;
+            $block_list->desc3 = $desc3;
+            $block_list->desc4 = $desc4;
+            $block_list->desc5 = $desc5;
+            $block_list->desc6 = $desc6;
+            $block_list->save();
+
+            $block = new BuilderBlocks();
+            $block->title = $title;
+            $block->page_id = $page_id;
+            $block->title_head = $title_head;
+            $block->title_color = $title_color;
+            $block->builder_table = 'block_list_table';
+            $block->builder_id = $block_list->id;
+            $block->class = $class;
+            $block->save();
+
+            $block->position = $block->id;
+            $block->save();
+
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    public function actionBlockAdvantagesSave($id, $design,$image1, $text1, $image2, $text2, $image3, $text3, $image4 = '', $text4 = '', $image5 = '', $text5 = '', $image6 = '', $text6 = '', $desc1 = '', $desc2 = '', $desc3 = '', $desc4 = '', $desc5 = '', $desc6 = ''){
+        if (\Yii::$app->request->isAjax) {
+            $block_list = BuilderListTable::findOne($id);
+            $block_list->design = $design;
+            $block_list->image1 = $image1;
+            $block_list->image2 = $image2;
+            $block_list->image3 = $image3;
+            $block_list->image4 = $image4;
+            $block_list->image5 = $image5;
+            $block_list->image6 = $image6;
+            $block_list->text1 = $text1;
+            $block_list->text2 = $text2;
+            $block_list->text3 = $text3;
+            $block_list->text4 = $text4;
+            $block_list->text5 = $text5;
+            $block_list->text6 = $text6;
+            $block_list->desc1 = $desc1;
+            $block_list->desc2 = $desc2;
+            $block_list->desc3 = $desc3;
+            $block_list->desc4 = $desc4;
+            $block_list->desc5 = $desc5;
+            $block_list->desc6 = $desc6;
+            return $block_list->save();
         } else {
             return $this->redirect('/');
         }

@@ -21,6 +21,13 @@ use Yii;
  * @property string $text5
  * @property string $image6
  * @property string $text6
+ * @property string $desc6
+ * @property string $desc1
+ * @property string $desc2
+ * @property string $desc3
+ * @property string $desc4
+ * @property string $desc5
+ * @property string $design
  */
 class BuilderListTable extends \yii\db\ActiveRecord
 {
@@ -39,8 +46,8 @@ class BuilderListTable extends \yii\db\ActiveRecord
     {
         return [
             [['list_id'], 'integer'],
-            [['text1', 'text2', 'text3', 'text4', 'text5', 'text6'], 'string'],
-            [['image1', 'image2', 'image3', 'image4', 'image5', 'image6'], 'string', 'max' => 255],
+            [['text1', 'text2', 'text3', 'text4', 'text5', 'text6', 'desc1', 'desc2', 'desc3', 'desc4', 'desc5', 'desc6'], 'string'],
+            [['image1', 'image2', 'image3', 'image4', 'image5', 'image6', 'design'], 'string', 'max' => 255],
         ];
     }
 
@@ -64,11 +71,13 @@ class BuilderListTable extends \yii\db\ActiveRecord
             'text5' => 'Text5',
             'image6' => 'Image6',
             'text6' => 'Text6',
+            'design' => 'Design',
+            'desc1' => 'Desc1',
+            'desc2' => 'Desc2',
+            'desc3' => 'Desc3',
+            'desc4' => 'Desc4',
+            'desc5' => 'Desc5',
+            'desc6' => 'Desc6',
         ];
-    }
-
-    public function getList()
-    {
-        return $this->hasOne(BuilderList::className(), ['id' => 'list_id']);
     }
 }

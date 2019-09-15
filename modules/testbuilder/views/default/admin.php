@@ -732,6 +732,269 @@ use yii\helpers\Json;
                 </div>
             </modal>
 
+
+            <div v-if="block.builder_table == 'block_list_table'"
+                 class="block"
+                 @click="block_advantages_edit(index)">
+                <div class="row"
+                     v-if="block.builder_id.design == '4 столбца'">
+                    <div class="col-sm-3 text-center">
+                        <img :src="block.builder_id.image1" :alt="block.builder_id.text1">
+                        <br>
+                        {{block.builder_id.text1}}
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <img :src="block.builder_id.image2" :alt="block.builder_id.text2">
+                        <br>
+                        {{block.builder_id.text2}}
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <img :src="block.builder_id.image3" :alt="block.builder_id.text3">
+                        <br>
+                        {{block.builder_id.text3}}
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <img :src="block.builder_id.image4" :alt="block.builder_id.text4">
+                        <br>
+                        {{block.builder_id.text4}}
+                    </div>
+                </div>
+                <div class="row text-center"
+                     v-if="block.builder_id.design == '5 столбцов'">
+                    <div class="col-sm-five">
+                        <img :src="block.builder_id.image1" :alt="block.builder_id.text1">
+                        <br>
+                        {{block.builder_id.text1}}
+                    </div>
+                    <div class="col-sm-five">
+                        <img :src="block.builder_id.image2" :alt="block.builder_id.text2">
+                        <br>
+                        {{block.builder_id.text2}}
+                    </div>
+                    <div class="col-sm-five">
+                        <img :src="block.builder_id.image3" :alt="block.builder_id.text3">
+                        <br>
+                        {{block.builder_id.text3}}
+                    </div>
+                    <div class="col-sm-five">
+                        <img :src="block.builder_id.image4" :alt="block.builder_id.text4">
+                        <br>
+                        {{block.builder_id.text4}}
+                    </div>
+                    <div class="col-sm-five">
+                        <img :src="block.builder_id.image5" :alt="block.builder_id.text5">
+                        <br>
+                        {{block.builder_id.text5}}
+                    </div>
+                </div>
+                <div class="row text-center"
+                     v-if="block.builder_id.design == '6 столбцов'">
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image1" :alt="block.builder_id.text1">
+                        <br>
+                        {{block.builder_id.text1}}
+                    </div>
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image2" :alt="block.builder_id.text2">
+                        <br>
+                        {{block.builder_id.text2}}
+                    </div>
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image3" :alt="block.builder_id.text3">
+                        <br>
+                        {{block.builder_id.text3}}
+                    </div>
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image4" :alt="block.builder_id.text4">
+                        <br>
+                        {{block.builder_id.text4}}
+                    </div>
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image5" :alt="block.builder_id.text5">
+                        <br>
+                        {{block.builder_id.text5}}
+                    </div>
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image6" :alt="block.builder_id.text6">
+                        <br>
+                        {{block.builder_id.text6}}
+                    </div>
+                </div>
+                <div class="row text-center"
+                     v-if="block.builder_id.design == '6 блоков'">
+                    <ul class="tiles ul-reset">
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">{{block.builder_id.text1}}</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc1"></div>
+                                    <img class="tile__img" :src="block.builder_id.image1" :alt="block.builder_id.text1"
+                                         loading="lazy"></div>
+                        </li>
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">{{block.builder_id.text2}}</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc2"></div>
+                                    <img class="tile__img" :src="block.builder_id.image2" :alt="block.builder_id.text2"
+                                         loading="lazy"></div>
+                        </li>
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">{{block.builder_id.text3}}</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc3"></div>
+                                    <img class="tile__img" :src="block.builder_id.image3" :alt="block.builder_id.text3"
+                                         loading="lazy"></div>
+                        </li>
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">block.builder_id.text4</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc4"></div>
+                                    <img class="tile__img" :src="block.builder_id.image4" :alt="block.builder_id.text4"
+                                         loading="lazy"></div>
+                        </li>
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">{{block.builder_id.text5}}</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc5"></div>
+                                    <img class="tile__img" :src="block.builder_id.image5" :alt="block.builder_id.text5"
+                                         loading="lazy"></div>
+                        </li>
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">{{block.builder_id.text6}}</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc6"></div>
+                                    <img class="tile__img" :src="block.builder_id.image6" :alt="block.builder_id.text6"
+                                         loading="lazy"></div>
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn btn-default btn-xs"
+                        @click="modal_advantages = index"
+                        v-if="block.builder_id.text1 == ''">
+                    Редактировать преимущества
+                </button>
+            </div>
+            <!--            Окно редактирования преимуществ-->
+            <modal v-if="modal_advantages == index"
+                   class="modal"
+                   @close="modal_advantages != index">
+                <h3 slot="header">Редактирование преимуществ</h3>
+                <div slot="body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Настройки преимуществ:</div>
+                        <div class="panel-body">
+                            <select class="form-control" id="type"
+                                    v-model="block.builder_id.design">
+                                <option>4 столбца</option>
+                                <option>5 столбцов</option>
+                                <option>6 столбцов</option>
+                                <option>6 блоков</option>
+                            </select> <br>
+                            <div class="input-group">
+                                <span class="input-group-addon">Картикна:</span>
+                                <input type="text" class="form-control" placeholder="Адресс картинки"
+                                       v-model="block.builder_id.image1">
+                                <span class="input-group-addon">Текст:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.text1">
+                            </div>
+                            <div class="input-group mt-2" v-if="block.builder_id.design == '6 блоков'">
+                                <span class="input-group-addon">Описание:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.desc1">
+                            </div>
+                            <hr>
+                            <div class="input-group">
+                                <span class="input-group-addon">Картикна:</span>
+                                <input type="text" class="form-control" placeholder="Адресс картинки"
+                                       v-model="block.builder_id.image2">
+                                <span class="input-group-addon">Текст:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.text2">
+                            </div>
+                            <div class="input-group mt-2" v-if="block.builder_id.design == '6 блоков'">
+                                <span class="input-group-addon">Описание:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.desc2">
+                            </div>
+                            <hr>
+                            <div class="input-group">
+                                <span class="input-group-addon">Картикна:</span>
+                                <input type="text" class="form-control" placeholder="Адресс картинки"
+                                       v-model="block.builder_id.image3">
+                                <span class="input-group-addon">Текст:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.text3">
+                            </div>
+                            <div class="input-group mt-2" v-if="block.builder_id.design == '6 блоков'">
+                                <span class="input-group-addon">Описание:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.desc3">
+                            </div>
+                            <hr>
+                            <div class="input-group">
+                                <span class="input-group-addon">Картикна:</span>
+                                <input type="text" class="form-control" placeholder="Адресс картинки"
+                                       v-model="block.builder_id.image4">
+                                <span class="input-group-addon">Текст:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.text4">
+                            </div>
+                            <div class="input-group mt-2" v-if="block.builder_id.design == '6 блоков'">
+                                <span class="input-group-addon">Описание:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.desc4">
+                            </div>
+                            <hr>
+                            <div class="input-group"
+                                 v-show="block.builder_id.design != '4 столбца'">
+                                <span class="input-group-addon">Картикна:</span>
+                                <input type="text" class="form-control" placeholder="Адресс картинки"
+                                       v-model="block.builder_id.image5">
+                                <span class="input-group-addon">Текст:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.text5">
+                            </div>
+                            <div class="input-group mt-2" v-if="block.builder_id.design == '6 блоков'">
+                                <span class="input-group-addon">Описание:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.desc5">
+                            </div>
+                            <hr>
+                            <div class="input-group"
+                                 v-show="((block.builder_id.design == '6 блоков') || (block.builder_id.design == '6 столбцов'))">
+                                <span class="input-group-addon">Картикна:</span>
+                                <input type="text" class="form-control" placeholder="Картинка"
+                                       v-model="block.builder_id.image6">
+                                <span class="input-group-addon">Текст:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.text6">
+                            </div>
+                            <div class="input-group mt-2" v-if="block.builder_id.design == '6 блоков'">
+                                <span class="input-group-addon">Описание:</span>
+                                <input type="text" class="form-control" placeholder="Текст"
+                                       v-model="block.builder_id.desc6">
+                            </div>
+                            <br>
+                            <button class="btn btn-success m-2"
+                                    @click="block_advantages_save(index)">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                    >
+                </div>
+                <div slot="footer">
+                    <button class="btn btn-danger"
+                            @click="modal_close()"> Закрыть
+                    </button>
+                </div>
+            </modal>
         </div>
     </section>
 
@@ -807,7 +1070,7 @@ use yii\helpers\Json;
                     Полоска
                 </button>
                 <button class="btn btn-default m-2"
-                        @click="prem()">
+                        @click="block_advantages_view()">
                     Преимущества
                 </button>
             </div>
@@ -921,6 +1184,111 @@ use yii\helpers\Json;
                 </button>
 
             </div>
+
+            <!--    Добавление блока ПРЕИМУЩЕСТВА-->
+            <div class="bg-light mt-3 p-4"
+                 v-show="modal_add_advantages">
+                Вид блока преимуществ: <br>
+                <select class="form-control" id="type"
+                        v-model="block_advantages_design">
+                    <option>4 столбца</option>
+                    <option>5 столбцов</option>
+                    <option>6 столбцов</option>
+                    <option>6 блоков</option>
+                </select> <br>
+                <div class="input-group">
+                    <span class="input-group-addon">Картикна:</span>
+                    <input type="text" class="form-control" placeholder="Адресс картинки"
+                           v-model="advantages_1_add_image">
+                    <span class="input-group-addon">Текст:</span>
+                    <input type="text" class="form-control" placeholder="Текст"
+                           v-model="advantages_1_add_text">
+                </div>
+                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                    <span class="input-group-addon">Описание:</span>
+                    <input type="text" class="form-control" placeholder="Описание"
+                           v-model="advantages_1_add_desc">
+                </div>
+                <hr>
+                <div class="input-group">
+                    <span class="input-group-addon">Картикна:</span>
+                    <input type="text" class="form-control" placeholder="Адресс картинки"
+                           v-model="advantages_2_add_image">
+                    <span class="input-group-addon">Текст:</span>
+                    <input type="text" class="form-control" placeholder="Текст"
+                           v-model="advantages_2_add_text">
+                </div>
+                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                    <span class="input-group-addon">Описание:</span>
+                    <input type="text" class="form-control" placeholder="Описание"
+                           v-model="advantages_2_add_desc">
+                </div>
+                <hr>
+                <div class="input-group">
+                    <span class="input-group-addon">Картикна:</span>
+                    <input type="text" class="form-control" placeholder="Адресс картинки"
+                           v-model="advantages_3_add_image">
+                    <span class="input-group-addon">Текст:</span>
+                    <input type="text" class="form-control" placeholder="Текст"
+                           v-model="advantages_3_add_text">
+                </div>
+                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                    <span class="input-group-addon">Описание:</span>
+                    <input type="text" class="form-control" placeholder="Описание"
+                           v-model="advantages_3_add_desc">
+                </div>
+                <hr>
+                <div class="input-group">
+                    <span class="input-group-addon">Картикна:</span>
+                    <input type="text" class="form-control" placeholder="Адресс картинки"
+                           v-model="advantages_4_add_image">
+                    <span class="input-group-addon">Текст:</span>
+                    <input type="text" class="form-control" placeholder="Текст"
+                           v-model="advantages_4_add_text">
+                </div>
+                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                    <span class="input-group-addon">Описание:</span>
+                    <input type="text" class="form-control" placeholder="Описание"
+                           v-model="advantages_4_add_desc">
+                </div>
+                <hr>
+                <div class="input-group"
+                     v-show="block_advantages_design != '4 столбца'">
+                    <span class="input-group-addon">Картикна:</span>
+                    <input type="text" class="form-control" placeholder="Адресс картинки"
+                           v-model="advantages_5_add_image">
+                    <span class="input-group-addon">Текст:</span>
+                    <input type="text" class="form-control" placeholder="Текст"
+                           v-model="advantages_5_add_text">
+                </div>
+                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                    <span class="input-group-addon">Описание:</span>
+                    <input type="text" class="form-control" placeholder="Описание"
+                           v-model="advantages_5_add_desc">
+                </div>
+                <hr>
+                <div class="input-group"
+                     v-show="((block_advantages_design == '6 блоков') || (block_advantages_design == '6 столбцов'))">
+                    <span class="input-group-addon">Картикна:</span>
+                    <input type="text" class="form-control" placeholder="Картинка"
+                           v-model="advantages_6_add_image">
+                    <span class="input-group-addon">Текст:</span>
+                    <input type="text" class="form-control" placeholder="Текст"
+                           v-model="advantages_6_add_text">
+                </div>
+                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                    <span class="input-group-addon">Описание:</span>
+                    <input type="text" class="form-control" placeholder="Описание"
+                           v-model="advantages_6_add_desc">
+                </div>
+                <hr>
+                <br>
+                <button class="btn btn-success"
+                        @click="block_advantages_add()">
+                    Создать
+                </button>
+
+            </div>
         </div>
         <div slot="footer">
             <button class="btn btn-danger"
@@ -995,6 +1363,32 @@ data:{
       list_add_item_image: '',
       //Модальное окно редактироания
       modal_list: 999,
+      
+      // блок преимущества
+      modal_add_advantages: false,
+      block_advantages_design: '4 столбца',
+      advantages_1_add_image: '',
+      advantages_2_add_image: '',
+      advantages_3_add_image: '',
+      advantages_4_add_image: '',
+      advantages_5_add_image: '',
+      advantages_6_add_image: '',
+      advantages_1_add_text: '',
+      advantages_2_add_text: '',
+      advantages_3_add_text: '',
+      advantages_4_add_text: '',
+      advantages_5_add_text: '',
+      advantages_6_add_text: '',
+      advantages_1_add_desc: '',
+      advantages_2_add_desc: '',
+      advantages_3_add_desc: '',
+      advantages_4_add_desc: '',
+      advantages_5_add_desc: '',
+      advantages_6_add_desc: '',
+      
+      //редактирование преимуществ
+      modal_advantages: 999,
+      
       
   showModal: false,
   
@@ -1269,6 +1663,40 @@ methods: {
          }
       });
   },
+  // Блок ПРЕИМУЩЕСТВА
+  block_advantages_view(){
+      this.modal_add_advantages = true;
+      this.block_add_view = false;
+  },
+  block_advantages_add(){
+      this.modal_close();
+      $.ajax({
+         url: '/testbuilder/ajax/block-advantages-add',
+         type: 'GET',
+         data: 'page_id=' + this.page.id + '&design=' + this.block_advantages_design + '&image1=' + this.advantages_1_add_image + '&image2=' + this.advantages_2_add_image + '&image3=' + this.advantages_3_add_image + '&image4=' + this.advantages_4_add_image + '&image5=' + this.advantages_5_add_image + '&image6=' + this.advantages_6_add_image + '&text1=' + this.advantages_1_add_text + '&text2=' + this.advantages_2_add_text + '&text3=' + this.advantages_3_add_text + '&text4=' + this.advantages_4_add_text + '&text5=' + this.advantages_5_add_text + '&text6=' + this.advantages_6_add_text + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&desc1=' + this.advantages_1_add_desc + '&desc2=' + this.advantages_2_add_desc + '&desc3=' + this.advantages_3_add_desc + '&desc4=' + this.advantages_4_add_desc + '&desc5=' + this.advantages_5_add_desc + '&desc6=' + this.advantages_6_add_desc,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+      });
+  },
+  block_advantages_edit(index){
+      this.modal_advantages = index;
+  },
+  block_advantages_save(index){
+      this.modal_close();
+      $.ajax({
+         url: '/testbuilder/ajax/block-advantages-save',
+         type: 'GET',
+         data: 'id=' + this.blocks[index].builder_id.id +'&design=' + this.blocks[index].builder_id.design + '&image1=' + this.blocks[index].builder_id.image1 + '&image2=' + this.blocks[index].builder_id.image2 + '&image3=' + this.blocks[index].builder_id.image3 + '&image4=' + this.blocks[index].builder_id.image4 + '&image5=' + this.blocks[index].builder_id.image5 + '&image6=' + this.blocks[index].builder_id.image6 + '&text1=' + this.blocks[index].builder_id.text1 + '&text2=' + this.blocks[index].builder_id.text2 + '&text3=' + this.blocks[index].builder_id.text3 + '&text4=' + this.blocks[index].builder_id.text4 + '&text5=' + this.blocks[index].builder_id.text5 + '&text6=' + this.blocks[index].builder_id.text6 + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&desc1=' + this.blocks[index].builder_id.desc1 + '&desc2=' + this.blocks[index].builder_id.desc2 + '&desc3=' + this.blocks[index].builder_id.desc3 + '&desc4=' + this.blocks[index].builder_id.desc4 + '&desc5=' + this.blocks[index].builder_id.desc5 + '&desc6=' + this.blocks[index].builder_id.desc6,
+         success: function(){
+           console.log('success push');
+         },
+         error: function(){
+         }
+      });
+  },
   
     
    
@@ -1282,6 +1710,8 @@ methods: {
       this.modal_command_people = 999;
       this.modal_add_list = false;
       this.modal_list = 999;
+      this.modal_add_advantages = false;
+      this.modal_advantages = 999;
     },
    
   
@@ -1487,6 +1917,42 @@ $this->registerJs($js, \yii\web\View::POS_END);
         transform: scale(1.1);
     }
 
+    .col-xs-five,
+    .col-sm-five,
+    .col-md-five,
+    .col-lg-five {
+        position: relative;
+        min-height: 1px;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .col-xs-five {
+        width: 20%;
+        float: left;
+    }
+
+    @media (min-width: 768px) {
+        .col-sm-five {
+            width: 20%;
+            float: left;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .col-md-five {
+            width: 20%;
+            float: left;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .col-lg-five {
+            width: 20%;
+            float: left;
+        }
+    }
+
     /*Эти классы удалить!*/
     .ul-reset {
         list-style: none;
@@ -1530,6 +1996,7 @@ $this->registerJs($js, \yii\web\View::POS_END);
         position: relative;
         margin-bottom: .75em;
     }
+
     }
     ul:not(.ul-reset) li::before {
         content: "";
@@ -1541,8 +2008,53 @@ $this->registerJs($js, \yii\web\View::POS_END);
         background-color: #f60;
         border-radius: 50%;
     }
+
     .section--light-bg {
         background-color: #fcfcfc;
+    }
+
+    .tiles {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+
+    .ul-reset {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .tiles__item {
+        width: calc(100% / 3);
+    }
+
+    .tile__wrap {
+        position: relative;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-box-align: start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        padding: 50px;
+        background-color: #fff;
+        border-radius: 5px;
+        -webkit-transition: .25s;
+        transition: .25s;
+    }
+
+    .tile__text {
+        width: 120px;
+    }
+
+    .tile__img {
+        margin-top: 15px;
     }
 </style>
 <script>
