@@ -1174,7 +1174,7 @@ use yii\helpers\Json;
                 <br>
                 Количество столбцов: <br>
                 <select class="form-control" id="pillar"
-                        v-model="block_list_pillar">
+                        v-model="block_list_col">
                     <option>1</option>
                     <option>2</option>
                 </select> <br>
@@ -1357,7 +1357,7 @@ data:{
       // блок список
       modal_add_list: false,
       block_list_design: 'С нумерацией',
-      block_list_pillar: 1,
+      block_list_col: 1,
       // Добавление пункта!
       list_add_item_title: '',
       list_add_item_content: '',
@@ -1448,19 +1448,24 @@ methods: {
       this.modal_close();
       this.push_ajax('block-html-add', 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + this.html_block_create_code + '&border=' + this.html_block_create_border);
   },
+  // Здравствуйте, ознакомился с вашим заказом, готов взяться за него.
+  //Имею опыт работы с подобными проектами.
+  //Спасибо за внимание, буду рад сотрудничеству. 
+  //Срок выполнения 1 день. текстового блока
   block_text_add(){
       this.modal_close();
       this.push_ajax('block-text-add', 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + 'Новый текстовый блок' + '&border=' + this.html_block_create_border);
-  }
+  },
   
   //команда
   block_command_view(){
       this.command_block_modal = true;
       this.block_add_view = false;
   },
-  block_command_add(){
+  
+  block_command_add(){  //TODO престало работать!
       this.modal_close();
-      this.push_ajax('block-commands-add', 'page_id=' + this.page.id + '&command_design=' + this.command_add_design + '&command_col=' + this.command_add_col_sm + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&content=' + this.command_add_content + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&col_content=' + this.command_add_gor_col_content + '&col_image=' + this.command_add_gor_col_image);
+      this.push_ajax('block-command-add', 'page_id=' + this.page.id + '&command_design=' + this.command_add_design + '&command_col=' + this.command_add_col_sm + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&content=' + this.command_add_content + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&col_content=' + this.command_add_gor_col_content + '&col_image=' + this.command_add_gor_col_image);
   },
   block_command_edit(index){
       this.modal_command_people = index;
@@ -1492,7 +1497,7 @@ methods: {
   },
   block_list_add(){  //TODO не работает!!!
       this.modal_close();
-      this.push_ajax('block-list-add', 'type=' + this.block_list_design + '&pillar=' + this.block_list_pillar + '&page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class);
+      this.push_ajax('block-list-add', 'type=' + this.block_list_design + '&col=' + this.block_list_col + '&page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class);
   },
   block_list_save(index){ 
       this.modal_close();
@@ -1564,8 +1569,7 @@ methods: {
     },
    
     
-    block_hr_add()
-    {
+    block_hr_add()  {
       this.push_ajax('block-hr-add', 'page_id=' + this.page.id);
     },
     push_ajax(action, request){

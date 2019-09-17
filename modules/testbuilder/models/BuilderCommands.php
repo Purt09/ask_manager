@@ -18,6 +18,7 @@ use Yii;
  */
 class BuilderCommands extends \yii\db\ActiveRecord
 {
+    public static $TABLE = 'block_command';
     /**
      * {@inheritdoc}
      */
@@ -56,6 +57,20 @@ class BuilderCommands extends \yii\db\ActiveRecord
     public function getBuilderCommandPeoples()
     {
         return $this->hasMany(BuilderCommandPeople::className(), ['commands_id' => 'id']);
+    }
+
+    public function duplicate(BuilderBlocks $block_old){
+        $block_new = new BuilderCommands();
+        $block_new->design = $this->design;
+        $block_new->col = $this->col;
+        $block_new->gor_col_image = $this->gor_col_image;
+        $block_new->gor_col_content = $this->gor_col_content;
+        $block_new->save();
+
+        $peoples = $this->getBuilderCommandPeoples()->all();
+        foreach ($peoples as $people) $people->duplicate($block_new);
+
+        $block_old->duplicate($block_new->id);
     }
 
 }

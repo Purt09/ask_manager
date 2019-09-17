@@ -48,11 +48,10 @@ class BuilderBlocks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['position', 'page_id', 'builder_id', 'style_margin_top', 'style_margin_bottom', 'css_isContainer', 'isLink', 'isHide', 'isDesktop', 'isTablet', 'isMobile'], 'integer'],
+            [['position', 'page_id', 'builder_id', 'style_margin_top', 'style_margin_bottom', 'css_isContainer', 'isLink', 'isHide', 'isDesktop', 'isTablet', 'isMobile', 'builder_id'], 'integer'],
             [['js', 'style'], 'string'],
             [['builder_table', 'title', 'description', 'class', 'link_title', 'css_background'], 'string', 'max' => 255],
             [['title_head', 'title_color'], 'string', 'max' => 10],
-            [['builder_id'], 'exist', 'skipOnError' => true, 'targetClass' => BuilderBlockHtml::className(), 'targetAttribute' => ['builder_id' => 'id']],
             [['page_id'], 'exist', 'skipOnError' => true, 'targetClass' => BuilderPage::className(), 'targetAttribute' => ['page_id' => 'id']],
         ];
     }
@@ -126,5 +125,20 @@ class BuilderBlocks extends \yii\db\ActiveRecord
     public function getPage()
     {
         return $this->hasOne(BuilderPage::className(), ['id' => 'page_id']);
+    }
+
+    public function duplicate($builder_id){
+        $block = new BuilderBlocks();
+        $block->title = $this->title;
+        $block->page_id = $this->page_id;
+        $block->title_head = $this->title_head;
+        $block->title_color = $this->title_color;
+        $block->class = $this->class;
+        $block->builder_id = $builder_id;
+        $block->builder_table = $this->builder_table;
+        $block->save();
+
+        $block->position = $block->id;
+        return $block->save();
     }
 }

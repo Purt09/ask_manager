@@ -53,4 +53,13 @@ class BuilderListItem extends \yii\db\ActiveRecord
     {
         return $this->hasOne(BuilderList::className(), ['id' => 'list_id']);
     }
+
+    public function duplicate(BuilderList $list){
+        $item = new BuilderListItem();
+        $item->list_id = $list->id;
+        $item->content = $this->content;
+        $item->image = $this->image;
+        $item->title = $this->title;
+        return $item->save();
+    }
 }

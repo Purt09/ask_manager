@@ -67,4 +67,17 @@ class BuilderCommandPeople extends \yii\db\ActiveRecord
     {
         return $this->hasOne(BuilderCommands::className(), ['id' => 'commands_id']);
     }
+
+    public function duplicate(BuilderCommands $commands){
+        $people = new BuilderCommandPeople();
+        $people->name = $this->name;
+        $people->content = $this->content;
+        $people->commands_id = $commands->id;
+        $people->image = $this->image;
+        $people->image_h = $this->image_h;
+        $people->image_w = $this->image_w;
+        $people->image_border = $this->image_border;
+        $people->job = $this->job;
+        return $people->save();
+    }
 }

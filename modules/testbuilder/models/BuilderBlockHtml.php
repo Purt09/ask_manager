@@ -15,6 +15,7 @@ use Yii;
  */
 class BuilderBlockHtml extends \yii\db\ActiveRecord
 {
+    public static $TABLE = 'blok_html';
     /**
      * {@inheritdoc}
      */
@@ -52,5 +53,14 @@ class BuilderBlockHtml extends \yii\db\ActiveRecord
     public function getBuilderBlocks()
     {
         return $this->hasMany(BuilderBlocks::className(), ['builder_id' => 'id']);
+    }
+
+    public function duplicate(BuilderBlocks $block_old){
+        $block_new = new BuilderBlockHtml();
+        $block_new->code = $this->code;
+        $block_new->border = $this->border;
+        $block_new->save();
+
+        $block_old->duplicate($block_new->id);
     }
 }

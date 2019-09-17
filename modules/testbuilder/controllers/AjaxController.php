@@ -87,38 +87,30 @@ class AjaxController extends Controller
         if (\Yii::$app->request->isAjax) {
             $block_old = BuilderBlocks::findOne($id);
 
-            $block = new BuilderBlocks();
-            $block->title = $block_old->title;
-            $block->page_id = $block_old->page_id;
-            $block->title_head = $block_old->title_head;
-            $block->title_color = $block_old->title_color;
-            $block->class = $block_old->class;
-
-            if ($block_old->builder_table == 'blok_html') {
-                $block_html_old = BuilderBlockHtml::findOne($block_old->builder_id);
-                $block_html = new BuilderBlockHtml();
-                $block_html->code = $block_html_old->code;
-                $block_html->border = $block_html_old->border;
-                $block_html->save();
-
-                $block->builder_id = $block_html->id;
-                $block->builder_table = 'blok_html';
+            if (($block_old->builder_table == 'blok_html') || ($block_old->builder_table == 'block_text')) {
+                $block_new = BuilderBlockHtml::findOne($block_old->builder_id);
+                $block_new->duplicate($block_old);
             }
             if ($block_old->builder_table == 'block_command') {
-                $block_command_old = BuilderCommands::findOne($block_old->builder_id);
-                $block_command = new BuilderCommands();
-                $block_command->col = $block_command_old->col;
-                $block_command->design = $block_command_old->design;
-                $block_command->save();
-
-                $block->builder_id = $block_command->id;
-                $block->builder_table = 'block_command';
+                $block_new = BuilderCommands::findOne($block_old->builder_id);
+                $block_new->duplicate($block_old);
             }
+            if ($block_old->builder_table == 'hr') {
+                $block_old->duplicate(0);
+            }
+            if ($block_old->builder_table == 'block_list') {
+                $block_new = BuilderList::findOne($block_old->builder_id);
+                $block_new->duplicate($block_old);
+            }
+
+            return $this->redirect('/testbuilder/default/index?id=' . $block_old->page_id, 200);
+
+            $block->builder_table = $block_old->builder_table;
             $block->save();
 
             $block->position = $block->id;
             $block->save();
-            return $this->redirect('/testbuilder/default/index?id=' . $block_old->page_id, 200);
+
         } else {
             return $this->redirect('/');
         }
@@ -134,7 +126,7 @@ class AjaxController extends Controller
     {
         if (\Yii::$app->request->isAjax) {
             $block = BuilderBlocks::findOne($id);
-            if ($block->builder_table == 'blok_html') {
+            if (($block->builder_table == 'blok_html') || ($block->builder_table == 'block_text')) {
                 $block_html = BuilderBlockHtml::findOne($block->builder_id);
                 $block_html->delete();
             }
@@ -142,8 +134,12 @@ class AjaxController extends Controller
                 $block_command = BuilderCommands::findOne($block->builder_id);
                 $block_command->delete();
             }
+            if ($block->builder_table == 'block_list') {
+                $block_list = BuilderList::findOne($block->builder_id);
+                $block_list->delete();
+            }
             $block->delete();
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
         } else {
             return $this->redirect('/');
         }
@@ -182,10 +178,7 @@ class AjaxController extends Controller
         if (\Yii::$app->request->isAjax) {
             $block_html = new BuilderBlockHtml();
             $block_html->code = $code;
-            if ($border == 'true')
-                $block_html->border = 1;
-            else
-                $block_html->border = 0;
+            ($border == 'true') ? $block_html->border = 1 : $block_html->border = 0;
             $block_html->save();
 
             $block = new BuilderBlocks();
@@ -193,7 +186,7 @@ class AjaxController extends Controller
             $block->page_id = $page_id;
             $block->title_head = $title_head;
             $block->title_color = $title_color;
-            $block->builder_table = 'blok_html';
+            $block->builder_table = $block_html::$TABLE;
             $block->builder_id = $block_html->id;
             $block->class = $class;
             $block->save();
@@ -201,7 +194,7 @@ class AjaxController extends Controller
             $block->position = $block->id;
             $block->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
 
         } else {
             return $this->redirect('/');
@@ -213,10 +206,7 @@ class AjaxController extends Controller
         if (\Yii::$app->request->isAjax) {
             $block_html = new BuilderBlockHtml();
             $block_html->code = $code;
-            if ($border == 'true')
-                $block_html->border = 1;
-            else
-                $block_html->border = 0;
+            ($border == 'true') ? $block_html->border = 1 :  $block_html->border = 0;
             $block_html->save();
 
             $block = new BuilderBlocks();
@@ -232,7 +222,7 @@ class AjaxController extends Controller
             $block->position = $block->id;
             $block->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
 
         } else {
             return $this->redirect('/');
@@ -278,12 +268,12 @@ class AjaxController extends Controller
      * @param string $class
      * @return \yii\web\Response
      */
-    public function actionBlockCommandsAdd($page_id, $command_design = 'Вертикальный', $command_col = 1, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $col_image, $col_content, $content = '')
+    public function actionBlockCommandAdd($page_id, $command_design = 'Вертикальный', $command_col = 1, $people_name = 'Name', $p_image = '', $p_image_h = 50, $p_image_w = 50, $p_image_b = '0px', $title = '', $title_head = 'h2', $title_color = '7faf24', $class = '', $col_image = 4, $col_content = 8, $content = '')
     {
         if (\Yii::$app->request->isAjax) {
             $block_command = new BuilderCommands();
             $block_command->design = $command_design;
-            $block_command->col = 12 / $command_col;
+            $block_command->col = $command_col;
             $block_command->gor_col_content = $col_content;
             $block_command->gor_col_image = $col_image;
             $block_command->save();
@@ -306,7 +296,7 @@ class AjaxController extends Controller
             $block->page_id = $page_id;
             $block->title_head = $title_head;
             $block->title_color = $title_color;
-            $block->builder_table = 'block_command';
+            $block->builder_table = $block_command::$TABLE;
             $block->builder_id = $block_command->id;
             $block->class = $class;
             $block->save();
@@ -314,7 +304,7 @@ class AjaxController extends Controller
             $block->position = $block->id;
             $block->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id,200);
 
         } else {
             return $this->redirect('/');
@@ -444,20 +434,21 @@ class AjaxController extends Controller
             $block->save();
 
             $block->position = $block->id;
+            $block->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
         } else {
             return $this->redirect('/');
         }
     }
 
-    public function actionBlockListAdd($type, $pillar = 1, $title = '', $title_head = 'h2', $title_color, $class = '', $page_id)
+    public function actionBlockListAdd($type, $col = 1, $title = '', $title_head = 'h2', $title_color, $class = '', $page_id)
     {
         if (\Yii::$app->request->isAjax) {
 
             $block_list = new BuilderList();
             $block_list->design = $type;
-            $block_list->col = $pillar;
+            $block_list->col = $col;
             $block_list->save();
 
 
@@ -471,7 +462,10 @@ class AjaxController extends Controller
             $block->class = $class;
             $block->save();
 
+            $block->position = $block->id;
+            $block->save();
 
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
         } else {
             return $this->redirect('/');
         }
@@ -489,7 +483,7 @@ class AjaxController extends Controller
             $list_item->list_id = $list->id;
             $list_item->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 301);
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
 
         } else {
             return $this->redirect('/');
