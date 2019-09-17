@@ -43,6 +43,13 @@ use yii\helpers\Json;
                      :class="{html_block_border: block.builder_id.border == 1}"></div>
             </div>
 
+            <!--                Если блок ТЕКСТ!-->
+            <div v-if="block.builder_table == 'block_text'"
+                 class="block">
+                <div :class="{html_block_border: block.builder_id.border == 1}">
+                    {{block.builder_id.code}}
+                </div>
+            </div>
             <!--                Если блок COMMAND!-->
             <div v-if="block.builder_table == 'blok_command'"
                  class="block">
@@ -77,6 +84,188 @@ use yii\helpers\Json;
                     </div>
                 </div>
 
+            </div>
+
+            <!--Если hr-->
+            <div v-if="block.builder_table == 'hr'"
+                 class="block">
+                <button class="btn btn-default btn-xs"
+                        @click="block_title_edit = index">
+                    Настроить заголовк
+                </button>
+                <hr>
+            </div>
+
+            <!--            Если СПИСОК-->
+            <div v-if="block.builder_table == 'block_list'"
+                 class="block">
+                <div class="row">
+                    <div v-if="block.builder_id.design == 'С нумерацией'">
+                        <ol :class="{list: block.builder_id.col == 2}">
+                            <li v-for="item in block.description">
+                                <label for="list"> {{item.title}}</label><br v-show="item.title != ''">
+                                <span v-html="item.content"></span>
+                            </li>
+                        </ol>
+                    </div>
+                    <div v-if="block.builder_id.design == 'С точками'">
+                        <ul :class="{list: block.builder_id.col == 2}">
+                            <li v-for="item in block.description" v-html="item.content"></li>
+                        </ul>
+                    </div>
+                    <div v-if="block.builder_id.design == 'С картинкой'">
+                        <ul class="section-4__list ul-reset"
+                            :class="{list: block.builder_id.col == 2}">
+                            <li class="list__item"
+                                v-for="item,indexI in block.description">
+                                <div class="list__img-wrap"><img class="list__img" :src="item.image" :alt="item.title"
+                                                                 loading="lazy"></div>
+                                <span class="list__text" v-html="item.content"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="block.builder_table == 'block_list_table'"
+                 class="block"">
+                <div class="row"
+                     v-if="block.builder_id.design == '4 столбца'">
+                    <div class="col-sm-3 text-center">
+                        <img :src="block.builder_id.image1" :alt="block.builder_id.text1">
+                        <br>
+                        {{block.builder_id.text1}}
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <img :src="block.builder_id.image2" :alt="block.builder_id.text2">
+                        <br>
+                        {{block.builder_id.text2}}
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <img :src="block.builder_id.image3" :alt="block.builder_id.text3">
+                        <br>
+                        {{block.builder_id.text3}}
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <img :src="block.builder_id.image4" :alt="block.builder_id.text4">
+                        <br>
+                        {{block.builder_id.text4}}
+                    </div>
+                </div>
+                <div class="row text-center"
+                     v-if="block.builder_id.design == '5 столбцов'">
+                    <div class="col-sm-five">
+                        <img :src="block.builder_id.image1" :alt="block.builder_id.text1">
+                        <br>
+                        {{block.builder_id.text1}}
+                    </div>
+                    <div class="col-sm-five">
+                        <img :src="block.builder_id.image2" :alt="block.builder_id.text2">
+                        <br>
+                        {{block.builder_id.text2}}
+                    </div>
+                    <div class="col-sm-five">
+                        <img :src="block.builder_id.image3" :alt="block.builder_id.text3">
+                        <br>
+                        {{block.builder_id.text3}}
+                    </div>
+                    <div class="col-sm-five">
+                        <img :src="block.builder_id.image4" :alt="block.builder_id.text4">
+                        <br>
+                        {{block.builder_id.text4}}
+                    </div>
+                    <div class="col-sm-five">
+                        <img :src="block.builder_id.image5" :alt="block.builder_id.text5">
+                        <br>
+                        {{block.builder_id.text5}}
+                    </div>
+                </div>
+                <div class="row text-center"
+                     v-if="block.builder_id.design == '6 столбцов'">
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image1" :alt="block.builder_id.text1">
+                        <br>
+                        {{block.builder_id.text1}}
+                    </div>
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image2" :alt="block.builder_id.text2">
+                        <br>
+                        {{block.builder_id.text2}}
+                    </div>
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image3" :alt="block.builder_id.text3">
+                        <br>
+                        {{block.builder_id.text3}}
+                    </div>
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image4" :alt="block.builder_id.text4">
+                        <br>
+                        {{block.builder_id.text4}}
+                    </div>
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image5" :alt="block.builder_id.text5">
+                        <br>
+                        {{block.builder_id.text5}}
+                    </div>
+                    <div class="col-sm-2">
+                        <img :src="block.builder_id.image6" :alt="block.builder_id.text6">
+                        <br>
+                        {{block.builder_id.text6}}
+                    </div>
+                </div>
+                <div class="row text-center"
+                     v-if="block.builder_id.design == '6 блоков'">
+                    <ul class="tiles ul-reset">
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">{{block.builder_id.text1}}</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc1"></div>
+                                    <img class="tile__img" :src="block.builder_id.image1" :alt="block.builder_id.text1"
+                                         loading="lazy"></div>
+                        </li>
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">{{block.builder_id.text2}}</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc2"></div>
+                                    <img class="tile__img" :src="block.builder_id.image2" :alt="block.builder_id.text2"
+                                         loading="lazy"></div>
+                        </li>
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">{{block.builder_id.text3}}</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc3"></div>
+                                    <img class="tile__img" :src="block.builder_id.image3" :alt="block.builder_id.text3"
+                                         loading="lazy"></div>
+                        </li>
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">block.builder_id.text4</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc4"></div>
+                                    <img class="tile__img" :src="block.builder_id.image4" :alt="block.builder_id.text4"
+                                         loading="lazy"></div>
+                        </li>
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">{{block.builder_id.text5}}</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc5"></div>
+                                    <img class="tile__img" :src="block.builder_id.image5" :alt="block.builder_id.text5"
+                                         loading="lazy"></div>
+                        </li>
+                        <li class="tiles__item tile">
+                            <div class="tile__wrap">
+                                <div class="tile__text">
+                                    <div class="tile__title">{{block.builder_id.text6}}</div>
+                                    <div class="tile__descr" v-html="block.builder_id.desc6"></div>
+                                    <img class="tile__img" :src="block.builder_id.image6" :alt="block.builder_id.text6"
+                                         loading="lazy"></div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>

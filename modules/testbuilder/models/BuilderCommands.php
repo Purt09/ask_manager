@@ -57,4 +57,5 @@ class BuilderCommands extends \yii\db\ActiveRecord
     {
         return $this->hasMany(BuilderCommandPeople::className(), ['commands_id' => 'id']);
     }
+
 }

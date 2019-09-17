@@ -29,32 +29,8 @@ class DefaultController extends Controller
         $page = BuilderPage::findOne($id);
 
         $blocks = $page->getBuilderBlocks()->orderBy('position')->all();
-        foreach ($blocks as $block) {
-            if ($block['builder_table'] == 'blok_html')
-                $block['builder_id'] = BuilderBlockHtml::find()->where(['id' => $block['builder_id']])->asArray()->one();
-            if ($block['builder_table'] == 'block_command') {
-                $block['builder_id'] = BuilderCommands::find()->where(['id' => $block['builder_id']])->asArray()->one();
-                if ($block['builder_id']['col'] == 1)
-                    $block['builder_id']['col'] = 12;
-                if ($block['builder_id']['col'] == 3)
-                    $block['builder_id']['col'] = 4;
-                if ($block['builder_id']['col'] == 4)
-                    $block['builder_id']['col'] = 3;
-                if ($block['builder_id']['col'] == 2)
-                    $block['builder_id']['col'] = 6;
-                if ($block['builder_id']['col'] == 6)
-                    $block['builder_id']['col'] = 2;
-                $block['description']   = BuilderCommandPeople::find()->where(['commands_id' => $block['builder_id']['id']])->asArray()->all();
-            }
-            if ($block['builder_table'] == 'block_list') {
-                $block['builder_id'] = BuilderList::find()->where(['id' => $block['builder_id']])->asArray()->one();
-                $block['description'] = BuilderListItem::find()->where(['list_id' => $block['builder_id']['id']])->asArray()->all();
-            }
-            if ($block['builder_table'] == 'block_text')
-                $block['builder_id'] = BuilderBlockHtml::find()->where(['id' => $block['builder_id']])->asArray()->one();
-            if ($block['builder_table'] == 'block_list_table')
-                $block['builder_id'] = BuilderListTable::find()->where(['id' => $block['builder_id']])->asArray()->one();
-        }
+        foreach ($blocks as $block)
+            $this->generateBlock($block);
 
             if(Yii::$app->user->isGuest){
                 return $this->render('view', [
@@ -67,5 +43,30 @@ class DefaultController extends Controller
                     'blocks' => $blocks,
                 ]);
             }
+    }
+    private function generateBlock(BuilderBlocks $block){
+
+        if (($block['builder_table'] == 'blok_html') || ($block['builder_table'] == 'block_text'))
+            $block['builder_id'] = $block->getBuilderHtml()->where(['id' => $block['builder_id']])->asArray()->one();
+        if ($block['builder_table'] == 'block_command') {
+            $block['builder_id'] = $block->getBuilderCommand()->where(['id' => $block['builder_id']])->one();
+            if($block['builder_id']->col == 1) $block['builder_id']->col = 12;
+            if($block['builder_id']->col == 2) $block['builder_id']->col = 6;
+            if($block['builder_id']->col == 3) $block['builder_id']->col = 4;
+            if($block['builder_id']->col == 4) $block['builder_id']->col = 3;
+            if($block['builder_id']->col == 6) $block['builder_id']->col = 2;
+            $block['builder_id']->peoples = $block['builder_id']->getBuilderCommandPeoples()->where(['commands_id' => $block['builder_id']['id']])->asArray()->all();
+        }
+        if ($block['builder_table'] == 'block_list') {
+            $block['builder_id'] = $block->getBuilderList()->where(['id' => $block['builder_id']])->one();
+            if($block['builder_id']->col == 1) $block['builder_id']->col = 12;
+            if($block['builder_id']->col == 2) $block['builder_id']->col = 6;
+            if($block['builder_id']->col == 3) $block['builder_id']->col = 4;
+            if($block['builder_id']->col == 4) $block['builder_id']->col = 3;
+            if($block['builder_id']->col == 6) $block['builder_id']->col = 2;
+            $block['description'] = $block['builder_id']->getListItem()->where(['list_id' => $block['builder_id']['id']])->asArray()->all();
+        }
+        if ($block['builder_table'] == 'block_list_table')
+            $block['builder_id'] = $block->getBuilderListTable()->where(['id' => $block['builder_id']])->one();
     }
 }

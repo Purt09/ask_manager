@@ -389,12 +389,12 @@ use yii\helpers\Json;
                  class="block"
                  @click="block_command_edit(index)">
                 <div class="row">
-                    <div v-for="people in block.description"
+                    <div v-for="people in block.builder_id.peoples"
                          v-show="people.commands_id == block.builder_id.id">
                         <div :class="'col-sm-' + block.builder_id.col">
                             <!--                        Вертикальный дизайн-->
                             <div class="text-center"
-                                 v-if="block.builder_id.design == 1">
+                                 v-if="block.builder_id.design == 'Вертикальный'">
                                 <img :src="people.image" :alt="people.name"
                                      :style="'height: ' + people.image_h + 'px; width: ' + people.image_w + 'px; border-radius: ' + people.image_border">
                                 <br>
@@ -479,7 +479,7 @@ use yii\helpers\Json;
                         <div class="panel-heading">Редактирование:</div>
                         <div class="panel-body">
                             <div class="panel panel-default"
-                                 v-for="people,indexP in block.description"
+                                 v-for="people,indexP in block.builder_id.peoples"
                                  v-show="people.commands_id == block.builder_id.id">
                                 <div class="panel-heading">
                                     <div class="row p-1">
@@ -580,7 +580,7 @@ use yii\helpers\Json;
             <!--            Если СПИСОК-->
             <div v-if="block.builder_table == 'block_list'"
                  class="block"
-                 @click="block_command_edit(index)">
+                 @click="block_list_edit(index)">
                 <div class="row">
                     <div v-if="block.builder_id.design == 'С нумерацией'"
                          @click="modal_list = index">
@@ -717,7 +717,7 @@ use yii\helpers\Json;
                                         </div>
                                     </div>
                                     <button class="btn btn-success m-2"
-                                            @click="block_list_item_add_in_list(block.builder_id.id)">
+                                            @click="block_list_item_add(block.builder_id.id)">
                                         Добавить
                                     </button>
                                 </div>
@@ -732,7 +732,7 @@ use yii\helpers\Json;
                 </div>
             </modal>
 
-
+            <!--Если преимущества-->
             <div v-if="block.builder_table == 'block_list_table'"
                  class="block"
                  @click="block_advantages_edit(index)">
@@ -1050,7 +1050,7 @@ use yii\helpers\Json;
                     </div>
                 </div>
                 <button class="btn btn-default m-2"
-                        @click="block_html_add()">
+                        @click="block_html_view()">
                     HTML
                 </button>
                 <button class="btn btn-default m-2"
@@ -1058,7 +1058,7 @@ use yii\helpers\Json;
                     Текст
                 </button>
                 <button class="btn btn-default m-2"
-                        @click="block_command_add()">
+                        @click="block_command_view()">
                     Команда
                 </button>
                 <button class="btn btn-default m-2"
@@ -1156,7 +1156,7 @@ use yii\helpers\Json;
                     </div>
                 </div>
                 <button class="btn btn-success"
-                        @click="block_command_save()">
+                        @click="block_command_add()">
                     Добавить
                 </button>
             </div>
@@ -1182,6 +1182,7 @@ use yii\helpers\Json;
                         @click="block_list_add()">
                     Создать
                 </button>
+
 
             </div>
 
@@ -1396,45 +1397,19 @@ data:{
   menu_title_edit: 999,
 },
 methods: {
+  // Общее редактирование блока
     block_block_block_edit_title(index){
       this.block_title_edit = index;
     },
     block_block_save_title(index) {
       this.block_title_edit = 999;
-      $.ajax({
-         url: '/testbuilder/ajax/block-save-title',
-         type: 'GET',
-         data: 'id=' + blocks[index].id + '&title=' + blocks[index].title + '&title_h=' + blocks[index].title_head + '&title_color=' + blocks[index].title_color + '&isH=' + this.blocks[index].isHide + '&isD=' + this.blocks[index].isDesktop + '&isT=' + this.blocks[index].isTablet + '&isM=' + this.blocks[index].isMobile,
-         success: function(){
-           console.log( blocks[index].id + 'success push');
-         },
-         error: function(){
-         }
-         });
+      this.push_ajax('block-save-title', 'id=' + blocks[index].id + '&title=' + blocks[index].title + '&title_h=' + blocks[index].title_head + '&title_color=' + blocks[index].title_color + '&isH=' + this.blocks[index].isHide + '&isD=' + this.blocks[index].isDesktop + '&isT=' + this.blocks[index].isTablet + '&isM=' + this.blocks[index].isMobile);
     },
-    block_block_duplicate(index){
-      $.ajax({
-         url: '/testbuilder/ajax/block-duplicate',
-         type: 'GET',
-         data: 'id=' + blocks[index].id,
-         success: function(){
-           console.log( blocks[index].id + 'success push');
-         },
-         error: function(){
-         }
-         });
+    block_block_duplicate(index){ //TODO более гибкое дублирование, а не костыли!
+      this.push_ajax('block-duplicate', 'id=' + blocks[index].id);
     },
-    block_block_delete(index){
-      $.ajax({
-         url: '/testbuilder/ajax/block-delete',
-         type: 'GET',
-         data: 'id=' + blocks[index].id + '&page_id=' + this.page.id,
-         success: function(){
-           console.log( blocks[index].id + 'success push');
-         },
-         error: function(){
-         }
-         });
+    block_block_delete(index){  //TODO удаление всех блоков! А не только BuilderBlock
+      this.push_ajax('block-delete', 'id=' + blocks[index].id + '&page_id=' + this.page.id);
     },
     block_position_up(index){
       var pos1 = blocks[index].position;
@@ -1447,16 +1422,7 @@ methods: {
       this.block_save_pos(pos1, pos2);
     },
     block_save_pos(pos1, pos2){
-      $.ajax({
-         url: '/testbuilder/ajax/block-save-pos',
-         type: 'GET',
-         data: 'pos1=' + pos1 + '&pos2=' + pos2,
-         success: function(){
-           console.log( pos1 + ' success push ' + pos2 );
-         },
-         error: function(){
-         }
-         });
+      this.push_ajax('block-save-pos', 'pos1=' + pos1 + '&pos2=' + pos2);
     },
      block_block_edit(index){
       this.showModal = true;
@@ -1465,204 +1431,87 @@ methods: {
     block_block_save_data(index){
       this.block_title_edit = 999;
       this.modal_close();
-    $.ajax({
-         url: '/testbuilder/ajax/block-save-data',
-         type: 'GET',
-         data: 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title + '&isH=' + this.blocks[index].isHide + '&isD=' + this.blocks[index].isDesktop + '&isT=' + this.blocks[index].isTablet + '&isM=' + this.blocks[index].isMobile + '&css_background=' + this.blocks[index].css_background,
-         success: function(){
-           console.log( id + 'success push');
-         },
-         error: function(){
-         }
-         });
+      this.push_ajax('block-save-data', 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title + '&isH=' + this.blocks[index].isHide + '&isD=' + this.blocks[index].isDesktop + '&isT=' + this.blocks[index].isTablet + '&isM=' + this.blocks[index].isMobile + '&css_background=' + this.blocks[index].css_background);
   },
   
   
     // HTML
+    block_html_view(){
+      this.block_add_view = false;
+      this.html_block_modal = true;
+    },
     block_html_save(index){
       this.prev_html = 999;
-    $.ajax({
-         url: '/testbuilder/ajax/block-html-save',
-         type: 'GET',
-         data: 'id=' + this.blocks[index].builder_id.id + '&code=' + this.blocks[index].builder_id.code + '&border=' + this.blocks[index].builder_id.border,
-         success: function(){
-           console.log( id + 'success push');
-         },
-         error: function(){
-         }
-         });
+      this.push_ajax('block-html-save', 'id=' + this.blocks[index].builder_id.id + '&code=' + this.blocks[index].builder_id.code + '&border=' + this.blocks[index].builder_id.border);
     },
-    block_html_create(){
+    block_html_create(){ //TODO объеденить функции
       this.modal_close();
-    $.ajax({
-         url: '/testbuilder/ajax/block-html-add',
-         type: 'GET',
-         data: 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + this.html_block_create_code + '&border=' + this.html_block_create_border,
-         success: function(){
-           console.log( 'success push');
-         },
-         error: function(){
-         }
-         });
+      this.push_ajax('block-html-add', 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + this.html_block_create_code + '&border=' + this.html_block_create_border);
   },
   block_text_add(){
       this.modal_close();
-      $.ajax({
-         url: '/testbuilder/ajax/block-text-add',
-         type: 'GET',
-         data: 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + 'Новый текстовый блок' + '&border=' + this.html_block_create_border,
-         success: function(){
-           console.log( 'success push');
-         },
-         error: function(){
-         }
-         });
-  },
-  
-   
+      this.push_ajax('block-text-add', 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + 'Новый текстовый блок' + '&border=' + this.html_block_create_border);
+  }
   
   //команда
-  block_command_add(){
+  block_command_view(){
       this.command_block_modal = true;
       this.block_add_view = false;
   },
-  block_command_save(){
-      $.ajax({
-         url: '/testbuilder/ajax/block-commands-add',
-         type: 'GET',
-         data: 'page_id=' + this.page.id + '&command_design=' + this.command_add_design + '&command_col=' + this.command_add_col_sm + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&col_content=' + this.command_add_gor_col_content + '&col_image=' + this.command_add_gor_col_image,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-         });
+  block_command_add(){
+      this.modal_close();
+      this.push_ajax('block-commands-add', 'page_id=' + this.page.id + '&command_design=' + this.command_add_design + '&command_col=' + this.command_add_col_sm + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&content=' + this.command_add_content + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&col_content=' + this.command_add_gor_col_content + '&col_image=' + this.command_add_gor_col_image);
   },
   block_command_edit(index){
       this.modal_command_people = index;
   },
   block_people_add_in_command(id){
-      $.ajax({
-         url: '/testbuilder/ajax/block-people-add-in-command',
-         type: 'GET',
-         data: 'page_id=' + this.page.id + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&content=' + this.command_add_content + '&command_id=' + id,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-         });
+      this.push_ajax('block-people-add-in-command', 'page_id=' + this.page.id + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&content=' + this.command_add_content + '&command_id=' + id);
       this.command_add_name = '';
       this.command_add_image = '';
       this.command_add_content = '';
   },
   block_command_delete_people(indexP, index){
-      blocks[index].description[indexP].commands_id = 0;
-      id = blocks[index].description[indexP].id
-      $.ajax({
-         url: '/testbuilder/ajax/block-command-people-delete',
-         type: 'GET',
-         data: 'id=' + id,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-      });
+      blocks[index].builder_id.peoples[indexP].commands_id = 0;
+      id = blocks[index].builder_id.peoples[indexP].id
+      this.push_ajax('block-command-people-delete', 'id=' + id);
       },
    
   block_command_people_save(indexP, index){
-      $.ajax({
-         url: '/testbuilder/ajax/block-command-people-save',
-         type: 'GET',
-         data: 'id=' + blocks[index].description[indexP].id + '&name=' + blocks[index].description[indexP].name + '&content=' + blocks[index].description[indexP].content + '&image=' + blocks[index].description[indexP].image + '&image_h=' + blocks[index].description[indexP].image_h + '&image_w=' + blocks[index].description[indexP].image_w + '&image_border=' + blocks[index].description[indexP].image_border + '&job=' + blocks[index].description[indexP].job,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-      });
+      this.push_ajax('block-command-people-save', 'id=' + blocks[index].builder_id.peoples[indexP].id + '&name=' + blocks[index].builder_id.peoples[indexP].name + '&content=' + blocks[index].builder_id.peoples[indexP].content + '&image=' + blocks[index].builder_id.peoples[indexP].image + '&image_h=' + blocks[index].builder_id.peoples[indexP].image_h + '&image_w=' + blocks[index].builder_id.peoples[indexP].image_w + '&image_border=' + blocks[index].builder_id.peoples[indexP].image_border + '&job=' + blocks[index].builder_id.peoples[indexP].job);
         },
   block_command_data_save(index){
-      $.ajax({
-         url: '/testbuilder/ajax/block-command-save',
-         type: 'GET',
-         data: 'col=' + this.blocks[index].builder_id.col + '&design=' + this.blocks[index].builder_id.design + '&id=' + this.blocks[index].builder_id.id + '&col_content=' + blocks[index].builder_id.gor_col_content + '&col_image=' + blocks[index].builder_id.gor_col_image,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-         });
+      this.push_ajax('block-command-save', 'col=' + this.blocks[index].builder_id.col + '&design=' + this.blocks[index].builder_id.design + '&id=' + this.blocks[index].builder_id.id + '&col_content=' + blocks[index].builder_id.gor_col_content + '&col_image=' + blocks[index].builder_id.gor_col_image + '&page_id=' + this.page.id);
   },
+  
   
   // СПИСОК
   block_list_view(){
       this.modal_add_list = true;
       this.block_add_view = false;
   },
-  block_list_add(){
-      $.ajax({
-         url: '/testbuilder/ajax/block-list-add',
-         type: 'GET',
-         data: 'type=' + this.block_list_design + '&pillar=' + this.block_list_pillar + '&page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-         });
+  block_list_add(){  //TODO не работает!!!
+      this.modal_close();
+      this.push_ajax('block-list-add', 'type=' + this.block_list_design + '&pillar=' + this.block_list_pillar + '&page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class);
   },
-  block_list_save(index){
-      $.ajax({
-         url: '/testbuilder/ajax/block-list-save',
-         type: 'GET',
-         data: 'id=' + blocks[index].builder_id.id + '&col=' + blocks[index].builder_id.col + '&design=' + blocks[index].builder_id.design + '&page_id=' + this.page.id ,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-         });
+  block_list_save(index){ 
+      this.modal_close();
+      this.push_ajax('block-list-save', 'id=' + blocks[index].builder_id.id + '&col=' + blocks[index].builder_id.col + '&design=' + blocks[index].builder_id.design + '&page_id=' + this.page.id);
   },
-  block_list_item_add_in_list(list_id){
-      $.ajax({
-         url: '/testbuilder/ajax/block-list-item-add',
-         type: 'GET',
-         data: 'list_id=' + list_id + '&title=' + this.list_add_item_title + '&content=' + this.list_add_item_content + '&page_id=' + this.page.id + '&image=' + this.list_add_item_image ,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-         });
+  block_list_item_add(list_id){
+      this.push_ajax('block-list-item-add', 'list_id=' + list_id + '&title=' + this.list_add_item_title + '&content=' + this.list_add_item_content + '&page_id=' + this.page.id + '&image=' + this.list_add_item_image);
   },
   block_list_item_delete(indexI, index){
       blocks[index].description[indexI].list_id = 0;
       id = blocks[index].description[indexI].id;
-      $.ajax({
-         url: '/testbuilder/ajax/block-list-item-delete',
-         type: 'GET',
-         data: 'id=' + id,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-      });
+      this.push_ajax('block-list-item-delete', 'id=' + id);
   },
   block_list_item_save(indexI, index){
-      $.ajax({
-         url: '/testbuilder/ajax/block-command-people-save',
-         type: 'GET',
-         data: 'id=' + blocks[index].description[indexP].id + '&name=' + blocks[index].description[indexP].name + '&content=' + blocks[index].description[indexP].content + '&image=' + blocks[index].description[indexP].image + '&image_h=' + blocks[index].description[indexP].image_h + '&image_w=' + blocks[index].description[indexP].image_w + '&image_border=' + blocks[index].description[indexP].image_border + '&job=' + blocks[index].description[indexP].job,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-      });
+      this.push_ajax('block-list-item-save', 'id=' + blocks[index].description[indexI].id + '&title=' + blocks[index].description[indexI].title + '&content=' + blocks[index].description[indexI].content + '&image=' + blocks[index].description[indexI].image + '&list_id=' + blocks[index].builder_id.id);
   },
+  
+  
+  
   // Блок ПРЕИМУЩЕСТВА
   block_advantages_view(){
       this.modal_add_advantages = true;
@@ -1670,32 +1519,14 @@ methods: {
   },
   block_advantages_add(){
       this.modal_close();
-      $.ajax({
-         url: '/testbuilder/ajax/block-advantages-add',
-         type: 'GET',
-         data: 'page_id=' + this.page.id + '&design=' + this.block_advantages_design + '&image1=' + this.advantages_1_add_image + '&image2=' + this.advantages_2_add_image + '&image3=' + this.advantages_3_add_image + '&image4=' + this.advantages_4_add_image + '&image5=' + this.advantages_5_add_image + '&image6=' + this.advantages_6_add_image + '&text1=' + this.advantages_1_add_text + '&text2=' + this.advantages_2_add_text + '&text3=' + this.advantages_3_add_text + '&text4=' + this.advantages_4_add_text + '&text5=' + this.advantages_5_add_text + '&text6=' + this.advantages_6_add_text + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&desc1=' + this.advantages_1_add_desc + '&desc2=' + this.advantages_2_add_desc + '&desc3=' + this.advantages_3_add_desc + '&desc4=' + this.advantages_4_add_desc + '&desc5=' + this.advantages_5_add_desc + '&desc6=' + this.advantages_6_add_desc,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-      });
+      this.push_ajax('block-advantages-add', 'page_id=' + this.page.id + '&design=' + this.block_advantages_design + '&image1=' + this.advantages_1_add_image + '&image2=' + this.advantages_2_add_image + '&image3=' + this.advantages_3_add_image + '&image4=' + this.advantages_4_add_image + '&image5=' + this.advantages_5_add_image + '&image6=' + this.advantages_6_add_image + '&text1=' + this.advantages_1_add_text + '&text2=' + this.advantages_2_add_text + '&text3=' + this.advantages_3_add_text + '&text4=' + this.advantages_4_add_text + '&text5=' + this.advantages_5_add_text + '&text6=' + this.advantages_6_add_text + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&desc1=' + this.advantages_1_add_desc + '&desc2=' + this.advantages_2_add_desc + '&desc3=' + this.advantages_3_add_desc + '&desc4=' + this.advantages_4_add_desc + '&desc5=' + this.advantages_5_add_desc + '&desc6=' + this.advantages_6_add_desc);
   },
   block_advantages_edit(index){
       this.modal_advantages = index;
   },
   block_advantages_save(index){
       this.modal_close();
-      $.ajax({
-         url: '/testbuilder/ajax/block-advantages-save',
-         type: 'GET',
-         data: 'id=' + this.blocks[index].builder_id.id +'&design=' + this.blocks[index].builder_id.design + '&image1=' + this.blocks[index].builder_id.image1 + '&image2=' + this.blocks[index].builder_id.image2 + '&image3=' + this.blocks[index].builder_id.image3 + '&image4=' + this.blocks[index].builder_id.image4 + '&image5=' + this.blocks[index].builder_id.image5 + '&image6=' + this.blocks[index].builder_id.image6 + '&text1=' + this.blocks[index].builder_id.text1 + '&text2=' + this.blocks[index].builder_id.text2 + '&text3=' + this.blocks[index].builder_id.text3 + '&text4=' + this.blocks[index].builder_id.text4 + '&text5=' + this.blocks[index].builder_id.text5 + '&text6=' + this.blocks[index].builder_id.text6 + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&desc1=' + this.blocks[index].builder_id.desc1 + '&desc2=' + this.blocks[index].builder_id.desc2 + '&desc3=' + this.blocks[index].builder_id.desc3 + '&desc4=' + this.blocks[index].builder_id.desc4 + '&desc5=' + this.blocks[index].builder_id.desc5 + '&desc6=' + this.blocks[index].builder_id.desc6,
-         success: function(){
-           console.log('success push');
-         },
-         error: function(){
-         }
-      });
+      this.push_ajax('block-advantages-save', 'id=' + this.blocks[index].builder_id.id +'&design=' + this.blocks[index].builder_id.design + '&image1=' + this.blocks[index].builder_id.image1 + '&image2=' + this.blocks[index].builder_id.image2 + '&image3=' + this.blocks[index].builder_id.image3 + '&image4=' + this.blocks[index].builder_id.image4 + '&image5=' + this.blocks[index].builder_id.image5 + '&image6=' + this.blocks[index].builder_id.image6 + '&text1=' + this.blocks[index].builder_id.text1 + '&text2=' + this.blocks[index].builder_id.text2 + '&text3=' + this.blocks[index].builder_id.text3 + '&text4=' + this.blocks[index].builder_id.text4 + '&text5=' + this.blocks[index].builder_id.text5 + '&text6=' + this.blocks[index].builder_id.text6 + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&desc1=' + this.blocks[index].builder_id.desc1 + '&desc2=' + this.blocks[index].builder_id.desc2 + '&desc3=' + this.blocks[index].builder_id.desc3 + '&desc4=' + this.blocks[index].builder_id.desc4 + '&desc5=' + this.blocks[index].builder_id.desc5 + '&desc6=' + this.blocks[index].builder_id.desc6);
   },
   
     
@@ -1718,55 +1549,38 @@ methods: {
   // СТРАНИЦА
   page_save(){
     this.page_cog = false;
-    $.ajax({
-         url: '/testbuilder/ajax/update-page',
-         type: 'GET',
-         data: 'id=' + page.id + '&title=' + page.title + '&desc=' + page.description + '&class=' + page.class + '&seo_t=' + page.seo_title + '&seo_d=' + page.seo_desc + '&seo_k=' + page.seo_key + '&foot=' + page.footer_html + '&js=' +  page.js + '&style=' + page.style,
-         success: function(){
-           console.log( id + 'success push');
-         },
-         error: function(){
-         }
-         });
+    this.push_ajax('update-page', 'id=' + page.id + '&title=' + page.title + '&desc=' + page.description + '&class=' + page.class + '&seo_t=' + page.seo_title + '&seo_d=' + page.seo_desc + '&seo_k=' + page.seo_key + '&foot=' + page.footer_html + '&js=' +  page.js + '&style=' + page.style);
   },
   menu_link_title_edit(index){
       this.menu_title_edit = 999;
-      $.ajax({
-         url: '/testbuilder/ajax/menu-edit-link',
-         type: 'GET',
-         data: 'id=' + blocks[index].id + '&link=' + blocks[index].link_title,
-         success: function(){
-           console.log( id + 'success push');
-         },
-         error: function(){
-         }
-         });
+      this.push_ajax('menu-edit-link', 'id=' + blocks[index].id + '&link=' + blocks[index].link_title);
   },
   
-   // Дабваление блоков
+   // Дабавление блоков
     block_new_add(){
       this.block_add_view = true;
       this.showModal = true;
       this.block_add_modal = true;
     },
-    block_html_add(){
-      this.block_add_view = false;
-      this.html_block_modal = true;
-    },
+   
     
     block_hr_add()
     {
-      $.ajax({
-         url: '/testbuilder/ajax/block-hr-add',
+      this.push_ajax('block-hr-add', 'page_id=' + this.page.id);
+    },
+    push_ajax(action, request){
+       $.ajax({
+         url: '/testbuilder/ajax/' + action,
          type: 'GET',
-         data: 'page_id=' + this.page.id,
+         data: request,
          success: function(){
-           console.log('success push');
+           console.log('success push action: ' + action + ' request: ' + request);
          },
          error: function(){
+           alert('Error' + request);
          }
          });
-    }
+    },
 }
     
 

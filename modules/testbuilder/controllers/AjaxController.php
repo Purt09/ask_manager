@@ -115,7 +115,10 @@ class AjaxController extends Controller
                 $block->builder_table = 'block_command';
             }
             $block->save();
-            return $this->redirect('/testbuilder/default/index?id=' . $block_old->page_id);
+
+            $block->position = $block->id;
+            $block->save();
+            return $this->redirect('/testbuilder/default/index?id=' . $block_old->page_id, 200);
         } else {
             return $this->redirect('/');
         }
@@ -275,7 +278,7 @@ class AjaxController extends Controller
      * @param string $class
      * @return \yii\web\Response
      */
-    public function actionBlockCommandsAdd($page_id, $command_design = 'Вертикальный', $command_col = 1, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $col_image, $col_content)
+    public function actionBlockCommandsAdd($page_id, $command_design = 'Вертикальный', $command_col = 1, $people_name = '', $p_image = '', $p_image_h, $p_image_w, $p_image_b, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $col_image, $col_content, $content = '')
     {
         if (\Yii::$app->request->isAjax) {
             $block_command = new BuilderCommands();
@@ -287,6 +290,7 @@ class AjaxController extends Controller
 
             $people = new BuilderCommandPeople();
             $people->name = $people_name;
+            $people->content = $content;
             if ($p_image == '')
                 $p_image = 'http://placehold.it/' . $p_image_h . '/DC1734/fff&text=' . $people_name;
             $people->image = $p_image;
@@ -308,7 +312,7 @@ class AjaxController extends Controller
             $block->save();
 
             $block->position = $block->id;
-            $block->save(); 
+            $block->save();
 
             return $this->redirect('/testbuilder/default/index?id=' . $page_id);
 
@@ -342,7 +346,7 @@ class AjaxController extends Controller
             $people->image_border = $p_image_b;
             $people->commands_id = $command_id;
             $people->save();
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
 
         } else {
             return $this->redirect('/');
@@ -409,15 +413,17 @@ class AjaxController extends Controller
      * @param $id
      * @return bool|\yii\web\Response
      */
-    public function actionBlockCommandSave($col, $design, $id, $col_image, $col_content)
+    public function actionBlockCommandSave($col, $design, $id, $col_image, $col_content, $page_id)
     {
         if (\Yii::$app->request->isAjax) {
             $command = BuilderCommands::findOne($id);
-            $command->col = 12 / $col;
+            $command->col = $col;
             $command->design = $design;
             $command->gor_col_content = $col_content;
             $command->gor_col_image = $col_image;
-            return $command->save();
+            $command->save();
+
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
 
         } else {
             return $this->redirect('/');
@@ -438,13 +444,14 @@ class AjaxController extends Controller
             $block->save();
 
             $block->position = $block->id;
-            return $block->save();
+
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
         } else {
             return $this->redirect('/');
         }
     }
 
-    public function actionBlockListAdd($type = 'С нумерацией', $pillar = 1, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $page_id)
+    public function actionBlockListAdd($type, $pillar = 1, $title = '', $title_head = 'h2', $title_color, $class = '', $page_id)
     {
         if (\Yii::$app->request->isAjax) {
 
@@ -464,10 +471,6 @@ class AjaxController extends Controller
             $block->class = $class;
             $block->save();
 
-            $block->position = $block->id;
-            $block->save();
-
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
 
         } else {
             return $this->redirect('/');
@@ -480,15 +483,31 @@ class AjaxController extends Controller
             $list = BuilderList::findOne($list_id);
 
             $list_item = new BuilderListItem();
-            if (($image == '') && ($title != ''))
-                $image = 'http://placehold.it/50/DC1734/fff&text=' . $title;
             $list_item->image = $image;
             $list_item->content = $content;
             $list_item->title = $title;
             $list_item->list_id = $list->id;
             $list_item->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 301);
+
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+
+    public function actionBlockListItemSave($list_id, $id, $title = '', $content = '', $image = '')
+    {
+        if (\Yii::$app->request->isAjax) {
+            $list = BuilderList::findOne($list_id);
+
+            $list_item = BuilderListItem::findOne($id);
+            $list_item->image = $image;
+            $list_item->content = $content;
+            $list_item->title = $title;
+            $list_item->list_id = $list->id;
+            $list_item->save();
 
         } else {
             return $this->redirect('/');
@@ -502,9 +521,8 @@ class AjaxController extends Controller
             $block_list = BuilderList::findOne($id);
             $block_list->design = $design;
             $block_list->col = $col;
-            $block_list->save();
+            return $block_list->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
 
         } else {
             return $this->redirect('/');

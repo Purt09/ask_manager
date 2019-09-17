@@ -89,11 +89,35 @@ class BuilderBlocks extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBuilder()
+ * @return \yii\db\ActiveQuery
+ */
+    public function getBuilderHtml()
     {
         return $this->hasOne(BuilderBlockHtml::className(), ['id' => 'builder_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBuilderCommand()
+    {
+        return $this->hasOne(BuilderCommands::className(), ['id' => 'builder_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBuilderList()
+    {
+        return $this->hasOne(BuilderList::className(), ['id' => 'builder_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBuilderListTable()
+    {
+        return $this->hasOne(BuilderListTable::className(), ['id' => 'builder_id']);
     }
 
     /**
