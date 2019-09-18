@@ -436,9 +436,9 @@ use yii\helpers\Json;
             </div>
 
             <!--    Окно редактирования COMMAND-->
-            <modal v-if="modal_command_people == index"
+            <modal v-if="command_block.modal == index"
                    class="modal"
-                   @close="modal_command_people = false">
+                   @close="command_block.modal = false">
                 <h3 slot="header">Изменение команды и добавление участника</h3>
                 <div slot="body">
                     <div class="panel panel-default">
@@ -539,27 +539,27 @@ use yii\helpers\Json;
                                 <div class="panel-body">
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control" placeholder="Имя"
-                                               v-model="command_add_name"><br>
+                                               v-model="command_block.people.name"><br>
                                     </div>
                                     <div class="col-sm-6">
                                     <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
                                               placeholder="Текст"
-                                              v-model="command_add_content">
+                                              v-model="command_block.people.content">
                                     </textarea>
                                     </div>
                                     <div class="input-group col-sm-12">
                                         <span class="input-group-addon"><strong>Картинка:</strong></span>
                                         <input type="text" class="form-control" placeholder="Путь к картинке"
-                                               v-model="command_add_image">
+                                               v-model="command_block.people.image">
                                         <span class="input-group-addon">Высота:</span>
                                         <input type="text" class="form-control" placeholder="Высота"
-                                               v-model="command_add_image_h">
+                                               v-model="command_block.people.image_h">
                                         <span class="input-group-addon">Ширина:</span>
                                         <input type="text" class="form-control" placeholder="Ширина"
-                                               v-model="command_add_image_w">
+                                               v-model="command_block.people.image_w">
                                         <span class="input-group-addon">Округление:</span>
                                         <input type="text" class="form-control" placeholder="border"
-                                               v-model="command_add_image_border">
+                                               v-model="command_block.people.image_border">
                                     </div>
                                     <button class="btn btn-success m-2"
                                             @click="block_people_add_in_command(block.builder_id.id)">
@@ -583,7 +583,7 @@ use yii\helpers\Json;
                  @click="block_list_edit(index)">
                 <div class="row">
                     <div v-if="block.builder_id.design == 'С нумерацией'"
-                         @click="modal_list = index">
+                         @click="list_block.modal = index">
                         <ol :class="{list: block.builder_id.col == 2}">
                             <li v-for="item in block.description">
                                 <label for="list"> {{item.title}}</label><br v-show="item.title != ''">
@@ -592,13 +592,13 @@ use yii\helpers\Json;
                         </ol>
                     </div>
                     <div v-if="block.builder_id.design == 'С точками'"
-                         @click="modal_list = index">
+                         @click="list_block.modal = index">
                         <ul :class="{list: block.builder_id.col == 2}">
                             <li v-for="item in block.description" v-html="item.content"></li>
                         </ul>
                     </div>
                     <div v-if="block.builder_id.design == 'С картинкой'"
-                         @click="modal_list = index">
+                         @click="list_block.modal = index">
                         <ul class="section-4__list ul-reset"
                             :class="{list: block.builder_id.col == 2}">
                             <li class="list__item"
@@ -610,16 +610,16 @@ use yii\helpers\Json;
                         </ul>
                     </div>
                     <button class="btn btn-default btn-xs"
-                            @click="modal_list = index"
+                            @click="list_block.modal = index"
                             v-if="block.description == ''">
                         Добавить пункт
                     </button>
                 </div>
             </div>
             <!--            Окно редакттирования списка-->
-            <modal v-if="modal_list == index"
+            <modal v-if="list_block.modal == index"
                    class="modal"
-                   @close="modal_list != index">
+                   @close="list_block.modal != index">
                 <h3 slot="header">Изменение списка и добавление пунктов</h3>
                 <div slot="body">
                     <div class="panel panel-default">
@@ -702,18 +702,18 @@ use yii\helpers\Json;
                                     <div class="col-sm-6">
                                     <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
                                               placeholder="Текст"
-                                              v-model="list_add_item_content">
+                                              v-model="list_block.item.content">
                                     </textarea>
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control" placeholder="Жирный шрифт в начале"
-                                               v-model="list_add_item_title"
+                                               v-model="list_block.item.title"
                                                v-show="block.builder_id.design == 'С нумерацией'"><br>
                                         <div class="input-group"
                                              v-show="block.builder_id.design == 'С картинкой'">
                                             <span class="input-group-addon"><strong>Картинка:</strong></span>
                                             <input type="text" class="form-control" placeholder="Путь к картинке"
-                                                   v-model="list_add_item_image">
+                                                   v-model="list_block.item.image">
                                         </div>
                                     </div>
                                     <button class="btn btn-success m-2"
@@ -874,15 +874,15 @@ use yii\helpers\Json;
                     </ul>
                 </div>
                 <button class="btn btn-default btn-xs"
-                        @click="modal_advantages = index"
+                        @click="advantages_block.modal = index"
                         v-if="block.builder_id.text1 == ''">
                     Редактировать преимущества
                 </button>
             </div>
             <!--            Окно редактирования преимуществ-->
-            <modal v-if="modal_advantages == index"
+            <modal v-if="advantages_block.modal == index"
                    class="modal"
-                   @close="modal_advantages != index">
+                   @close="advantages_block.modal != index">
                 <h3 slot="header">Редактирование преимуществ</h3>
                 <div slot="body">
                     <div class="panel panel-default">
@@ -1008,45 +1008,49 @@ use yii\helpers\Json;
 
     <!--    Окно добавления нового блока-->
     <modal class="modal"
-           v-if="(showModal) && (block_add_modal)" @close="showModal = false">
+           v-if="(showModal) && (block_add.modal)" @close="showModal = false">
         <h3 slot="header">Добавить блок</h3>
         <div slot="body">
             <div class="block_new_add mt-2 bg-light shadow-sm p-2"
-                 v-show="block_add_view">
+                 v-show="block_add.view">
                 <h3 class="text-center">
                     Добавление блока!
                 </h3>
                 <div class="row">
                     <div class="col-lg-5">
                         <input type="text" class="form-control" placeholder="Заголовок"
-                               v-model="block_add_title">
+                               v-model="block_add.title">
                     </div><!-- /.col-lg-6 -->
                     <div class="col-lg-1">
-                        <input type="text" class="form-control" placeholder="Тег(h2)"
-                               v-model="block_add_tag">
+                        <select class="form-control" id="sel1"
+                                v-model="block_add.tag">
+                            <option>h2</option>
+                            <option>h3</option>
+                            <option>h4</option>
+                        </select>
                     </div><!-- /.col-lg-6 -->
                     <div class="col-lg-2">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Цвет"
-                                   v-model="block_add_color">
+                                   v-model="block_add.color">
                             <span class="input-group-addon"
-                                  :style="'background: #' + block_add_color"></span>
+                                  :style="'background: #' + block_add.color"></span>
                         </div>
                     </div><!-- /.col-lg-6 -->
                     <div class="col-lg-2">
                         <input type="text" class="form-control" placeholder="class"
-                               v-model="block_add_class">
+                               v-model="block_add.class">
                     </div><!-- /.col-lg-6 -->
                 </div><!-- /.row -->
-                <div :style="'color: #' + block_add_color">
-                    <div v-if="block_add_tag == 'h2'">
-                        <h2> {{block_add_title}} </h2>
+                <div :style="'color: #' + block_add.color">
+                    <div v-if="block_add.tag == 'h2'">
+                        <h2> {{block_add.title}} </h2>
                     </div>
-                    <div v-if="block_add_tag == 'h3'">
-                        <h3> {{block_add_title}} </h3>
+                    <div v-if="block_add.tag == 'h3'">
+                        <h3> {{block_add.title}} </h3>
                     </div>
-                    <div v-if="block_add_tag == 'h4'">
-                        <h4> {{block_add_title}} </h4>
+                    <div v-if="block_add.tag == 'h4'">
+                        <h4> {{block_add.title}} </h4>
                     </div>
                 </div>
                 <button class="btn btn-default m-2"
@@ -1054,7 +1058,7 @@ use yii\helpers\Json;
                     HTML
                 </button>
                 <button class="btn btn-default m-2"
-                        @click="block_text_add()">
+                        @click="block_html_add('block_text')">
                     Текст
                 </button>
                 <button class="btn btn-default m-2"
@@ -1077,17 +1081,17 @@ use yii\helpers\Json;
 
             <!--    Создание блока HTML-->
             <div class="bg-light mt-3 p-4"
-                 v-show="html_block_modal">
+                 v-show="html_block.modal">
                 <div class="form-group">
                     <label class="text-center" for="exampleFormControlTextarea1">Добавить html block! </label>
                     <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="10"
                               placeholder="Введите свой код!"
-                              v-model="html_block_create_code"></textarea>
+                              v-model="html_block.code"></textarea>
                 </div>
                 <input type="checkbox"
-                       v-model="html_block_create_border"> Добавить рамку? <br>
+                       v-model="html_block.border"> Добавить рамку? <br>
                 <button class="btn btn-success"
-                        @click="block_html_create()">
+                        @click="block_html_add()">
                     Добавить
                 </button>
             </div>
@@ -1100,13 +1104,13 @@ use yii\helpers\Json;
                     <div class="form-group">
                         <label for="sel1">Выберите дизайн:</label>
                         <select class="form-control" id="sel1"
-                                v-model="command_add_design">
+                                v-model="command_block.design">
                             <option>Вертикальный</option>
                             <option>Горизонтальный</option>
                         </select>
                         <label for="sel1">Количество столбцов:</label>
                         <select class="form-control" id="sel1"
-                                v-model="command_add_col_sm">
+                                v-model="command_block.col">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -1114,13 +1118,13 @@ use yii\helpers\Json;
                             <option>6</option>
                         </select>
                         <div class="input-group"
-                             v-if="command_add_design == 'Горизонтальный'">
+                             v-if="command_block.design == 'Горизонтальный'">
                             <span class="input-group-addon"><strong>Соотношение картинки к тексту:</strong></span>
                             <input type="text" class="form-control" placeholder="сверху"
-                                   v-model="command_add_gor_col_image">
+                                   v-model="command_block.people.gor_col_image">
                             <span class="input-group-addon"> к </span>
                             <input type="text" class="form-control" placeholder="сверху"
-                                   v-model="command_add_gor_col_content">
+                                   v-model="command_block.people.gor_col_content">
                             <span class="input-group-addon"> (сумма должна быть 12) </span>
                         </div>
                     </div>
@@ -1128,28 +1132,28 @@ use yii\helpers\Json;
                     <div class="row">
                         <div class="col-sm-6">
                             <input type="text" class="form-control" placeholder="Имя"
-                                   v-model="command_add_name"><br>
+                                   v-model="command_block.people.name"><br>
                         </div>
                         <div class="col-sm-6">
                     <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="4"
                               placeholder="Текст"
-                              v-model="command_add_content"></textarea>
+                              v-model="command_block.people.content"></textarea>
                         </div>
                         <br>
 
                         <div class="input-group col-sm-12">
                             <span class="input-group-addon"><strong>Картинка:</strong></span>
                             <input type="text" class="form-control" placeholder="Путь к картинке"
-                                   v-model="command_add_image">
+                                   v-model="command_block.people.image">
                             <span class="input-group-addon">Высота:</span>
                             <input type="text" class="form-control" placeholder="Высота"
-                                   v-model="command_add_image_h">
+                                   v-model="command_block.people.image_h">
                             <span class="input-group-addon">Ширина:</span>
                             <input type="text" class="form-control" placeholder="Ширина"
-                                   v-model="command_add_image_w">
+                                   v-model="command_block.people.image_w">
                             <span class="input-group-addon">Округление:</span>
                             <input type="text" class="form-control" placeholder="border"
-                                   v-model="command_add_image_border">
+                                   v-model="command_block.people.image_border">
                         </div>
 
 
@@ -1166,7 +1170,7 @@ use yii\helpers\Json;
                  v-show="modal_add_list">
                 Вид списка: <br>
                 <select class="form-control" id="type"
-                        v-model="block_list_design">
+                        v-model="list_block.design">
                     <option>С нумерацией</option>
                     <option>С точками</option>
                     <option>С картинкой</option>
@@ -1174,7 +1178,7 @@ use yii\helpers\Json;
                 <br>
                 Количество столбцов: <br>
                 <select class="form-control" id="pillar"
-                        v-model="block_list_col">
+                        v-model="list_block.col">
                     <option>1</option>
                     <option>2</option>
                 </select> <br>
@@ -1191,7 +1195,7 @@ use yii\helpers\Json;
                  v-show="modal_add_advantages">
                 Вид блока преимуществ: <br>
                 <select class="form-control" id="type"
-                        v-model="block_advantages_design">
+                        v-model="advantages_block.design">
                     <option>4 столбца</option>
                     <option>5 столбцов</option>
                     <option>6 столбцов</option>
@@ -1200,87 +1204,87 @@ use yii\helpers\Json;
                 <div class="input-group">
                     <span class="input-group-addon">Картикна:</span>
                     <input type="text" class="form-control" placeholder="Адресс картинки"
-                           v-model="advantages_1_add_image">
+                           v-model="advantages_block.image1">
                     <span class="input-group-addon">Текст:</span>
                     <input type="text" class="form-control" placeholder="Текст"
-                           v-model="advantages_1_add_text">
+                           v-model="advantages_block.text1">
                 </div>
-                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                <div class="input-group mt-2" v-if="advantages_block.design == '6 блоков'">
                     <span class="input-group-addon">Описание:</span>
                     <input type="text" class="form-control" placeholder="Описание"
-                           v-model="advantages_1_add_desc">
+                           v-model="advantages_block.desc1">
                 </div>
                 <hr>
                 <div class="input-group">
                     <span class="input-group-addon">Картикна:</span>
                     <input type="text" class="form-control" placeholder="Адресс картинки"
-                           v-model="advantages_2_add_image">
+                           v-model="advantages_block.image2">
                     <span class="input-group-addon">Текст:</span>
                     <input type="text" class="form-control" placeholder="Текст"
-                           v-model="advantages_2_add_text">
+                           v-model="advantages_block.text2">
                 </div>
-                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                <div class="input-group mt-2" v-if="advantages_block.design == '6 блоков'">
                     <span class="input-group-addon">Описание:</span>
                     <input type="text" class="form-control" placeholder="Описание"
-                           v-model="advantages_2_add_desc">
+                           v-model="advantages_block.desc2">
                 </div>
                 <hr>
                 <div class="input-group">
                     <span class="input-group-addon">Картикна:</span>
                     <input type="text" class="form-control" placeholder="Адресс картинки"
-                           v-model="advantages_3_add_image">
+                           v-model="advantages_block.image3">
                     <span class="input-group-addon">Текст:</span>
                     <input type="text" class="form-control" placeholder="Текст"
-                           v-model="advantages_3_add_text">
+                           v-model="advantages_block.text3">
                 </div>
-                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                <div class="input-group mt-2" v-if="advantages_block.design == '6 блоков'">
                     <span class="input-group-addon">Описание:</span>
                     <input type="text" class="form-control" placeholder="Описание"
-                           v-model="advantages_3_add_desc">
+                           v-model="advantages_block.desc3">
                 </div>
                 <hr>
                 <div class="input-group">
                     <span class="input-group-addon">Картикна:</span>
                     <input type="text" class="form-control" placeholder="Адресс картинки"
-                           v-model="advantages_4_add_image">
+                           v-model="advantages_block.image4">
                     <span class="input-group-addon">Текст:</span>
                     <input type="text" class="form-control" placeholder="Текст"
-                           v-model="advantages_4_add_text">
+                           v-model="advantages_block.text4">
                 </div>
-                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                <div class="input-group mt-2" v-if="advantages_block.design == '6 блоков'">
                     <span class="input-group-addon">Описание:</span>
                     <input type="text" class="form-control" placeholder="Описание"
-                           v-model="advantages_4_add_desc">
+                           v-model="advantages_block.desc4">
                 </div>
                 <hr>
                 <div class="input-group"
-                     v-show="block_advantages_design != '4 столбца'">
+                     v-show="advantages_block.design != '4 столбца'">
                     <span class="input-group-addon">Картикна:</span>
                     <input type="text" class="form-control" placeholder="Адресс картинки"
-                           v-model="advantages_5_add_image">
+                           v-model="advantages_block.image5">
                     <span class="input-group-addon">Текст:</span>
                     <input type="text" class="form-control" placeholder="Текст"
-                           v-model="advantages_5_add_text">
+                           v-model="advantages_block.text5">
                 </div>
-                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                <div class="input-group mt-2" v-if="advantages_block.design == '6 блоков'">
                     <span class="input-group-addon">Описание:</span>
                     <input type="text" class="form-control" placeholder="Описание"
-                           v-model="advantages_5_add_desc">
+                           v-model="advantages_block.desc5">
                 </div>
                 <hr>
                 <div class="input-group"
-                     v-show="((block_advantages_design == '6 блоков') || (block_advantages_design == '6 столбцов'))">
+                     v-show="((advantages_block.design == '6 блоков') || (advantages_block.design == '6 столбцов'))">
                     <span class="input-group-addon">Картикна:</span>
                     <input type="text" class="form-control" placeholder="Картинка"
-                           v-model="advantages_6_add_image">
+                           v-model="advantages_block.image6">
                     <span class="input-group-addon">Текст:</span>
                     <input type="text" class="form-control" placeholder="Текст"
-                           v-model="advantages_6_add_text">
+                           v-model="advantages_block.text6">
                 </div>
-                <div class="input-group mt-2" v-if="block_advantages_design == '6 блоков'">
+                <div class="input-group mt-2" v-if="advantages_block.design == '6 блоков'">
                     <span class="input-group-addon">Описание:</span>
                     <input type="text" class="form-control" placeholder="Описание"
-                           v-model="advantages_6_add_desc">
+                           v-model="advantages_block.desc6">
                 </div>
                 <hr>
                 <br>
@@ -1324,73 +1328,80 @@ data:{
   block_title_edit: 999,
   block_block_edit_modal: 999,
       // добавление блока
-      block_add_color: '7faf24',
-      block_add_view: false,
-      block_add_title: '',
-      block_add_tag: 'h2',
-      block_add_color: '7faf24',
-      block_add_class: '',
-      block_add_modal: false,
+      block_add: {
+          color: '7faf24',
+          view: false,
+          title: '',
+          tag: 'h2',
+          class: '',
+          modal: false,
+      },
       
       //БЛОК HTML
       prev_html: 999,
-      html_block_modal: false,
-      html_block_create_code: '',
-      html_block_create_border: 0,
+      html_block: {
+          modal: false,
+          code: '',
+          border: 0,
+      },
       
       // блок команда
       command_block_modal: false,
       //добавление блока команда:
-      command_add_design: 'Вертикальный',
-      command_add_col_sm: 1,
-      command_add_name: '',
-      command_add_content: '',
-      command_add_image: '',
-      command_add_image_h: 50,
-      command_add_image_w: 50,
-      command_add_image_border: '0px 0px 0px 0px',
-      command_add_gor_col_content: 8,
-      command_add_gor_col_image: 4,
-      //Редактирование команды:
-      modal_command_people: 999,
+      command_block: {
+          design: 'Вертикальный',
+          col: 1,
+          people: {
+              name: '',
+              content: '',
+              image: '',
+              image_h: 100,
+              image_w: 100,
+              image_border: '0px 0px 0px 0px',
+              gor_col_content: 8,
+              gor_col_image: 4,
+          },
+          modal: 999,
+      },
       
       // блок список
       modal_add_list: false,
-      block_list_design: 'С нумерацией',
-      block_list_col: 1,
-      // Добавление пункта!
-      list_add_item_title: '',
-      list_add_item_content: '',
-      list_add_item_image: '',
-      //Модальное окно редактироания
-      modal_list: 999,
+      list_block:{
+          design: 'С нумерацией',
+          col: 1,
+          item: {
+            title: '',
+            content: '',
+            image: '',
+          },
+          modal: 999,
+      },
       
       // блок преимущества
       modal_add_advantages: false,
-      block_advantages_design: '4 столбца',
-      advantages_1_add_image: '',
-      advantages_2_add_image: '',
-      advantages_3_add_image: '',
-      advantages_4_add_image: '',
-      advantages_5_add_image: '',
-      advantages_6_add_image: '',
-      advantages_1_add_text: '',
-      advantages_2_add_text: '',
-      advantages_3_add_text: '',
-      advantages_4_add_text: '',
-      advantages_5_add_text: '',
-      advantages_6_add_text: '',
-      advantages_1_add_desc: '',
-      advantages_2_add_desc: '',
-      advantages_3_add_desc: '',
-      advantages_4_add_desc: '',
-      advantages_5_add_desc: '',
-      advantages_6_add_desc: '',
-      
-      //редактирование преимуществ
-      modal_advantages: 999,
-      
-      
+      advantages_block:{
+          design: '4 столбца',
+          image1: '',
+          image2: '',
+          image3: '',
+          image4: '',
+          image5: '',
+          image6: '',
+          text1: '',
+          text2: '',
+          text3: '',
+          text4: '',
+          text5: '',
+          text6: '',
+          desc1: '',
+          desc2: '',
+          desc3: '',
+          desc4: '',
+          desc5: '',
+          desc6: '',
+          modal: 999,
+      },
+     
   showModal: false,
   
   //menu
@@ -1437,44 +1448,36 @@ methods: {
   
     // HTML
     block_html_view(){
-      this.block_add_view = false;
-      this.html_block_modal = true;
+      this.block_add.view = false;
+      this.html_block.modal = true;
     },
     block_html_save(index){
       this.prev_html = 999;
       this.push_ajax('block-html-save', 'id=' + this.blocks[index].builder_id.id + '&code=' + this.blocks[index].builder_id.code + '&border=' + this.blocks[index].builder_id.border);
     },
-    block_html_create(){ //TODO объеденить функции
+    block_html_add(type){
       this.modal_close();
-      this.push_ajax('block-html-add', 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + this.html_block_create_code + '&border=' + this.html_block_create_border);
-  },
-  // Здравствуйте, ознакомился с вашим заказом, готов взяться за него.
-  //Имею опыт работы с подобными проектами.
-  //Спасибо за внимание, буду рад сотрудничеству. 
-  //Срок выполнения 1 день. текстового блока
-  block_text_add(){
-      this.modal_close();
-      this.push_ajax('block-text-add', 'page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&code=' + 'Новый текстовый блок' + '&border=' + this.html_block_create_border);
+      this.push_ajax('block-html-add', 'page_id=' + this.page.id + '&title=' + this.block_add.title + '&title_head=' + this.block_add.tag + '&title_color=' + this.block_add.color + '&class=' + this.block_add.class + '&code=' + this.html_block.code + '&border=' + this.html_block.border + '&type=' + type);
   },
   
   //команда
   block_command_view(){
       this.command_block_modal = true;
-      this.block_add_view = false;
+      this.block_add.view = false;
   },
   
   block_command_add(){  //TODO престало работать!
       this.modal_close();
-      this.push_ajax('block-command-add', 'page_id=' + this.page.id + '&command_design=' + this.command_add_design + '&command_col=' + this.command_add_col_sm + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&content=' + this.command_add_content + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&col_content=' + this.command_add_gor_col_content + '&col_image=' + this.command_add_gor_col_image);
+      this.push_ajax('block-command-add', 'page_id=' + this.page.id + '&command_design=' + this.command_block.design + '&command_col=' + this.command_block.col + '&people_name=' + this.command_block.people.name + '&p_image=' + this.command_block.people.image + '&p_image_h=' + this.command_block.people.image_h + '&p_image_w=' + this.command_block.people.image_w + '&p_image_b=' + this.command_block.people.image_border + '&content=' + this.command_block.people.content + '&title=' + this.block_add.title + '&title_head=' + this.block_add.tag + '&title_color=' + this.block_add.color + '&class=' + this.block_add.class + '&col_content=' + this.command_block.people.gor_col_content + '&col_image=' + this.command_block.people.gor_col_image);
   },
   block_command_edit(index){
-      this.modal_command_people = index;
+      this.command_block.modal = index;
   },
   block_people_add_in_command(id){
-      this.push_ajax('block-people-add-in-command', 'page_id=' + this.page.id + '&people_name=' + this.command_add_name + '&p_image=' + this.command_add_image + '&p_image_h=' + this.command_add_image_h + '&p_image_w=' + this.command_add_image_w + '&p_image_b=' + this.command_add_image_border + '&content=' + this.command_add_content + '&command_id=' + id);
-      this.command_add_name = '';
-      this.command_add_image = '';
-      this.command_add_content = '';
+      this.push_ajax('block-people-add-in-command', 'page_id=' + this.page.id + '&people_name=' + this.command_block.people.name + '&p_image=' + this.command_block.people.image + '&p_image_h=' + this.command_block.people.image_h + '&p_image_w=' + this.command_block.people.image_w + '&p_image_b=' + this.command_block.people.image_border + '&content=' + this.command_block.people.content + '&command_id=' + id);
+      this.command_block.people.name = '';
+      this.command_block.people.image = '';
+      this.command_block.people.content = '';
   },
   block_command_delete_people(indexP, index){
       blocks[index].builder_id.peoples[indexP].commands_id = 0;
@@ -1493,18 +1496,18 @@ methods: {
   // СПИСОК
   block_list_view(){
       this.modal_add_list = true;
-      this.block_add_view = false;
+      this.block_add.view = false;
   },
   block_list_add(){  //TODO не работает!!!
       this.modal_close();
-      this.push_ajax('block-list-add', 'type=' + this.block_list_design + '&col=' + this.block_list_col + '&page_id=' + this.page.id + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class);
+      this.push_ajax('block-list-add', 'type=' + this.list_block.design + '&col=' + this.list_block.col + '&page_id=' + this.page.id + '&title=' + this.block_add.title + '&title_head=' + this.block_add.tag + '&title_color=' + this.block_add.color + '&class=' + this.block_add.class);
   },
   block_list_save(index){ 
       this.modal_close();
       this.push_ajax('block-list-save', 'id=' + blocks[index].builder_id.id + '&col=' + blocks[index].builder_id.col + '&design=' + blocks[index].builder_id.design + '&page_id=' + this.page.id);
   },
   block_list_item_add(list_id){
-      this.push_ajax('block-list-item-add', 'list_id=' + list_id + '&title=' + this.list_add_item_title + '&content=' + this.list_add_item_content + '&page_id=' + this.page.id + '&image=' + this.list_add_item_image);
+      this.push_ajax('block-list-item-add', 'list_id=' + list_id + '&title=' + this.list_block.item.title + '&content=' + this.list_block.item.content + '&page_id=' + this.page.id + '&image=' + this.list_block.item.image);
   },
   block_list_item_delete(indexI, index){
       blocks[index].description[indexI].list_id = 0;
@@ -1520,18 +1523,18 @@ methods: {
   // Блок ПРЕИМУЩЕСТВА
   block_advantages_view(){
       this.modal_add_advantages = true;
-      this.block_add_view = false;
+      this.block_add.view = false;
   },
   block_advantages_add(){
       this.modal_close();
-      this.push_ajax('block-advantages-add', 'page_id=' + this.page.id + '&design=' + this.block_advantages_design + '&image1=' + this.advantages_1_add_image + '&image2=' + this.advantages_2_add_image + '&image3=' + this.advantages_3_add_image + '&image4=' + this.advantages_4_add_image + '&image5=' + this.advantages_5_add_image + '&image6=' + this.advantages_6_add_image + '&text1=' + this.advantages_1_add_text + '&text2=' + this.advantages_2_add_text + '&text3=' + this.advantages_3_add_text + '&text4=' + this.advantages_4_add_text + '&text5=' + this.advantages_5_add_text + '&text6=' + this.advantages_6_add_text + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&desc1=' + this.advantages_1_add_desc + '&desc2=' + this.advantages_2_add_desc + '&desc3=' + this.advantages_3_add_desc + '&desc4=' + this.advantages_4_add_desc + '&desc5=' + this.advantages_5_add_desc + '&desc6=' + this.advantages_6_add_desc);
+      this.push_ajax('block-advantages-add', 'page_id=' + this.page.id + '&design=' + this.advantages_block.design + '&image1=' + this.advantages_block.image1 + '&image2=' + this.advantages_block.image2 + '&image3=' + this.advantages_block.image3 + '&image4=' + this.advantages_block.image4 + '&image5=' + this.advantages_block.image5 + '&image6=' + this.advantages_block.image6 + '&text1=' + this.advantages_block.text1 + '&text2=' + this.advantages_block.text2 + '&text3=' + this.advantages_block.text3 + '&text4=' + this.advantages_block.text4 + '&text5=' + this.advantages_block.text5 + '&text6=' + this.advantages_block.text6 + '&title=' + this.block_add.title + '&title_head=' + this.block_add.tag + '&title_color=' + this.block_add.color + '&class=' + this.block_add.class + '&desc1=' + this.advantages_block.desc1 + '&desc2=' + this.advantages_block.desc2 + '&desc3=' + this.advantages_block.desc3 + '&desc4=' + this.advantages_block.desc4 + '&desc5=' + this.advantages_block.desc5 + '&desc6=' + this.advantages_block.desc6);
   },
   block_advantages_edit(index){
-      this.modal_advantages = index;
+      this.advantages_block.modal = index;
   },
   block_advantages_save(index){
       this.modal_close();
-      this.push_ajax('block-advantages-save', 'id=' + this.blocks[index].builder_id.id +'&design=' + this.blocks[index].builder_id.design + '&image1=' + this.blocks[index].builder_id.image1 + '&image2=' + this.blocks[index].builder_id.image2 + '&image3=' + this.blocks[index].builder_id.image3 + '&image4=' + this.blocks[index].builder_id.image4 + '&image5=' + this.blocks[index].builder_id.image5 + '&image6=' + this.blocks[index].builder_id.image6 + '&text1=' + this.blocks[index].builder_id.text1 + '&text2=' + this.blocks[index].builder_id.text2 + '&text3=' + this.blocks[index].builder_id.text3 + '&text4=' + this.blocks[index].builder_id.text4 + '&text5=' + this.blocks[index].builder_id.text5 + '&text6=' + this.blocks[index].builder_id.text6 + '&title=' + this.block_add_title + '&title_head=' + this.block_add_tag + '&title_color=' + this.block_add_color + '&class=' + this.block_add_class + '&desc1=' + this.blocks[index].builder_id.desc1 + '&desc2=' + this.blocks[index].builder_id.desc2 + '&desc3=' + this.blocks[index].builder_id.desc3 + '&desc4=' + this.blocks[index].builder_id.desc4 + '&desc5=' + this.blocks[index].builder_id.desc5 + '&desc6=' + this.blocks[index].builder_id.desc6);
+      this.push_ajax('block-advantages-save', 'id=' + this.blocks[index].builder_id.id +'&design=' + this.blocks[index].builder_id.design + '&image1=' + this.blocks[index].builder_id.image1 + '&image2=' + this.blocks[index].builder_id.image2 + '&image3=' + this.blocks[index].builder_id.image3 + '&image4=' + this.blocks[index].builder_id.image4 + '&image5=' + this.blocks[index].builder_id.image5 + '&image6=' + this.blocks[index].builder_id.image6 + '&text1=' + this.blocks[index].builder_id.text1 + '&text2=' + this.blocks[index].builder_id.text2 + '&text3=' + this.blocks[index].builder_id.text3 + '&text4=' + this.blocks[index].builder_id.text4 + '&text5=' + this.blocks[index].builder_id.text5 + '&text6=' + this.blocks[index].builder_id.text6 + '&title=' + this.block_add.title + '&title_head=' + this.block_add.tag + '&title_color=' + this.block_add.color + '&class=' + this.block_add.class + '&desc1=' + this.blocks[index].builder_id.desc1 + '&desc2=' + this.blocks[index].builder_id.desc2 + '&desc3=' + this.blocks[index].builder_id.desc3 + '&desc4=' + this.blocks[index].builder_id.desc4 + '&desc5=' + this.blocks[index].builder_id.desc5 + '&desc6=' + this.blocks[index].builder_id.desc6);
   },
   
     
@@ -1539,15 +1542,15 @@ methods: {
     // МОДАЛЬНОЕ ОКНО
     modal_close(){
       this.showModal = false;
-      this.block_add_modal = false;
-      this.block_add_view = false;
+      this.block_add.modal = false;
+      this.block_add.view = false;
       this.command_block_modal = false;
-      this.html_block_modal = false;
-      this.modal_command_people = 999;
+      this.html_block.modal = false;
+      this.command_block.modal = 999;
       this.modal_add_list = false;
-      this.modal_list = 999;
+      this.list_block.modal = 999;
       this.modal_add_advantages = false;
-      this.modal_advantages = 999;
+      this.advantages_block.modal = 999;
     },
    
   
@@ -1563,9 +1566,9 @@ methods: {
   
    // Дабавление блоков
     block_new_add(){
-      this.block_add_view = true;
+      this.block_add.view = true;
       this.showModal = true;
-      this.block_add_modal = true;
+      this.block_add.modal = true;
     },
    
     

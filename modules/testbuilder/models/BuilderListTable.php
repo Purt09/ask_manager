@@ -81,16 +81,30 @@ class BuilderListTable extends \yii\db\ActiveRecord
         ];
     }
 
-//    public function duplicate(BuilderBlocks $block_old){
-//        $block_new = new BuilderListTable();
-//        $block_new->design = $this->design;
-//        $block_new->col = $this->col;
-//        $block_new->content = $this->content;
-//        $block_new->save();
-//
-//        $items = $this->getListItem()->all();
-//        foreach ($items as $item) $item->duplicate($block_new);
-//
-//        $block_old->duplicate($block_new->id);
-//    }
+    public function duplicate(BuilderBlocks $block_old){
+        $block_new = new BuilderListTable();
+        $block_new->design = $this->design;
+        $block_new->desc1 = $this->desc1;
+        $block_new->desc2 = $this->desc2;
+        $block_new->desc3 = $this->desc3;
+        $block_new->desc4 = $this->desc4;
+        $block_new->desc5 = $this->desc5;
+        $block_new->desc6 = $this->desc6;
+        $block_new->image1 = $this->image1;
+        $block_new->image2 = $this->image2;
+        $block_new->image3 = $this->image3;
+        $block_new->image4 = $this->image4;
+        $block_new->image5 = $this->image5;
+        $block_new->image6 = $this->image6;
+        $block_new->text1 = $this->text1;
+        $block_new->text2 = $this->text2;
+        $block_new->text3 = $this->text3;
+        $block_new->text4 = $this->text4;
+        $block_new->text5 = $this->text5;
+        $block_new->text6 = $this->text6;
+        $block_new->save();
+
+
+        $block_old->duplicate($block_new->id);
+    }
 }
