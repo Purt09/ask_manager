@@ -212,34 +212,6 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionBlockTextAdd($page_id, $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $border = 0, $code = '')
-    {
-        if (\Yii::$app->request->isAjax) {
-            $block_html = new BuilderBlockHtml();
-            $block_html->code = $code;
-            ($border == 'true') ? $block_html->border = 1 :  $block_html->border = 0;
-            $block_html->save();
-
-            $block = new BuilderBlocks();
-            $block->title = $title;
-            $block->page_id = $page_id;
-            $block->title_head = $title_head;
-            $block->title_color = $title_color;
-            $block->builder_table = 'block_text';
-            $block->builder_id = $block_html->id;
-            $block->class = $class;
-            $block->save();
-
-            $block->position = $block->id;
-            $block->save();
-
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
-
-        } else {
-            return $this->redirect('/');
-        }
-    }
-
     /** Сохранение позици 2=ух блоков после перемещений их
      * @param $pos1
      * @param $pos2
@@ -374,7 +346,7 @@ class AjaxController extends Controller
     }
 
 
-    /**
+    /** Сохранение данных человека в блоке команды
      * @param $id
      * @param $content
      * @param $commands_id
@@ -431,8 +403,9 @@ class AjaxController extends Controller
         }
     }
 
-    /**
-     * @param $page
+    /** Добавление блока <hr>
+     * @param $page_id
+     * @return \yii\web\Response
      */
     public function actionBlockHrAdd($page_id)
     {
@@ -453,6 +426,16 @@ class AjaxController extends Controller
         }
     }
 
+    /** Добавление блока список
+     * @param $type
+     * @param int $col
+     * @param string $title
+     * @param string $title_head
+     * @param $title_color
+     * @param string $class
+     * @param $page_id
+     * @return \yii\web\Response
+     */
     public function actionBlockListAdd($type, $col = 1, $title = '', $title_head = 'h2', $title_color, $class = '', $page_id)
     {
         if (\Yii::$app->request->isAjax) {
@@ -482,6 +465,14 @@ class AjaxController extends Controller
         }
     }
 
+    /** Добавление пункта в блок-список
+     * @param string $content
+     * @param string $title
+     * @param $list_id
+     * @param $page_id
+     * @param string $image
+     * @return \yii\web\Response
+     */
     public function actionBlockListItemAdd($content = '', $title = '', $list_id, $page_id, $image = '')
     {
         if (\Yii::$app->request->isAjax) {
@@ -502,6 +493,14 @@ class AjaxController extends Controller
     }
 
 
+    /** Сохранение пункта в блоке список (если его изменили)
+     * @param $list_id
+     * @param $id
+     * @param string $title
+     * @param string $content
+     * @param string $image
+     * @return \yii\web\Response
+     */
     public function actionBlockListItemSave($list_id, $id, $title = '', $content = '', $image = '')
     {
         if (\Yii::$app->request->isAjax) {
@@ -519,6 +518,13 @@ class AjaxController extends Controller
         }
     }
 
+    /** Сохранение данных настроек блока-список
+     * @param string $design
+     * @param int $col
+     * @param $id
+     * @param $page_id
+     * @return bool|\yii\web\Response
+     */
     public function actionBlockListSave($design = 'С нумерацией', $col = 1, $id, $page_id)
     {
         if (\Yii::$app->request->isAjax) {
@@ -534,6 +540,12 @@ class AjaxController extends Controller
         }
     }
 
+    /** Удаление пункта из блока-список
+     * @param $id
+     * @return false|int|\yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
     public function actionBlockListItemDelete($id)
     {
         if (\Yii::$app->request->isAjax) {
@@ -546,6 +558,33 @@ class AjaxController extends Controller
         }
     }
 
+    /** Добавление блока преимущества!
+     * @param $page_id
+     * @param $design
+     * @param $image1
+     * @param $text1
+     * @param $image2
+     * @param $text2
+     * @param $image3
+     * @param $text3
+     * @param string $image4
+     * @param string $text4
+     * @param string $image5
+     * @param string $text5
+     * @param string $image6
+     * @param string $text6
+     * @param string $title
+     * @param string $title_head
+     * @param $title_color
+     * @param string $class
+     * @param string $desc1
+     * @param string $desc2
+     * @param string $desc3
+     * @param string $desc4
+     * @param string $desc5
+     * @param string $desc6
+     * @return \yii\web\Response
+     */
     public function actionBlockAdvantagesAdd($page_id, $design,$image1, $text1, $image2, $text2, $image3, $text3, $image4 = '', $text4 = '', $image5 = '', $text5 = '', $image6 = '', $text6 = '', $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $desc1 = '', $desc2 = '', $desc3 = '', $desc4 = '', $desc5 = '', $desc6 = ''){
         if (\Yii::$app->request->isAjax) {
             $block_list = new BuilderListTable();
@@ -589,7 +628,30 @@ class AjaxController extends Controller
         }
     }
 
-    public function actionBlockAdvantagesSave($id, $design,$image1, $text1, $image2, $text2, $image3, $text3, $image4 = '', $text4 = '', $image5 = '', $text5 = '', $image6 = '', $text6 = '', $desc1 = '', $desc2 = '', $desc3 = '', $desc4 = '', $desc5 = '', $desc6 = ''){
+    /** Сохранение данных в блоке-преимущества
+     * @param $id
+     * @param string $design
+     * @param string $image1
+     * @param string $text1
+     * @param string $image2
+     * @param string $text2
+     * @param string $image3
+     * @param string $text3
+     * @param string $image4
+     * @param string $text4
+     * @param string $image5
+     * @param string $text5
+     * @param string $image6
+     * @param string $text6
+     * @param string $desc1
+     * @param string $desc2
+     * @param string $desc3
+     * @param string $desc4
+     * @param string $desc5
+     * @param string $desc6
+     * @return bool|\yii\web\Response
+     */
+    public function actionBlockAdvantagesSave($id, $design = '4 блока' ,$image1 = '', $text1 = '', $image2 = '', $text2 = '', $image3 = '', $text3 = '', $image4 = '', $text4 = '', $image5 = '', $text5 = '', $image6 = '', $text6 = '', $desc1 = '', $desc2 = '', $desc3 = '', $desc4 = '', $desc5 = '', $desc6 = ''){
         if (\Yii::$app->request->isAjax) {
             $block_list = BuilderListTable::findOne($id);
             $block_list->design = $design;
@@ -654,7 +716,7 @@ class AjaxController extends Controller
     }
 
 
-    /** Изменение заголовка ссылки!
+    /** Изменение заголовка ссылки в меню!
      * @param $id
      * @param $link
      * @return bool|\yii\web\Response

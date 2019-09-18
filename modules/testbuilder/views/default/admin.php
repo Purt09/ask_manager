@@ -1103,11 +1103,20 @@ use yii\helpers\Json;
                     <h3>Настройки команды:</h3>
                     <div class="form-group">
                         <label for="sel1">Выберите дизайн:</label>
-                        <select class="form-control" id="sel1"
-                                v-model="command_block.design">
-                            <option>Вертикальный</option>
-                            <option>Горизонтальный</option>
-                        </select>
+                        <br>
+                        <input type="radio" id="one_command" value="Вертикальный" v-model="command_block.design">
+                        <label for="one_command"><img src="https://i.ibb.co/VqQ1jmr/20.png" alt="Вертикальный"
+                                              style="height: 100px;"></label>
+                        <br>
+                        <input type="radio" id="two_command" value="Горизонтальный" v-model="command_block.design">
+                        <label for="two_command"><img src="https://i.ibb.co/m9GnGr3/39.png" alt="Горизонтальный"
+                                              style="height: 100px;"></label>
+                        <br>
+                        <input type="radio" id="three_command" value="Слово лидера" v-model="command_block.design">
+                        <label for="three_command"><img src="https://i.ibb.co/tpzBg9w/21.png" alt="Слово лидера"
+                                                      style="height: 100px;"></label> НЕ РЕАЛИЗОВАНО!!
+                        <br>
+                        <span>Выбрано: {{ picked }}</span>
                         <label for="sel1">Количество столбцов:</label>
                         <select class="form-control" id="sel1"
                                 v-model="command_block.col">
@@ -1168,20 +1177,26 @@ use yii\helpers\Json;
             <!--    Добавление блока СПИСОК-->
             <div class="bg-light mt-3 p-4"
                  v-show="modal_add_list">
-                Вид списка: <br>
-                <select class="form-control" id="type"
-                        v-model="list_block.design">
-                    <option>С нумерацией</option>
-                    <option>С точками</option>
-                    <option>С картинкой</option>
-                </select>
-                <br>
-                Количество столбцов: <br>
-                <select class="form-control" id="pillar"
-                        v-model="list_block.col">
-                    <option>1</option>
-                    <option>2</option>
-                </select> <br>
+                <div class="form-group">
+                    <label for="sel1">Вид списка:</label>
+                    <br>
+                    <input type="radio" id="one_list" value="С нумерацией" v-model="list_block.design">
+                    <label for="one_list"><img src="https://i.ibb.co/9HTZMJF/5.png" alt="Вертикальный"
+                                          style="height: 100px;"></label>
+                    <br>
+                    <input type="radio" id="two_list" value="С точками" v-model="list_block.design">
+                    <label for="two_list"><img src="https://i.ibb.co/0Fhvw6j/8.png" alt="С точками" style="height: 100px;"></label>
+                    <br>
+                    <input type="radio" id="three_list" value="С картинкой" v-model="list_block.design">
+                    <label for="three_list"><img src="https://i.ibb.co/xq2rhXR/1.png" alt="С картинкой" style="height: 100px;"></label>
+                    <br>
+                    Количество столбцов: <br>
+                    <select class="form-control" id="pillar"
+                            v-model="list_block.col">
+                        <option>1</option>
+                        <option>2</option>
+                    </select> <br>
+                </div>
                 <button class="btn btn-default"
                         @click="block_list_add()">
                     Создать
@@ -1194,13 +1209,23 @@ use yii\helpers\Json;
             <div class="bg-light mt-3 p-4"
                  v-show="modal_add_advantages">
                 Вид блока преимуществ: <br>
-                <select class="form-control" id="type"
-                        v-model="advantages_block.design">
-                    <option>4 столбца</option>
-                    <option>5 столбцов</option>
-                    <option>6 столбцов</option>
-                    <option>6 блоков</option>
-                </select> <br>
+                <br>
+                <input type="radio" id="one_advantages" value="4 столбца" v-model="advantages_block.design">
+                <label for="one_advantages"><img src="https://i.ibb.co/sW4k8k0/9.png" alt="4 столбца"
+                                              style="height: 100px;"></label>
+                <br>
+                <input type="radio" id="two_advantages" value="5 столбцов" v-model="advantages_block.design">
+                <label for="two_advantages"><img src="https://i.ibb.co/TkY9K2j/6.png" alt="5 столбцов"
+                                              style="height: 100px;"></label>
+                <br>
+                <input type="radio" id="three_advantages" value="6 столбцов" v-model="advantages_block.design">
+                <label for="three_advantages"><img src="https://i.ibb.co/kgnzjHS/image.png" alt="6 столбцов"
+                                              style="height: 100px;"></label>
+                <br>
+                <input type="radio" id="four_advantages" value="6 блоков" v-model="advantages_block.design">
+                <label for="four_advantages"><img src="https://i.ibb.co/gZWCvwZ/40.png" alt="6 блоков"
+                                              style="height: 100px;"></label>
+                <br>
                 <div class="input-group">
                     <span class="input-group-addon">Картикна:</span>
                     <input type="text" class="form-control" placeholder="Адресс картинки"
@@ -1466,7 +1491,7 @@ methods: {
       this.block_add.view = false;
   },
   
-  block_command_add(){  //TODO престало работать!
+  block_command_add(){  
       this.modal_close();
       this.push_ajax('block-command-add', 'page_id=' + this.page.id + '&command_design=' + this.command_block.design + '&command_col=' + this.command_block.col + '&people_name=' + this.command_block.people.name + '&p_image=' + this.command_block.people.image + '&p_image_h=' + this.command_block.people.image_h + '&p_image_w=' + this.command_block.people.image_w + '&p_image_b=' + this.command_block.people.image_border + '&content=' + this.command_block.people.content + '&title=' + this.block_add.title + '&title_head=' + this.block_add.tag + '&title_color=' + this.block_add.color + '&class=' + this.block_add.class + '&col_content=' + this.command_block.people.gor_col_content + '&col_image=' + this.command_block.people.gor_col_image);
   },
