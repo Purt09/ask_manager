@@ -81,6 +81,9 @@ class BuilderListTable extends \yii\db\ActiveRecord
         ];
     }
 
+    /** Дублирует себя
+     * @param BuilderBlocks $block_old
+     */
     public function duplicate(BuilderBlocks $block_old){
         $block_new = new BuilderListTable();
         $block_new->design = $this->design;

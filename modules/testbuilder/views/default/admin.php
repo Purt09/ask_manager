@@ -130,7 +130,7 @@ use yii\helpers\Json;
             </button>
             <div class="title block"
                  v-if="block_title_edit != index"
-                 @click="block_block_block_edit_title(index)"
+                 @click="block_edit_title(index)"
                  :style="'color: #' + block.title_color">
                 <div v-if="block.title_head == 'h2'">
                     <h2> {{block.title}}</h2>
@@ -187,17 +187,17 @@ use yii\helpers\Json;
                                 v-if="index != 0"><span
                                     class="glyphicon glyphicon-arrow-up" title="Вверх"></span></button>
                         <button type="button" class="btn btn-default"
-                                @click="block_block_duplicate(index)"><span
+                                @click="block_duplicate(index)"><span
                                     class="glyphicon glyphicon-file" title="Дублировать"></span></button>
                         <button type="button" class="btn btn-default"
                                 @click="block_block_edit(index)"><span
                                     class="glyphicon glyphicon-pencil " title="Редактировать"></span></button>
                         <button type="button" class="btn btn-danger"
-                                @click="block_block_delete(index)"><span
+                                @click="block_delete(index)"><span
                                     class="glyphicon glyphicon-remove" title="Удалить"></span>
                         </button>
                         <button class="btn btn-success" type="button"
-                                @click="block_block_save_title(index)"><span class="glyphicon glyphicon-ok"
+                                @click="block_save_title(index)"><span class="glyphicon glyphicon-ok"
                                                                              title="Сохранить"></span> Сохранить
                         </button>
                         <button class="btn btn-warning" type="button"
@@ -1434,17 +1434,17 @@ data:{
 },
 methods: {
   // Общее редактирование блока
-    block_block_block_edit_title(index){
+    block_edit_title(index){
       this.block_title_edit = index;
     },
-    block_block_save_title(index) {
+    block_save_title(index) {
       this.block_title_edit = 999;
-      this.push_ajax('block-save-title', 'id=' + blocks[index].id + '&title=' + blocks[index].title + '&title_h=' + blocks[index].title_head + '&title_color=' + blocks[index].title_color + '&isH=' + this.blocks[index].isHide + '&isD=' + this.blocks[index].isDesktop + '&isT=' + this.blocks[index].isTablet + '&isM=' + this.blocks[index].isMobile);
+      this.push_ajax('block-save-title', 'id=' + blocks[index].id + '&title=' + blocks[index].title + '&title_h=' + blocks[index].title_head + '&title_color=' + blocks[index].title_color + '&isHide=' + this.blocks[index].isHide + '&isDesktop=' + this.blocks[index].isDesktop + '&isTablet=' + this.blocks[index].isTablet + '&isMobile=' + this.blocks[index].isMobile);
     },
-    block_block_duplicate(index){ //TODO более гибкое дублирование, а не костыли!
+    block_duplicate(index){ //TODO более гибкое дублирование, а не костыли!
       this.push_ajax('block-duplicate', 'id=' + blocks[index].id);
     },
-    block_block_delete(index){  //TODO удаление всех блоков! А не только BuilderBlock
+    block_delete(index){  //TODO удаление всех блоков! А не только BuilderBlock
       this.push_ajax('block-delete', 'id=' + blocks[index].id + '&page_id=' + this.page.id);
     },
     block_position_up(index){
@@ -1467,7 +1467,7 @@ methods: {
     block_block_save_data(index){
       this.block_title_edit = 999;
       this.modal_close();
-      this.push_ajax('block-save-data', 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title + '&isH=' + this.blocks[index].isHide + '&isD=' + this.blocks[index].isDesktop + '&isT=' + this.blocks[index].isTablet + '&isM=' + this.blocks[index].isMobile + '&css_background=' + this.blocks[index].css_background);
+      this.push_ajax('block-save-data', 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title + '&isHide=' + this.blocks[index].isHide + '&isDesktop=' + this.blocks[index].isDesktop + '&isTablet=' + this.blocks[index].isTablet + '&isMobile=' + this.blocks[index].isMobile + '&css_background=' + this.blocks[index].css_background);
   },
   
   

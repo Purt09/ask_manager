@@ -22,17 +22,17 @@ class AjaxController extends Controller
      * @param $title_color
      * @return bool|\yii\web\Response
      */
-    public function actionBlockSaveTitle($id, $title, $title_h, $title_color, $isH = 0, $isD = 1, $isT = 1, $isM = 1)
+    public function actionBlockSaveTitle($id, $title, $title_h, $title_color, $isHide = 0, $isDesktop = 1, $isTablet = 1, $isMobile = 1)
     {
         if (\Yii::$app->request->isAjax) {
             $block = BuilderBlocks::findOne($id);
             $block->title = $title;
             $block->title_head = $title_h;
             $block->title_color = $title_color;
-            (($isH == 'true') || ($isH == 1)) ? $block->isHide = 1 : $block->isHide = 0;
-            (($isD == 'true') || ($isD == 1)) ? $block->isDesktop = 1 : $block->isDesktop = 0;
-            (($isT == 'true') || ($isT == 1)) ? $block->isTablet = 1 : $block->isTablet = 0;
-            (($isM == 'true') || ($isM == 1)) ? $block->isMobile = 1 : $block->isMobile = 0;
+            (($isHide == 'true') || ($isHide == 1)) ? $block->isHide = 1 : $block->isHide = 0;
+            (($isDesktop == 'true') || ($isDesktop == 1)) ? $block->isDesktop = 1 : $block->isDesktop = 0;
+            (($isTablet == 'true') || ($isTablet == 1)) ? $block->isTablet = 1 : $block->isTablet = 0;
+            (($isMobile == 'true') || ($isMobile == 1)) ? $block->isMobile = 1 : $block->isMobile = 0;
             return $block->save();
         } else {
             return $this->redirect('/');
@@ -48,7 +48,7 @@ class AjaxController extends Controller
      * @param $id
      * @return bool|\yii\web\Response
      */
-    public function actionBlockSaveData($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt = '', $mb = '', $isCont = '', $isLink = '', $link_title = '', $isH = 0, $isD = 1, $isT = 1, $isM = 1, $css_background = 'FFFFFF')
+    public function actionBlockSaveData($page_id, $title = '', $title_head = '', $title_color = '', $class = '', $id, $mt = '', $mb = '', $isCont = '', $isLink = '', $link_title = '', $isHide = 0, $isDesktop = 1, $isTablet = 1, $isMobile = 1, $css_background = 'FFFFFF')
     {
         if (\Yii::$app->request->isAjax) {
 
@@ -63,14 +63,12 @@ class AjaxController extends Controller
             ($isCont == 'true') ? $block->css_isContainer = 1 : $block->css_isContainer = 0;
             ($isLink == 'true') ? $block->isLink = 1 : $block->isLink = 0;
             ($link_title == 'null') ? $block->link_title = ' ' : $block->link_title = $link_title;
-            ($isH == 'true') ? $block->isHide = 1 : $block->isHide = 0;
-            ($isD == 'true') ? $block->isDesktop = 1 : $block->isDesktop = 0;
-            ($isT == 'true') ? $block->isTablet = 1 : $block->isTablet = 0;
-            ($isM == 'true') ? $block->isMobile = 1 : $block->isMobile = 0;
+            ($isHide == 'true') ? $block->isHide = 1 : $block->isHide = 0;
+            ($isDesktop == 'true') ? $block->isDesktop = 1 : $block->isDesktop = 0;
+            ($isTablet == 'true') ? $block->isTablet = 1 : $block->isTablet = 0;
+            ($isMobile == 'true') ? $block->isMobile = 1 : $block->isMobile = 0;
             $block->css_background = $css_background;
-            $block->save();
-
-            return true;
+            return $block->save();
 
         } else {
             return $this->redirect('/');
@@ -107,13 +105,7 @@ class AjaxController extends Controller
                 $block_new->duplicate($block_old);
             }
 
-            return $this->redirect('/testbuilder/default/index?id=' . $block_old->page_id, 200);
-
-            $block->builder_table = $block_old->builder_table;
-            $block->save();
-
-            $block->position = $block->id;
-            $block->save();
+            return $this->redirectPage($block_old->page_id);
 
         } else {
             return $this->redirect('/');
@@ -150,7 +142,7 @@ class AjaxController extends Controller
                 $block->delete();
             }
             $block->delete();
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
+            return $this->redirectPage($page_id);
         } else {
             return $this->redirect('/');
         }
@@ -205,7 +197,7 @@ class AjaxController extends Controller
             $block->position = $block->id;
             $block->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
+            return $this->redirectPage($page_id);
 
         } else {
             return $this->redirect('/');
@@ -229,7 +221,7 @@ class AjaxController extends Controller
             $block2->position = $pos;
             $block1->save();
             $block2->save();
-            return $this->redirect('/testbuilder/default/index?id=' . $block1->page_id, 200);
+            return $this->redirectPage($block1->page_id);
 
         } else {
             return $this->redirect('/');
@@ -287,7 +279,7 @@ class AjaxController extends Controller
             $block->position = $block->id;
             $block->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id,200);
+            return $this->redirectPage($page_id);
 
         } else {
             return $this->redirect('/');
@@ -319,7 +311,7 @@ class AjaxController extends Controller
             $people->image_border = $p_image_b;
             $people->commands_id = $command_id;
             $people->save();
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
+            return $this->redirectPage($page_id);
 
         } else {
             return $this->redirect('/');
@@ -396,7 +388,7 @@ class AjaxController extends Controller
             $command->gor_col_image = $col_image;
             $command->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
+            return $this->redirectPage($page_id);
 
         } else {
             return $this->redirect('/');
@@ -420,7 +412,7 @@ class AjaxController extends Controller
             $block->position = $block->id;
             $block->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
+            return $this->redirectPage($page_id);
         } else {
             return $this->redirect('/');
         }
@@ -459,7 +451,7 @@ class AjaxController extends Controller
             $block->position = $block->id;
             $block->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
+            return $this->redirectPage($page_id);
         } else {
             return $this->redirect('/');
         }
@@ -485,7 +477,7 @@ class AjaxController extends Controller
             $list_item->list_id = $list->id;
             $list_item->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
+            return $this->redirectPage($page_id);
 
         } else {
             return $this->redirect('/');
@@ -511,7 +503,7 @@ class AjaxController extends Controller
             $list_item->content = $content;
             $list_item->title = $title;
             $list_item->list_id = $list->id;
-            $list_item->save();
+            return $list_item->save();
 
         } else {
             return $this->redirect('/');
@@ -622,7 +614,7 @@ class AjaxController extends Controller
             $block->position = $block->id;
             $block->save();
 
-            return $this->redirect('/testbuilder/default/index?id=' . $page_id);
+            return $this->redirectPage($page_id);
         } else {
             return $this->redirect('/');
         }
@@ -733,5 +725,13 @@ class AjaxController extends Controller
         } else {
             return $this->redirect('/');
         }
+    }
+
+    /** Редирект
+     * @param $page_id
+     * @return \yii\web\Response
+     */
+    private function redirectPage($page_id){
+        return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
     }
 }
