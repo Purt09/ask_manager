@@ -198,7 +198,7 @@ use yii\helpers\Json;
                         </button>
                         <button class="btn btn-success" type="button"
                                 @click="block_save_title(index)"><span class="glyphicon glyphicon-ok"
-                                                                             title="Сохранить"></span> Сохранить
+                                                                       title="Сохранить"></span> Сохранить
                         </button>
                         <button class="btn btn-warning" type="button"
                                 @click="block_title_edit = 999"><span
@@ -393,19 +393,24 @@ use yii\helpers\Json;
                          v-show="people.commands_id == block.builder_id.id">
                         <div :class="'col-sm-' + block.builder_id.col">
                             <!--                        Вертикальный дизайн-->
-                            <div class="text-center"
+                            <div class="team__item team-item"
                                  v-if="block.builder_id.design == 'Вертикальный'">
-                                <img :src="people.image" :alt="people.name"
-                                     :style="'height: ' + people.image_h + 'px; width: ' + people.image_w + 'px; border-radius: ' + people.image_border">
-                                <br>
-                                <div class="people_name text-center">
-                                    {{people.name}}
+                                <div class="image col-sm-4 text-right">
+                                    <img :src="people.image"
+                                         :alt="people.name"
+                                         :style="'height: ' + people.image_h + 'px; width: ' + people.image_w + 'px; border-radius: ' + people.image_border">
                                 </div>
-                                <div class="people_content" v-html="people.content">
+                                <div class="text-left col-sm-8 team-item__text">
+                                    <div class="people_name team-item__name">
+                                        {{people.name}}
+                                    </div>
+                                    <div class="people_job team-item__position">
+                                        {{people.job}}
+                                    </div>
                                 </div>
                             </div>
                             <!--                        Горизонтальный-->
-                            <div v-else>
+                            <div v-if="block.builder_id.design == 'Горизонтальный'">
                                 <div class="people_name_img text-center"
                                      :class="'col-sm-' + block.builder_id.gor_col_image">
                                     <div class="people_name">
@@ -417,6 +422,24 @@ use yii\helpers\Json;
                                 </div>
                                 <div class=" people_content"
                                      :class="'col-sm-' + block.builder_id.gor_col_content"
+                                     v-html="people.content">
+                                </div>
+                            </div>
+                            <!--                        Слово лидера-->
+                            <div class="thesis"
+                                 v-if="block.builder_id.design == 'Слово лидера'">
+                                <div class="thesis__author team-item col-sm-5">
+                                    <img class="team-item__img"
+                                         :src="people.image"
+                                         :alt="people.name"
+                                         :style="'height: ' + people.image_h + 'px; width: ' + people.image_w + 'px; border-radius: ' + people.image_border">
+                                    <div class="team-item__text">
+                                        <div class="team-item__name"><b>{{people.name}}</b></div>
+                                        <div class="team-item__position">{{people.job}}</div>
+                                    </div>
+                                </div>
+
+                                <div class="people_content col-sm-7 thesis__text"
                                      v-html="people.content">
                                 </div>
                             </div>
@@ -1106,15 +1129,15 @@ use yii\helpers\Json;
                         <br>
                         <input type="radio" id="one_command" value="Вертикальный" v-model="command_block.design">
                         <label for="one_command"><img src="https://i.ibb.co/VqQ1jmr/20.png" alt="Вертикальный"
-                                              style="height: 100px;"></label>
+                                                      style="height: 100px;"></label>
                         <br>
                         <input type="radio" id="two_command" value="Горизонтальный" v-model="command_block.design">
                         <label for="two_command"><img src="https://i.ibb.co/m9GnGr3/39.png" alt="Горизонтальный"
-                                              style="height: 100px;"></label>
+                                                      style="height: 100px;"></label>
                         <br>
                         <input type="radio" id="three_command" value="Слово лидера" v-model="command_block.design">
                         <label for="three_command"><img src="https://i.ibb.co/tpzBg9w/21.png" alt="Слово лидера"
-                                                      style="height: 100px;"></label> НЕ РЕАЛИЗОВАНО!!
+                                                        style="height: 100px;"></label> НЕ РЕАЛИЗОВАНО!!
                         <br>
                         <span>Выбрано: {{ picked }}</span>
                         <label for="sel1">Количество столбцов:</label>
@@ -1182,13 +1205,15 @@ use yii\helpers\Json;
                     <br>
                     <input type="radio" id="one_list" value="С нумерацией" v-model="list_block.design">
                     <label for="one_list"><img src="https://i.ibb.co/9HTZMJF/5.png" alt="Вертикальный"
-                                          style="height: 100px;"></label>
+                                               style="height: 100px;"></label>
                     <br>
                     <input type="radio" id="two_list" value="С точками" v-model="list_block.design">
-                    <label for="two_list"><img src="https://i.ibb.co/0Fhvw6j/8.png" alt="С точками" style="height: 100px;"></label>
+                    <label for="two_list"><img src="https://i.ibb.co/0Fhvw6j/8.png" alt="С точками"
+                                               style="height: 100px;"></label>
                     <br>
                     <input type="radio" id="three_list" value="С картинкой" v-model="list_block.design">
-                    <label for="three_list"><img src="https://i.ibb.co/xq2rhXR/1.png" alt="С картинкой" style="height: 100px;"></label>
+                    <label for="three_list"><img src="https://i.ibb.co/xq2rhXR/1.png" alt="С картинкой"
+                                                 style="height: 100px;"></label>
                     <br>
                     Количество столбцов: <br>
                     <select class="form-control" id="pillar"
@@ -1212,19 +1237,19 @@ use yii\helpers\Json;
                 <br>
                 <input type="radio" id="one_advantages" value="4 столбца" v-model="advantages_block.design">
                 <label for="one_advantages"><img src="https://i.ibb.co/sW4k8k0/9.png" alt="4 столбца"
-                                              style="height: 100px;"></label>
+                                                 style="height: 100px;"></label>
                 <br>
                 <input type="radio" id="two_advantages" value="5 столбцов" v-model="advantages_block.design">
                 <label for="two_advantages"><img src="https://i.ibb.co/TkY9K2j/6.png" alt="5 столбцов"
-                                              style="height: 100px;"></label>
+                                                 style="height: 100px;"></label>
                 <br>
                 <input type="radio" id="three_advantages" value="6 столбцов" v-model="advantages_block.design">
                 <label for="three_advantages"><img src="https://i.ibb.co/kgnzjHS/image.png" alt="6 столбцов"
-                                              style="height: 100px;"></label>
+                                                   style="height: 100px;"></label>
                 <br>
                 <input type="radio" id="four_advantages" value="6 блоков" v-model="advantages_block.design">
                 <label for="four_advantages"><img src="https://i.ibb.co/gZWCvwZ/40.png" alt="6 блоков"
-                                              style="height: 100px;"></label>
+                                                  style="height: 100px;"></label>
                 <br>
                 <div class="input-group">
                     <span class="input-group-addon">Картикна:</span>
@@ -1800,6 +1825,46 @@ $this->registerJs($js, \yii\web\View::POS_END);
     }
 
     /*Эти классы удалить!*/
+    .team-item {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+    }
+
+    .team-item__img {
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        margin-right: 15px;
+        border-radius: 50%;
+        border: 2px solid #f60;
+    }
+
+    .team-item__text {
+        margin-top: 35px;
+    }
+
+    .thesis__text {
+        font-style: italic;
+        line-height: 1.5;
+        position: relative;
+        padding-left: 30px;
+    }
+
+    .thesis {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        background-color: #73b721;
+        padding: 40px;
+        color: #fff;
+    }
+
     .ul-reset {
         list-style: none;
         margin: 0;
