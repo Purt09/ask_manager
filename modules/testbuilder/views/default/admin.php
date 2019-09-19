@@ -413,8 +413,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <!--                Если блок COMMAND!-->
             <button class="btn btn-default btn-xs"
                     @click="block_command_edit(index)"
-                    v-show="((block.builder_table == 'block_command') && (block.description == ''))">
-                Редактировать команду блок
+                    v-show="block.builder_table == 'block_command'">
+                Редактировать команду
             </button>
             <div v-if="block.builder_table == 'block_command'"
                  class="block"
@@ -436,7 +436,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         {{people.name}}
                                     </div>
                                     <div class="people_job team-item__position">
-                                        {{people.job}}
+                                        {{people.content}}
                                     </div>
                                 </div>
                             </div>
@@ -503,6 +503,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     v-model="block.builder_id.design">
                                 <option>Вертикальный</option>
                                 <option>Горизонтальный</option>
+                                <option>Слово лидера</option>
                             </select>
                             <label for="sel1">Количество столбцов: </label>
                             <select class="form-control"
@@ -1171,9 +1172,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <br>
                         <input type="radio" id="three_command" value="Слово лидера" v-model="command_block.design">
                         <label for="three_command"><img src="https://i.ibb.co/tpzBg9w/21.png" alt="Слово лидера"
-                                                        style="height: 100px;"></label> НЕ РЕАЛИЗОВАНО!!
+                                                        style="height: 100px;"></label>
                         <br>
-                        <span>Выбрано: {{ picked }}</span>
                         <label for="sel1">Количество столбцов:</label>
                         <select class="form-control" id="sel1"
                                 v-model="command_block.col">
