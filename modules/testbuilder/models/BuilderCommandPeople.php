@@ -68,6 +68,10 @@ class BuilderCommandPeople extends \yii\db\ActiveRecord
         return $this->hasOne(BuilderCommands::className(), ['id' => 'commands_id']);
     }
 
+    /** Дублирование
+     * @param BuilderCommands $commands
+     * @return bool
+     */
     public function duplicate(BuilderCommands $commands){
         $people = new BuilderCommandPeople();
         $people->name = $this->name;

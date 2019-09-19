@@ -3,6 +3,7 @@
 namespace app\modules\testbuilder\controllers;
 
 use app\modules\testbuilder\models\BuilderBlocks;
+use app\modules\testbuilder\models\BuilderBlockSaved;
 use app\modules\testbuilder\models\BuilderCommandPeople;
 use app\modules\testbuilder\models\BuilderCommands;
 use app\modules\testbuilder\models\BuilderList;
@@ -32,6 +33,9 @@ class DefaultController extends Controller
         foreach ($blocks as $block)
             $this->generateBlock($block);
 
+        $block_saved = new BuilderBlockSaved();
+        $blocks_saved = $block_saved->find()->indexBy('id')->all();
+
             if(Yii::$app->user->isGuest){
                 return $this->render('view', [
                     'page' => $page,
@@ -41,6 +45,7 @@ class DefaultController extends Controller
                 return $this->render('admin', [
                     'page' => $page,
                     'blocks' => $blocks,
+                    'blocks_saved' => $blocks_saved,
                 ]);
             }
     }

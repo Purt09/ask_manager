@@ -47,17 +47,27 @@ class BuilderList extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getListItem()
     {
         return $this->hasMany(BuilderListItem::className(), ['list_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getListTable()
     {
         return $this->hasMany(BuilderListTable::className(), ['list_id' => 'id']);
     }
 
-    public function duplicate(BuilderBlocks $block_old){
+    /** Дублирует себя и создает родительский блок с page_id
+     * @param BuilderBlocks $block_old
+     * @param $page_id
+     */
+    public function duplicate(BuilderBlocks $block_old, $page_id){
         $block_new = new BuilderList();
         $block_new->design = $this->design;
         $block_new->col = $this->col;
@@ -67,6 +77,6 @@ class BuilderList extends \yii\db\ActiveRecord
         $items = $this->getListItem()->all();
         foreach ($items as $item) $item->duplicate($block_new);
 
-        $block_old->duplicate($block_new->id);
+        $block_old->duplicate($block_new->id, $page_id);
     }
 }

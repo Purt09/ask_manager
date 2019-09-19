@@ -49,11 +49,18 @@ class BuilderListItem extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getList()
     {
         return $this->hasOne(BuilderList::className(), ['id' => 'list_id']);
     }
 
+    /** Дублируется опред. пункт
+     * @param BuilderList $list
+     * @return bool
+     */
     public function duplicate(BuilderList $list){
         $item = new BuilderListItem();
         $item->list_id = $list->id;

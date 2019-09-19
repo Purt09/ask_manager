@@ -81,10 +81,11 @@ class BuilderListTable extends \yii\db\ActiveRecord
         ];
     }
 
-    /** Дублирует себя
+    /** Дублирует себя и родительский блок с page_id
      * @param BuilderBlocks $block_old
+     * @param $page_id
      */
-    public function duplicate(BuilderBlocks $block_old){
+    public function duplicate(BuilderBlocks $block_old, $page_id){
         $block_new = new BuilderListTable();
         $block_new->design = $this->design;
         $block_new->desc1 = $this->desc1;
@@ -108,6 +109,6 @@ class BuilderListTable extends \yii\db\ActiveRecord
         $block_new->save();
 
 
-        $block_old->duplicate($block_new->id);
+        $block_old->duplicate($block_new->id, $page_id);
     }
 }

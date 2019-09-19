@@ -11,6 +11,7 @@ use yii\web\Controller;
 use app\modules\testbuilder\models\BuilderPage;
 use app\modules\testbuilder\models\BuilderBlocks;
 use app\modules\testbuilder\models\BuilderBlockHtml;
+use app\modules\testbuilder\models\BuilderBlockSaved;
 
 class AjaxController extends Controller
 {
@@ -80,29 +81,29 @@ class AjaxController extends Controller
      * @param $id
      * @return \yii\web\Response
      */
-    public function actionBlockDuplicate($id)
+    public function actionBlockDuplicate($id, $page_id)
     {
         if (\Yii::$app->request->isAjax) {
             $block_old = BuilderBlocks::findOne($id);
 
             if (($block_old->builder_table == 'blok_html') || ($block_old->builder_table == 'block_text')) {
                 $block_new = BuilderBlockHtml::findOne($block_old->builder_id);
-                $block_new->duplicate($block_old);
+                $block_new->duplicate($block_old, $page_id);
             }
             if ($block_old->builder_table == 'block_command') {
                 $block_new = BuilderCommands::findOne($block_old->builder_id);
-                $block_new->duplicate($block_old);
+                $block_new->duplicate($block_old, $page_id);
             }
             if ($block_old->builder_table == 'hr') {
-                $block_old->duplicate(0);
+                $block_old->duplicate(0, $page_id);
             }
             if ($block_old->builder_table == 'block_list') {
                 $block_new = BuilderList::findOne($block_old->builder_id);
-                $block_new->duplicate($block_old);
+                $block_new->duplicate($block_old, $page_id);
             }
             if ($block_old->builder_table == 'block_list_table') {
                 $block_new = BuilderListTable::findOne($block_old->builder_id);
-                $block_new->duplicate($block_old);
+                $block_new->duplicate($block_old, $page_id);
             }
 
             return $this->redirectPage($block_old->page_id);
@@ -577,7 +578,8 @@ class AjaxController extends Controller
      * @param string $desc6
      * @return \yii\web\Response
      */
-    public function actionBlockAdvantagesAdd($page_id, $design,$image1, $text1, $image2, $text2, $image3, $text3, $image4 = '', $text4 = '', $image5 = '', $text5 = '', $image6 = '', $text6 = '', $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $desc1 = '', $desc2 = '', $desc3 = '', $desc4 = '', $desc5 = '', $desc6 = ''){
+    public function actionBlockAdvantagesAdd($page_id, $design,$image1, $text1, $image2, $text2, $image3, $text3, $image4 = '', $text4 = '', $image5 = '', $text5 = '', $image6 = '', $text6 = '', $title = 'Заголовок', $title_head = 'h2', $title_color, $class = '', $desc1 = '', $desc2 = '', $desc3 = '', $desc4 = '', $desc5 = '', $desc6 = '')
+    {
         if (\Yii::$app->request->isAjax) {
             $block_list = new BuilderListTable();
             $block_list->design = $design;
@@ -643,7 +645,8 @@ class AjaxController extends Controller
      * @param string $desc6
      * @return bool|\yii\web\Response
      */
-    public function actionBlockAdvantagesSave($id, $design = '4 блока' ,$image1 = '', $text1 = '', $image2 = '', $text2 = '', $image3 = '', $text3 = '', $image4 = '', $text4 = '', $image5 = '', $text5 = '', $image6 = '', $text6 = '', $desc1 = '', $desc2 = '', $desc3 = '', $desc4 = '', $desc5 = '', $desc6 = ''){
+    public function actionBlockAdvantagesSave($id, $design = '4 блока' ,$image1 = '', $text1 = '', $image2 = '', $text2 = '', $image3 = '', $text3 = '', $image4 = '', $text4 = '', $image5 = '', $text5 = '', $image6 = '', $text6 = '', $desc1 = '', $desc2 = '', $desc3 = '', $desc4 = '', $desc5 = '', $desc6 = '')
+    {
         if (\Yii::$app->request->isAjax) {
             $block_list = BuilderListTable::findOne($id);
             $block_list->design = $design;
@@ -699,9 +702,7 @@ class AjaxController extends Controller
             $page->footer_html = $foot;
             $page->js = $js;
             $page->style = $style;
-            $page->update();
-            return true;
-
+            return $page->update();
         } else {
             return $this->redirect('/');
         }
@@ -718,10 +719,40 @@ class AjaxController extends Controller
         if (\Yii::$app->request->isAjax) {
             $block = BuilderBlocks::findOne($id);
             $block->link_title = $link;
-            $block->save();
+            return $block->save();
+        } else {
+            return $this->redirect('/');
+        }
+    }
 
-            return true;
+    public function actionBlockSaveInSaved($block_id, $title, $description, $image)
+    {
+        if (\Yii::$app->request->isAjax) {
+            $block = new BuilderBlockSaved();
+            $block->block_id = $block_id;
+            $block->title = $title;
+            $block->description = $description;
+            $block->image = $image;
+            return $block->save();
+        } else {
+            return $this->redirect('/');
+        }
+    }
 
+    public function actionBlockSavedDelete($id){
+        if (\Yii::$app->request->isAjax) {
+            $block = BuilderBlockSaved::findOne($id);
+            return $block->delete();
+        } else {
+            return $this->redirect('/');
+        }
+    }
+
+    public function actionBlockSavedAdd($id, $page_id){
+        if (\Yii::$app->request->isAjax) {
+            $block_save = BuilderBlockSaved::findOne($id);
+            $block = BuilderBlocks::findOne($block_save->block_id);
+            return $this->actionBlockDuplicate($block->id, $page_id);
         } else {
             return $this->redirect('/');
         }
@@ -731,7 +762,8 @@ class AjaxController extends Controller
      * @param $page_id
      * @return \yii\web\Response
      */
-    private function redirectPage($page_id){
+    private function redirectPage($page_id)
+    {
         return $this->redirect('/testbuilder/default/index?id=' . $page_id, 200);
     }
 }

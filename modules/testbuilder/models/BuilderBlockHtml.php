@@ -55,12 +55,16 @@ class BuilderBlockHtml extends \yii\db\ActiveRecord
         return $this->hasMany(BuilderBlocks::className(), ['builder_id' => 'id']);
     }
 
-    public function duplicate(BuilderBlocks $block_old){
+    /** Дублирует себя и родительский блок
+     * @param BuilderBlocks $block_old
+     * @param $page_id
+     */
+    public function duplicate(BuilderBlocks $block_old, $page_id){
         $block_new = new BuilderBlockHtml();
         $block_new->code = $this->code;
         $block_new->border = $this->border;
         $block_new->save();
 
-        $block_old->duplicate($block_new->id);
+        $block_old->duplicate($block_new->id, $page_id);
     }
 }

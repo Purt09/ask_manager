@@ -1,5 +1,7 @@
 <?php
 
+use yii\helpers\Json;
+
 $this->title = Yii::t('app', 'PROJECTS');
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -15,8 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
     'name' => 'keywords',
     'content' => $page->seo_key,
 ]);
-
-use yii\helpers\Json;
 
 ?>
 
@@ -188,9 +188,12 @@ use yii\helpers\Json;
                                     class="glyphicon glyphicon-arrow-up" title="Вверх"></span></button>
                         <button type="button" class="btn btn-default"
                                 @click="block_duplicate(index)"><span
-                                    class="glyphicon glyphicon-file" title="Дублировать"></span></button>
+                                    class="glyphicon glyphicon-duplicate" title="Дублировать"></span></button>
                         <button type="button" class="btn btn-default"
-                                @click="block_block_edit(index)"><span
+                                @click="block_save(index)"><span
+                                    class="glyphicon glyphicon-file" title="Сохранить"></span></button>
+                        <button type="button" class="btn btn-default"
+                                @click="block_edit(index)"><span
                                     class="glyphicon glyphicon-pencil " title="Редактировать"></span></button>
                         <button type="button" class="btn btn-danger"
                                 @click="block_delete(index)"><span
@@ -207,7 +210,7 @@ use yii\helpers\Json;
                     </div>
 
                     <!--    Окно редактирования блока-->
-                    <modal v-if="(block_block_edit_modal == index) && (showModal)" @close="showModal = false"
+                    <modal v-if="(block_edit_modal == index) && (showModal)" @close="showModal = false"
                            class="modal">
                         <h3 slot="header">Изменить блок</h3>
                         <div slot="body">
@@ -306,9 +309,37 @@ use yii\helpers\Json;
                             </div>
 
                             <button class="btn btn-success m-2"
-                                    @click="block_block_save_data(index)">
+                                    @click="block_save_data(index)">
                                 Сохранить
                             </button>
+                        </div>
+                        <div slot="footer">
+                            <button class="btn btn-danger"
+                                    @click="modal_close()"> Закрыть
+                            </button>
+                        </div>
+                    </modal>
+
+                    <!--    Окно сохранения блока-->
+                    <modal v-if="(block_saved.modal == index) && (showModal)" @close="showModal = false"
+                           class="modal">
+                        <h3 slot="header">Добавить блок в "Сохраненное"</h3>
+                        <div slot="body">
+                            <div class="bg-light text-right">
+                                <br>
+                                <input type="text" class="form-control" placeholder="Заголовок"
+                                       v-model="block_saved.title"><br>
+                                <input type="text" class="form-control" placeholder="Картинка"
+                                       v-model="block_saved.image"><br>
+                                <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="3"
+                                          placeholder="Описание"
+                                          v-model="block_saved.description"></textarea>
+
+                                <button class="btn btn-success m-2"
+                                        @click="block_save_in_saved(index)">
+                                    Сохранить
+                                </button>
+                            </div>
                         </div>
                         <div slot="footer">
                             <button class="btn btn-danger"
@@ -633,8 +664,7 @@ use yii\helpers\Json;
                         </ul>
                     </div>
                     <button class="btn btn-default btn-xs"
-                            @click="list_block.modal = index"
-                            v-if="block.description == ''">
+                            @click="list_block.modal = index">
                         Добавить пункт
                     </button>
                 </div>
@@ -1100,6 +1130,10 @@ use yii\helpers\Json;
                         @click="block_advantages_view()">
                     Преимущества
                 </button>
+                <button class="btn btn-default m-2"
+                        @click="block_saved_view()">
+                    Сохраненное
+                </button>
             </div>
 
             <!--    Создание блока HTML-->
@@ -1344,13 +1378,39 @@ use yii\helpers\Json;
                 </button>
 
             </div>
+
+            <!--            Добавление блока сохраненное-->
+            <div class="col-sm-4"
+                 v-show="modal_add_saved"
+                 v-for=" block_saved of blocks_saved">
+            <div class="panel panel-default"
+                 v-show="block_saved.id != 0"
+                 @click="block_saved_add(block_saved.id)">
+                <div class="panel-heading">
+                    <h3 class="panel-title col-sm-10">{{block_saved.title}}</h3>
+                    <button class="btn btn-danger btn-sm col-sm-2"
+                            @click="block_saved_delete(block_saved.id)">
+                        <span class="glyphicon glyphicon-remove "></span>
+                    </button>
+                    <br><br>
+                </div>
+                <div class="panel-body">
+                    <img style="max-width: 320px;max-height: 300px"
+                         :src="block_saved.image"
+                         :alt="block_saved.title">
+                </div>
+                <div class="panel-footer">
+                    {{block_saved.description}}
+                </div>
+            </div>
         </div>
-        <div slot="footer">
-            <button class="btn btn-danger"
-                    @click="modal_close()"> Закрыть
-            </button>
-        </div>
-    </modal>
+</div>
+<div slot="footer">
+    <button class="btn btn-danger"
+            @click="modal_close()"> Закрыть
+    </button>
+</div>
+</modal>
 
 </div>
 
@@ -1358,8 +1418,11 @@ use yii\helpers\Json;
 <?php
 Yii::$app->view->registerJs("var page = " . Json::encode($page)
     . ";", \yii\web\View::POS_END);
+Yii::$app->view->registerJs("var blocks_saved = " . Json::encode($blocks_saved)
+    . ";", \yii\web\View::POS_END);
 Yii::$app->view->registerJs("var blocks = " . Json::encode($blocks)
     . ";", \yii\web\View::POS_END);
+
 
 $js = <<<JS
 
@@ -1376,16 +1439,28 @@ data:{
   //блоки
   blocks: blocks,
   block_title_edit: 999,
-  block_block_edit_modal: 999,
-      // добавление блока
-      block_add: {
-          color: '7faf24',
-          view: false,
-          title: '',
-          tag: 'h2',
-          class: '',
-          modal: false,
-      },
+  block_edit_modal: 999,
+  
+  // Сохранение блока
+  blocks_saved: blocks_saved,
+  modal_add_saved: false,
+  block_saved: {
+    modal: 999,
+    image: '',
+    title: '',
+    description: '',
+    },
+    
+ 
+  // добавление блока
+          block_add: {
+              color: '7faf24',
+              view: false,
+              title: '',
+              tag: 'h2',
+              class: '',
+              modal: false,
+          },
       
       //БЛОК HTML
       prev_html: 999,
@@ -1467,9 +1542,9 @@ methods: {
       this.push_ajax('block-save-title', 'id=' + blocks[index].id + '&title=' + blocks[index].title + '&title_h=' + blocks[index].title_head + '&title_color=' + blocks[index].title_color + '&isHide=' + this.blocks[index].isHide + '&isDesktop=' + this.blocks[index].isDesktop + '&isTablet=' + this.blocks[index].isTablet + '&isMobile=' + this.blocks[index].isMobile);
     },
     block_duplicate(index){ //TODO более гибкое дублирование, а не костыли!
-      this.push_ajax('block-duplicate', 'id=' + blocks[index].id);
+      this.push_ajax('block-duplicate', 'id=' + blocks[index].id + '&page_id=' + this.page.id);
     },
-    block_delete(index){  //TODO удаление всех блоков! А не только BuilderBlock
+    block_delete(index){ 
       this.push_ajax('block-delete', 'id=' + blocks[index].id + '&page_id=' + this.page.id);
     },
     block_position_up(index){
@@ -1485,11 +1560,11 @@ methods: {
     block_save_pos(pos1, pos2){
       this.push_ajax('block-save-pos', 'pos1=' + pos1 + '&pos2=' + pos2);
     },
-     block_block_edit(index){
+     block_edit(index){
       this.showModal = true;
-      this.block_block_edit_modal = index;
+      this.block_edit_modal = index;
     },
-    block_block_save_data(index){
+    block_save_data(index){
       this.block_title_edit = 999;
       this.modal_close();
       this.push_ajax('block-save-data', 'page_id=' + this.page.id + '&title=' + this.blocks[index].title + '&title_head=' + this.blocks[index].title_head + '&title_color=' + this.blocks[index].title_color + '&class=' + this.blocks[index].class + '&id=' + this.blocks[index].id + '&mt=' + this.blocks[index].style_margin_top + '&mb=' + this.blocks[index].style_margin_bottom + '&isCont=' + this.blocks[index].css_isContainer + '&isLink=' + this.blocks[index].isLink + '&link_title=' + this.blocks[index].link_title + '&isHide=' + this.blocks[index].isHide + '&isDesktop=' + this.blocks[index].isDesktop + '&isTablet=' + this.blocks[index].isTablet + '&isMobile=' + this.blocks[index].isMobile + '&css_background=' + this.blocks[index].css_background);
@@ -1587,6 +1662,7 @@ methods: {
       this.push_ajax('block-advantages-save', 'id=' + this.blocks[index].builder_id.id +'&design=' + this.blocks[index].builder_id.design + '&image1=' + this.blocks[index].builder_id.image1 + '&image2=' + this.blocks[index].builder_id.image2 + '&image3=' + this.blocks[index].builder_id.image3 + '&image4=' + this.blocks[index].builder_id.image4 + '&image5=' + this.blocks[index].builder_id.image5 + '&image6=' + this.blocks[index].builder_id.image6 + '&text1=' + this.blocks[index].builder_id.text1 + '&text2=' + this.blocks[index].builder_id.text2 + '&text3=' + this.blocks[index].builder_id.text3 + '&text4=' + this.blocks[index].builder_id.text4 + '&text5=' + this.blocks[index].builder_id.text5 + '&text6=' + this.blocks[index].builder_id.text6 + '&title=' + this.block_add.title + '&title_head=' + this.block_add.tag + '&title_color=' + this.block_add.color + '&class=' + this.block_add.class + '&desc1=' + this.blocks[index].builder_id.desc1 + '&desc2=' + this.blocks[index].builder_id.desc2 + '&desc3=' + this.blocks[index].builder_id.desc3 + '&desc4=' + this.blocks[index].builder_id.desc4 + '&desc5=' + this.blocks[index].builder_id.desc5 + '&desc6=' + this.blocks[index].builder_id.desc6);
   },
   
+  
     
    
     // МОДАЛЬНОЕ ОКНО
@@ -1601,6 +1677,8 @@ methods: {
       this.list_block.modal = 999;
       this.modal_add_advantages = false;
       this.advantages_block.modal = 999;
+      this.block_add_saved = false;
+      this.modal_add_saved = false;
     },
    
   
@@ -1620,6 +1698,30 @@ methods: {
       this.showModal = true;
       this.block_add.modal = true;
     },
+    
+    // Сохранение блока
+    block_save(index){
+      this.showModal = true;
+      this.block_saved.modal = index;
+    },
+    block_save_in_saved(index){
+      this.push_ajax('block-save-in-saved','block_id=' + this.blocks[index].id + '&title=' + this.block_saved.title + '&description=' + this.block_saved.description + '&image=' + this.block_saved.image );
+      this.modal_close();
+    },
+    block_saved_view(){
+      this.block_add.view = false;
+      this.block_add_saved = true;
+      this.modal_add_saved = true;
+    },
+    block_saved_delete(id){
+      this.push_ajax('block-saved-delete', 'id=' + this.blocks_saved[id].id);
+      this.blocks_saved[id].id = 0;
+  },
+    block_saved_add(id){
+      this.modal_close();
+      this.push_ajax('block-saved-add', 'id=' + this.blocks_saved[id].id + '&page_id=' + this.page.id);
+    },
+    
    
     
     block_hr_add()  {

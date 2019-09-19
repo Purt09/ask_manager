@@ -59,7 +59,11 @@ class BuilderCommands extends \yii\db\ActiveRecord
         return $this->hasMany(BuilderCommandPeople::className(), ['commands_id' => 'id']);
     }
 
-    public function duplicate(BuilderBlocks $block_old){
+    /** Дублирует себя и созддае родительский блок для опред page_id
+     * @param BuilderBlocks $block_old
+     * @param $page_id
+     */
+    public function duplicate(BuilderBlocks $block_old, $page_id){
         $block_new = new BuilderCommands();
         $block_new->design = $this->design;
         $block_new->col = $this->col;
@@ -70,7 +74,7 @@ class BuilderCommands extends \yii\db\ActiveRecord
         $peoples = $this->getBuilderCommandPeoples()->all();
         foreach ($peoples as $people) $people->duplicate($block_new);
 
-        $block_old->duplicate($block_new->id);
+        $block_old->duplicate($block_new->id, $page_id);
     }
 
 }

@@ -127,10 +127,15 @@ class BuilderBlocks extends \yii\db\ActiveRecord
         return $this->hasOne(BuilderPage::className(), ['id' => 'page_id']);
     }
 
-    public function duplicate($builder_id){
+    /** Создает свою копию для страницы с page_id
+     * @param $builder_id
+     * @param $page_id
+     * @return bool
+     */
+    public function duplicate($builder_id, $page_id){
         $block = new BuilderBlocks();
         $block->title = $this->title;
-        $block->page_id = $this->page_id;
+        $block->page_id = $page_id;
         $block->title_head = $this->title_head;
         $block->title_color = $this->title_color;
         $block->class = $this->class;
