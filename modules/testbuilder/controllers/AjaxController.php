@@ -725,6 +725,13 @@ class AjaxController extends Controller
         }
     }
 
+    /** Сохраняет блок в сохраненное
+     * @param $block_id
+     * @param $title
+     * @param $description
+     * @param $image
+     * @return bool|\yii\web\Response
+     */
     public function actionBlockSaveInSaved($block_id, $title, $description, $image)
     {
         if (\Yii::$app->request->isAjax) {
@@ -739,6 +746,12 @@ class AjaxController extends Controller
         }
     }
 
+    /** Удаялет блок из сохраненного
+     * @param $id
+     * @return false|int|\yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
     public function actionBlockSavedDelete($id){
         if (\Yii::$app->request->isAjax) {
             $block = BuilderBlockSaved::findOne($id);
@@ -748,6 +761,11 @@ class AjaxController extends Controller
         }
     }
 
+    /** Добавить блок в сохраненное
+     * @param $id
+     * @param $page_id
+     * @return \yii\web\Response
+     */
     public function actionBlockSavedAdd($id, $page_id){
         if (\Yii::$app->request->isAjax) {
             $block_save = BuilderBlockSaved::findOne($id);
