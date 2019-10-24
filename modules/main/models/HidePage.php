@@ -5,7 +5,7 @@ namespace app\modules\main\models;
 use Yii;
 
 /**
- * This is the model class for table "keys_hide_page".
+ * This is the model class for table "hide_page".
  *
  * @property int $id
  * @property string $code
@@ -18,7 +18,7 @@ class HidePage extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'keys_hide_page';
+        return '{{%hide_page}}';
     }
 
     /**
