@@ -19,4 +19,9 @@ class DefaultController extends Controller
     {
         return $this->render('index');
     }
+
+    public function actionPortfolio()
+    {
+        return $this->render('portfolio');
+    }
 }

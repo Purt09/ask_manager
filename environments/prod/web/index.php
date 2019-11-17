@@ -13,5 +13,7 @@ $config = yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/../config/web-local.php')
 );
 
+require_once __DIR__ . '/../functions.php';
+
 $application = new yii\web\Application($config);
 $application->run();

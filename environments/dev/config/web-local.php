@@ -3,6 +3,7 @@
 return [
     'components' => [
         'request' => [
+            'baseUrl' => '',
             'cookieValidationKey' => '',
         ],
         'assetManager' => [

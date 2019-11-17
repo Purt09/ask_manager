@@ -5,6 +5,7 @@ namespace app\modules\main\controllers;
 use Yii;
 use app\modules\main\models\HidePage;
 use app\modules\main\models\HidePageSearch;
+use yii\web\ConflictHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -48,20 +49,41 @@ class PageController extends Controller
 
     /**
      * Displays a single HidePage model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $model = $this->findModelbyUrl($id);
+
+        $model = $this->findModel($id);
+
+        return $this->render('view', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Displays a single HidePage model.
+     * @param string $url
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionPortfolio($url)
+    {
+        $model = $this->findModelbyUrl($url);
+        if ($model == null)
+            return $this->redirect('/main/default/portfolio');
+
         $model->url = md5(time());
         $model->save();
 
+
         return $this->render('view', [
-            'model' => $this->findModelbyUrl($model->url),
+            'model' => $model,
         ]);
     }
+
 
     /**
      * Creates a new HidePage model.
@@ -138,12 +160,10 @@ class PageController extends Controller
      * @return HidePage the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModelbyUrl($id)
+    protected function findModelbyUrl($url)
     {
-        if (($model = HidePage::find()->where(['url' => $id])->one()) !== null) {
+        if (($model = HidePage::find()->where(['url' => $url])->one()) !== null) {
             return $model;
         }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

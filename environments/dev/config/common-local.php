@@ -3,7 +3,7 @@
 return [
     'components' => [
         'db' => [
-            'dsn' => 'mysql:host=localhost;dbname=yii2ask',
+            'dsn' => 'mysql:host=localhost;dbname=ask',
             'username' => 'root',
             'password' => '',
             'tablePrefix' => 'keys_',

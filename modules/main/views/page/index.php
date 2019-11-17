@@ -13,7 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="hide-page-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('Create Hide Page', ['create'], ['class' => 'btn btn-success']) ?>
@@ -32,8 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function($data){
                     return Html::a(
-                        'http://task.md-help.ru/main/page/view?id=' . $data->url,
-                        'page/view?id=' . $data->url,
+                        'http://task.md-help.ru/main/page/portfolio?id=' . $data->url,
+                        '/main/page/portfolio?url=' . $data->url,
                         [
                             'title' => 'Смелей вперед!',
                             'target' => '_blank'

@@ -15,6 +15,7 @@ $config = yii\helpers\ArrayHelper::merge(
 
 // Вспомогательные функции
 require_once __DIR__ . '/../functions.php';
+require_once __DIR__ . '/../functionsDev.php';
 
 $application = new yii\web\Application($config);
 $application->run();

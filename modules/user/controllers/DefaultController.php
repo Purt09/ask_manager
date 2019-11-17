@@ -76,6 +76,7 @@ class DefaultController extends Controller
         Yii::$app->user->logout();
         return $this->goHome();
     }
+
     public function actionSignup()
     {
         $model = new SignupForm();
@@ -168,6 +169,5 @@ class DefaultController extends Controller
 
         return $this->redirect([$redirect, 'id' => Yii::$app->user->identity->id]);
     }
-
 
 }
